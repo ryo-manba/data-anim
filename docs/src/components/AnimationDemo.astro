@@ -8,12 +8,13 @@ const { name, trigger } = Astro.props;
 const id = `demo-${Math.random().toString(36).slice(2, 9)}`;
 ---
 
-<div class="demo-card" data-demo-id={id} data-demo-anim={name}>
-  <code class="demo-label">{name}</code>
+<div class="demo-card">
+  <div class="demo-header">
+    <code class="demo-label">{name}</code>
+    <button class="demo-play-btn" data-demo-id={id} data-demo-anim={name}>Play</button>
+  </div>
   <div class="demo-stage">
-    <div id={id} class="demo-box">
-      <span class="demo-click-hint">Click to play</span>
-    </div>
+    <div id={id} class="demo-box"></div>
   </div>
 </div>
 
@@ -23,16 +24,37 @@ const id = `demo-${Math.random().toString(36).slice(2, 9)}`;
     border-radius: 12px;
     overflow: hidden;
     margin-bottom: 1rem;
-    cursor: pointer;
+  }
+  .demo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--color-bg-surface);
+    border-bottom: 1px solid var(--color-border);
   }
   .demo-label {
-    display: block;
-    padding: 8px 14px;
     font-family: var(--font-mono) !important;
     font-size: 14px !important;
     color: var(--color-accent-readable) !important;
-    background: var(--color-bg-surface) !important;
-    border-bottom: 1px solid var(--color-border);
+    background: none !important;
+    padding: 0 !important;
+  }
+  .demo-play-btn {
+    padding: 4px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: none;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .demo-play-btn:hover {
+    border-color: var(--color-accent-readable);
+    color: var(--color-accent-readable);
+    background: rgba(99, 102, 241, 0.05);
   }
   .demo-stage {
     display: flex;
@@ -46,22 +68,14 @@ const id = `demo-${Math.random().toString(36).slice(2, 9)}`;
     height: 72px;
     border-radius: 14px;
     background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .demo-click-hint {
-    font-size: 10px;
-    color: rgba(255,255,255,0.5);
-    font-family: var(--font-mono);
   }
 </style>
 
 <script is:inline>
-  document.querySelectorAll('.demo-card').forEach(function(card) {
-    card.addEventListener('click', function() {
-      var id = card.getAttribute('data-demo-id');
-      var name = card.getAttribute('data-demo-anim');
+  document.querySelectorAll('.demo-play-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = btn.getAttribute('data-demo-id');
+      var name = btn.getAttribute('data-demo-anim');
       var el = document.getElementById(id);
       if (el && name) {
         el.style.transition = 'none';
