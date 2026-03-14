@@ -8,15 +8,6 @@ importers:
 
   .:
     devDependencies:
-      '@oxfmt/binding-darwin-arm64':
-        specifier: 0.40.0
-        version: 0.40.0
-      '@oxlint/binding-darwin-arm64':
-        specifier: 1.55.0
-        version: 1.55.0
-      '@rolldown/binding-darwin-arm64':
-        specifier: 1.0.0-rc.9
-        version: 1.0.0-rc.9
       happy-dom:
         specifier: ^20.8.4
         version: 20.8.4
@@ -3754,7 +3745,8 @@ snapshots:
   '@oxfmt/binding-android-arm64@0.40.0':
     optional: true
 
-  '@oxfmt/binding-darwin-arm64@0.40.0': {}
+  '@oxfmt/binding-darwin-arm64@0.40.0':
+    optional: true
 
   '@oxfmt/binding-darwin-x64@0.40.0':
     optional: true
@@ -3810,7 +3802,8 @@ snapshots:
   '@oxlint/binding-android-arm64@1.55.0':
     optional: true
 
-  '@oxlint/binding-darwin-arm64@1.55.0': {}
+  '@oxlint/binding-darwin-arm64@1.55.0':
+    optional: true
 
   '@oxlint/binding-darwin-x64@1.55.0':
     optional: true
@@ -3878,7 +3871,8 @@ snapshots:
   '@rolldown/binding-android-arm64@1.0.0-rc.9':
     optional: true
 
-  '@rolldown/binding-darwin-arm64@1.0.0-rc.9': {}
+  '@rolldown/binding-darwin-arm64@1.0.0-rc.9':
+    optional: true
 
   '@rolldown/binding-darwin-x64@1.0.0-rc.9':
     optional: true

@@ -6,10 +6,10 @@
   "packageManager": "pnpm@10.11.0",
   "main": "dist/data-anim.js",
   "module": "dist/data-anim.esm.js",
-  "types": "dist/data-anim.d.ts",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/data-anim.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/data-anim.esm.js",
       "require": "./dist/data-anim.js"
     }
@@ -51,9 +51,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@oxfmt/binding-darwin-arm64": "0.40.0",
-    "@oxlint/binding-darwin-arm64": "1.55.0",
-    "@rolldown/binding-darwin-arm64": "1.0.0-rc.9",
     "happy-dom": "^20.8.4",
     "oxfmt": "^0.40.0",
     "oxlint": "1.55.0",
