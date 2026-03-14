@@ -51,9 +51,12 @@
     display: flex; align-items: center; justify-content: center;
     color: #fff; font-family: var(--font-heading); font-weight: 600; font-size: 14px;
     text-align: center; padding: 12px; box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
-    line-height: 1.3; outline: none;
+    line-height: 1.3; outline: none; position: relative;
   }
-  .trigger-box:focus-visible { box-shadow: 0 0 0 3px var(--color-accent-light), 0 8px 32px rgba(99, 102, 241, 0.3); }
+  .trigger-box:focus-visible, .trigger-box.trigger-focused {
+    box-shadow: 0 0 0 6px #a78bfa, 0 0 40px rgba(139, 92, 246, 0.7);
+    outline: none;
+  }
   .trigger-hint { color: var(--color-text-muted) !important; font-size: 14px !important; margin: 0 0 8px 0 !important; }
   .trigger-btn-wrap { min-height: 36px; }
   .trigger-simulate-btn {
@@ -146,9 +149,15 @@
       if (currentTrigger === 'click') playAnim();
     });
 
-    // Focus
+    // Focus (keyboard only, not mouse click)
     target.addEventListener('focus', function() {
-      if (currentTrigger === 'focus') playAnim();
+      if (currentTrigger === 'focus' && target.matches(':focus-visible')) {
+        target.classList.add('trigger-focused');
+        playAnim();
+      }
+    });
+    target.addEventListener('blur', function() {
+      target.classList.remove('trigger-focused');
     });
 
     // Copy
