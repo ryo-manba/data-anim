@@ -228,8 +228,9 @@ a {
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  background: linear-gradient(135deg, #818cf8, #c084fc);
   transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(99,102,241,0.4);
 }
 
 .btn-secondary {
@@ -327,11 +328,29 @@ a {
 }
 
 /* Syntax highlight classes */
-.tag { color: #f472b6; }
-.attr { color: #67e8f9; }
-.value { color: #a5f3a0; }
-.comment { color: #555577; }
-.text-content { color: #e8e8f0; }
+.tag { color: #ff79c6; }
+.attr { color: #8be9fd; }
+.value { color: #50fa7b; }
+.comment { color: #6272a4; }
+.text-content { color: #f8f8f2; }
+
+.section-cta {
+  text-align: center;
+  margin-top: 48px;
+}
+
+.section-cta a {
+  color: #a78bfa;
+  font-size: 18px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.section-cta a:hover {
+  color: #c4b5fd;
+  text-decoration: underline;
+}
 
 .what-preview {
   display: flex;
@@ -414,26 +433,27 @@ a {
 .steps-grid::before {
   content: '';
   position: absolute;
-  top: 60px;
-  left: calc(16.66% + 40px);
-  right: calc(16.66% + 40px);
+  top: 64px;
+  left: 17%;
+  right: 17%;
   height: 2px;
   background: linear-gradient(90deg, #6366f1, #a855f7);
-  opacity: 0.3;
 }
 
 .step-card {
   text-align: center;
   padding: 32px 24px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .step-number {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.15));
-  border: 2px solid rgba(99,102,241,0.3);
+  background: linear-gradient(135deg, #1a1a3e, #1c1640);
+  border: 2px solid #4a4aaf;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -452,10 +472,11 @@ a {
 
 .step-card p {
   font-size: 15px;
+  flex: 1;
 }
 
 .step-code {
-  margin-top: 16px;
+  margin-top: auto;
   background: #111133;
   border-radius: 10px;
   padding: 14px 18px;
@@ -891,7 +912,7 @@ a {
 
     <div class="hero-ctas" data-anim="fadeInUp" data-anim-trigger="load" data-anim-delay="800">
       <a href="#quickstart" class="btn-primary" aria-label="Get started with data-anim">Get Started</a>
-      <a href="https://github.com/AimWhy/data-anim" class="btn-secondary" target="_blank" rel="noopener noreferrer" aria-label="View data-anim on GitHub">GitHub &#9733;</a>
+      <a href="https://github.com/ryo-manba/data-anim" class="btn-secondary" target="_blank" rel="noopener noreferrer" aria-label="View data-anim on GitHub">GitHub &#9733;</a>
     </div>
 
     <div class="hero-badges" data-anim="fadeIn" data-anim-trigger="load" data-anim-delay="1000">
@@ -955,6 +976,7 @@ a {
         </div>
       </div>
     </div>
+    <p class="section-cta" data-anim="fadeIn" data-anim-once><a href="#gallery">Browse all 30+ animations &#8594;</a></p>
   </div>
 </section>
 
@@ -1028,9 +1050,6 @@ a {
         <div class="step-number">3</div>
         <h3>Done &#10024;</h3>
         <p>No build step. No config. Your elements animate on scroll, load, click, or hover.</p>
-        <div class="step-code">
-          <code><span class="comment">&lt;!-- That's it. Seriously. --&gt;</span></code>
-        </div>
       </div>
     </div>
   </div>
@@ -1399,6 +1418,7 @@ a {
 <span class="tag">&lt;/html&gt;</span></code></pre>
       </div>
     </div>
+    <p class="section-cta" data-anim="fadeIn" data-anim-once><a href="https://github.com/ryo-manba/data-anim" target="_blank" rel="noopener noreferrer">Read the full docs &#8594;</a></p>
   </div>
 </section>
 
@@ -1413,12 +1433,10 @@ a {
       </div>
       <p style="font-size:15px;">Zero-JS animation library powered by data attributes.</p>
       <nav class="footer-links" aria-label="Footer navigation">
-        <a href="https://github.com/AimWhy/data-anim" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub">GitHub</a>
+        <a href="https://github.com/ryo-manba/data-anim" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub">GitHub</a>
         <a href="https://www.npmjs.com/package/data-anim" target="_blank" rel="noopener noreferrer" aria-label="View package on npm">npm</a>
         <a href="#what" aria-label="Read documentation">Documentation</a>
-        <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" aria-label="View MIT License">MIT License</a>
       </nav>
-      <p class="footer-credit">Made with &#9829; by Ryo</p>
     </div>
   </div>
 </footer>
