@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://ryo-manba.github.io/data-anim/">
+    <img src="https://ryo-manba.github.io/data-anim/og-image.png" alt="data-anim — Animate with just HTML" width="600" />
+  </a>
+</p>
+
 # data-anim
 
 [![npm version](https://img.shields.io/npm/v/data-anim.svg)](https://www.npmjs.com/package/data-anim)
