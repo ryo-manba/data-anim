@@ -9,7 +9,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description } = Astro.props.frontmatter || Astro.props;
 ---
 
 <BaseLayout title={`${title} - data-anim`} description={description}>
