@@ -1,7 +1,7 @@
 {
   "name": "data-anim",
   "version": "1.0.0",
-  "description": "Zero-JS animation library powered by data attributes",
+  "description": "Animate with just HTML. Powered by data attributes.",
   "type": "module",
   "packageManager": "pnpm@10.11.0",
   "main": "dist/data-anim.js",

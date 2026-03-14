@@ -4,7 +4,7 @@
 [![gzip size](https://img.shields.io/badge/gzip-<3KB-brightgreen.svg)](https://bundlephobia.com/package/data-anim)
 [![license](https://img.shields.io/npm/l/data-anim.svg)](LICENSE)
 
-Zero-JS animation library powered by data attributes. Add scroll, load, click, and hover animations to any HTML element without writing a single line of JavaScript.
+Animate with just HTML. Powered by data attributes. Add scroll, load, click, and hover animations to any HTML element without writing a single line of JavaScript.
 
 ## Quick Start
 
@@ -64,7 +64,7 @@ Zero-JS animation library powered by data attributes. Add scroll, load, click, a
 
 | Feature | data-anim | AOS | animate.css |
 |---------|-----------|-----|-------------|
-| Zero JS setup | Yes | No | No |
+| No JS to write | Yes | No | No |
 | Bundle size | <3KB | 14KB | 80KB |
 | Scroll trigger | Yes | Yes | No |
 | Click/Hover trigger | Yes | No | Manual |

@@ -1,6 +1,6 @@
 # data-anim
 
-> Zero-JS animation library powered by data attributes. Add a single `<script>` tag, write data attributes, and your HTML comes alive.
+> Animate with just HTML. Powered by data attributes. Add a single `<script>` tag, write data attributes, and your HTML comes alive.
 
 ## Quick Start
 
@@ -14,7 +14,7 @@ No `init()`. No import. No CSS file. No build step.
 
 ## Core Concept
 
-Users add `data-anim` attributes to HTML elements. The library auto-initializes on script load, injects CSS keyframes, and uses IntersectionObserver to trigger animations. Zero JavaScript knowledge required from the end user.
+Users add `data-anim` attributes to HTML elements. The library auto-initializes on script load, injects CSS keyframes, and uses IntersectionObserver to trigger animations. No JavaScript knowledge required from the end user.
 
 ## Data Attributes
 
