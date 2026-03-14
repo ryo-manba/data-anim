@@ -1,11 +1,10 @@
-import { getConfig } from './config';
+import { breakpoints } from './config';
 
 let dt: ReturnType<typeof setTimeout>;
 
 export const getDevice = (): string => {
-  const w = window.innerWidth,
-    b = getConfig().breakpoints;
-  return w < b.mobile ? 'mobile' : w < b.tablet ? 'tablet' : 'desktop';
+  const w = window.innerWidth;
+  return w < breakpoints.mobile ? 'mobile' : w < breakpoints.tablet ? 'tablet' : 'desktop';
 };
 
 export const isDisabled = (el: HTMLElement): boolean => {

@@ -76,24 +76,6 @@ Three-layer defense:
 
 Above-fold elements get a fast-reveal (150ms) instead of full animation to prevent perceived blinking.
 
-## Global Configuration
-
-```html
-<script>
-window.__dataAnim = {
-  duration: 500,
-  easing: "ease",
-  offset: 0.2,
-  distance: 30,
-  once: false,
-  debug: false,
-  breakpoints: { mobile: 768, tablet: 1024 },
-  reducedMotion: "respect"
-};
-</script>
-<script src="data-anim.min.js"></script>
-```
-
 ## Accessibility
 
 - `prefers-reduced-motion: reduce` automatically disables all animations.

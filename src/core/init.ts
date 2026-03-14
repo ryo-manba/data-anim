@@ -3,7 +3,6 @@ import { setupTrigger } from './triggers';
 import { applyStagger } from './stagger';
 import { isDisabled, onResize } from './responsive';
 import { startMutationObserver } from './mutation';
-import { debugLog } from './debug';
 import type { DataAnimElement } from '../types';
 
 // Layer 1: Anti-FOUC
@@ -40,7 +39,6 @@ export function initElement(el: HTMLElement): void {
   )
     el.setAttribute('data-anim-duration', '800');
   setupTrigger(d);
-  debugLog('init:' + el.getAttribute('data-anim'), el);
 }
 
 export function init(): void {

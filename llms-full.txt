@@ -297,42 +297,6 @@ These use non-standard CSS properties:
 
 ---
 
-## Global Configuration
-
-Set `window.__dataAnim` BEFORE the script loads:
-
-```html
-<script>
-window.__dataAnim = {
-  duration: 500,        // Default duration (ms)
-  easing: "ease",       // Default easing
-  offset: 0.2,          // Default scroll offset
-  distance: 30,         // Default translate distance (px)
-  once: false,          // Default once behavior
-  debug: false,         // Enable debug mode (colored outlines + console logs)
-  breakpoints: {
-    mobile: 768,        // Mobile breakpoint (px)
-    tablet: 1024        // Tablet breakpoint (px)
-  },
-  reducedMotion: "respect",  // "respect" | "ignore" | "disable"
-  aboveFold: "fast-reveal",  // "fast-reveal" | "skip" | "animate"
-  aboveFoldDuration: 150,    // Fast-reveal duration (ms)
-  fallbackTimeout: 5000      // Safety timeout (ms)
-};
-</script>
-```
-
-## Debug Mode
-
-When `debug: true`:
-- Blue outline: waiting for trigger
-- Green outline: has been animated
-- Red outline: error or never animated
-- Yellow outline: disabled (responsive/reduced-motion)
-- Console logs: initialization info, trigger events, performance timing
-
----
-
 ## Best Practices for AI-Generated HTML
 
 1. **Always place script in `<head>` synchronously** for anti-FOUC

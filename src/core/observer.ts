@@ -1,7 +1,6 @@
-import { getConfig, easings } from './config';
+import { DEFAULTS, easings } from './config';
 import { animationMap } from '../animations/index';
 import { isDisabled, getMobileAnim } from './responsive';
-import { debugLog, debugOutline } from './debug';
 import type { DataAnimElement } from '../types';
 
 const ms = (v: string) => (/^\d+$/.test(v) ? v + 'ms' : v);
@@ -13,17 +12,14 @@ export function playAnimation(el: DataAnimElement, isHover = false): void {
   }
   const n = getMobileAnim(el) || el.getAttribute('data-anim') || '';
   if (!animationMap.has(n)) return;
-  const c = getConfig(),
-    dist = el.getAttribute('data-anim-distance');
+  const dist = el.getAttribute('data-anim-distance');
   if (dist) el.style.setProperty('--da-distance', dist);
   const e = el.getAttribute('data-anim-easing') || 'ease';
-  const dur = ms(el.getAttribute('data-anim-duration') || '' + c.duration);
+  const dur = ms(el.getAttribute('data-anim-duration') || '' + DEFAULTS.duration);
   // For hover: use fill:none (don't apply from-state) + negative delay to skip initial opacity:0 frame
   const fill = isHover ? 'none' : el.getAttribute('data-anim-fill') || 'both';
   const delay = isHover ? '-100ms' : ms(el.getAttribute('data-anim-delay') || '0');
   el.style.animation = `da-${n} ${dur} ${easings[e] || e} ${delay} ${el.getAttribute('data-anim-iteration') || '1'} ${fill}`;
-  debugLog('play:' + n, el);
-  debugOutline(el);
 }
 
 export function resetAnimation(el: DataAnimElement, forHover = false): void {
@@ -42,9 +38,8 @@ export function resetAnimation(el: DataAnimElement, forHover = false): void {
 }
 
 export function createObserver(el: DataAnimElement): void {
-  const c = getConfig(),
-    th = parseFloat(el.getAttribute('data-anim-offset') || '') || c.offset;
-  const once = el.hasAttribute('data-anim-once') || c.once,
+  const th = parseFloat(el.getAttribute('data-anim-offset') || '') || DEFAULTS.offset;
+  const once = el.hasAttribute('data-anim-once'),
     mirror = el.hasAttribute('data-anim-mirror');
   const o = new IntersectionObserver(
     (es) => {

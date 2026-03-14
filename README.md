@@ -60,20 +60,6 @@ Zero-JS animation library powered by data attributes. Add scroll, load, click, a
 **Rotate:** rotateIn, rotateInDownLeft, rotateInDownRight
 **Special:** blur, clipReveal, typewriter
 
-## Global Config
-
-```html
-<script>
-window.__dataAnim = {
-  offset: 0.2,
-  duration: 500,
-  easing: 'ease',
-  once: false,
-  debug: false
-};
-</script>
-```
-
 ## Comparison
 
 | Feature | data-anim | AOS | animate.css |
