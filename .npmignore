@@ -1,0 +1,10 @@
+src/
+tests/
+spec/
+*.ts
+tsconfig.json
+build.js
+CLAUDE.md
+prompt.md
+.git
+.github

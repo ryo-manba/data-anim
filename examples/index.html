@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>data-anim — Zero-JS Animation Library Powered by Data Attributes</title>
+<meta name="description" content="Add a script tag. Write attributes. Your HTML comes alive. Zero-JS animation library under 2KB gzip with 30+ animations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fira+Code:wght@400;500&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<!-- data-anim library -->
+<script src="../dist/data-anim.min.js"></script>
+
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #06061a;
+  color: #e8e8f0;
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========== SKIP LINK ========== */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  padding: 12px 24px;
+  background: #6366f1;
+  color: #fff;
+  border-radius: 0 0 8px 8px;
+  z-index: 1000;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ========== TYPOGRAPHY ========== */
+h1, h2, h3, h4 {
+  font-family: 'Sora', sans-serif;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+p {
+  color: #8888a8;
+}
+
+code, pre {
+  font-family: 'Fira Code', monospace;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ========== UTILITIES ========== */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-padding {
+  padding: 120px 0;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  color: #8888a8;
+  max-width: 600px;
+  margin: 0 auto 64px;
+  text-align: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ========== HERO ========== */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(99,102,241,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 60% 55%, rgba(168,85,247,0.08) 0%, transparent 60%),
+    #06061a;
+}
+
+.hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 24px;
+}
+
+.hero-logo {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+#hero h1 {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  max-width: 800px;
+}
+
+.hero-tagline {
+  font-size: 20px;
+  color: #8888a8;
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+.hero-subcopy {
+  font-size: 16px;
+  color: #6668888;
+  max-width: 500px;
+}
+
+/* Install block */
+.install-block {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: #111133;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.install-block code {
+  padding: 14px 20px;
+  font-size: 14px;
+  color: #a5f3a0;
+  white-space: nowrap;
+}
+
+.install-block .copy-btn {
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border: none;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  color: #8888a8;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.install-block .copy-btn:hover {
+  color: #e8e8f0;
+  background: rgba(255,255,255,0.08);
+}
+
+/* CTAs */
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #fff;
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  text-decoration: none;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: transparent;
+  color: #e8e8f0;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.04);
+}
+
+/* Badges */
+.hero-badges {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.badge {
+  padding: 6px 16px;
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #a5b4fc;
+}
+
+/* ========== WHAT SECTION ========== */
+#what {
+  background: #0d0d2b;
+}
+
+.what-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.code-editor {
+  background: #111133;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(99,102,241,0.1);
+}
+
+.code-editor-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.code-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.code-dot:nth-child(1) { background: #f87171; }
+.code-dot:nth-child(2) { background: #fbbf24; }
+.code-dot:nth-child(3) { background: #34d399; }
+
+.code-editor-title {
+  font-size: 13px;
+  color: #8888a8;
+  margin-left: 8px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.code-editor pre {
+  padding: 24px;
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+
+/* Syntax highlight classes */
+.tag { color: #f472b6; }
+.attr { color: #67e8f9; }
+.value { color: #a5f3a0; }
+.comment { color: #555577; }
+.text-content { color: #e8e8f0; }
+
+.what-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.preview-card {
+  padding: 24px 28px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.preview-card:hover {
+  border-color: rgba(99,102,241,0.3);
+  box-shadow: 0 0 30px rgba(99,102,241,0.08);
+}
+
+.preview-card h4 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.preview-card p {
+  font-size: 15px;
+  color: #8888a8;
+}
+
+/* ========== FEATURES ========== */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.feature-card {
+  padding: 32px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  border-color: rgba(99,102,241,0.3);
+  box-shadow: 0 0 40px rgba(99,102,241,0.08);
+}
+
+.feature-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.feature-card h3 {
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.feature-card p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ========== HOW IT WORKS ========== */
+#how {
+  background: #0d0d2b;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  position: relative;
+}
+
+/* Connector line between steps */
+.steps-grid::before {
+  content: '';
+  position: absolute;
+  top: 60px;
+  left: calc(16.66% + 40px);
+  right: calc(16.66% + 40px);
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  opacity: 0.3;
+}
+
+.step-card {
+  text-align: center;
+  padding: 32px 24px;
+  position: relative;
+}
+
+.step-number {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.15));
+  border: 2px solid rgba(99,102,241,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sora', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 auto 20px;
+  color: #a5b4fc;
+  position: relative;
+  z-index: 1;
+}
+
+.step-card h3 {
+  margin-bottom: 12px;
+}
+
+.step-card p {
+  font-size: 15px;
+}
+
+.step-code {
+  margin-top: 16px;
+  background: #111133;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 13px;
+  text-align: left;
+  border: 1px solid rgba(255,255,255,0.06);
+  overflow-x: auto;
+}
+
+/* ========== GALLERY ========== */
+.gallery-tabs {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+
+/* Hide radio inputs */
+.gallery-wrapper > input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gallery-tabs label {
+  padding: 10px 24px;
+  border-radius: 100px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #8888a8;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  border: 1px solid transparent;
+}
+
+.gallery-tabs label:hover {
+  color: #e8e8f0;
+  background: rgba(255,255,255,0.04);
+}
+
+/* Active tab label styles via :has() with fallback */
+.gallery-wrapper:has(#tab-fade:checked) label[for="tab-fade"],
+.gallery-wrapper:has(#tab-slide:checked) label[for="tab-slide"],
+.gallery-wrapper:has(#tab-zoom:checked) label[for="tab-zoom"],
+.gallery-wrapper:has(#tab-bounce:checked) label[for="tab-bounce"],
+.gallery-wrapper:has(#tab-attention:checked) label[for="tab-attention"],
+.gallery-wrapper:has(#tab-rotate:checked) label[for="tab-rotate"] {
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+}
+
+/* Tab contents — all hidden by default */
+.tab-content {
+  display: none;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+/* Show checked tab content */
+#tab-fade:checked ~ .gallery-content .tab-content-fade,
+#tab-slide:checked ~ .gallery-content .tab-content-slide,
+#tab-zoom:checked ~ .gallery-content .tab-content-zoom,
+#tab-bounce:checked ~ .gallery-content .tab-content-bounce,
+#tab-attention:checked ~ .gallery-content .tab-content-attention,
+#tab-rotate:checked ~ .gallery-content .tab-content-rotate {
+  display: grid;
+}
+
+.anim-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 0;
+  text-align: center;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.anim-card:hover {
+  border-color: rgba(99,102,241,0.4);
+  box-shadow: 0 0 40px rgba(99,102,241,0.1);
+}
+
+.anim-card .anim-stage {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.anim-preview {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sora', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.anim-name {
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
+  color: #a5b4fc;
+  display: block;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.02);
+}
+
+/* ========== COMPARISON ========== */
+#comparison {
+  background: #0d0d2b;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  min-width: 700px;
+}
+
+.comparison-table thead {
+  background: rgba(255,255,255,0.03);
+}
+
+.comparison-table th {
+  padding: 18px 20px;
+  text-align: left;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: #8888a8;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  white-space: nowrap;
+}
+
+.comparison-table th.highlight {
+  color: #e8e8f0;
+  background: rgba(99,102,241,0.08);
+  border-bottom-color: rgba(99,102,241,0.2);
+}
+
+.comparison-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: #8888a8;
+}
+
+.comparison-table td.highlight {
+  background: rgba(99,102,241,0.04);
+}
+
+.comparison-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table td.feature-name {
+  font-weight: 500;
+  color: #e8e8f0;
+}
+
+.check {
+  color: #34d399;
+  font-size: 18px;
+}
+
+.cross {
+  color: #555577;
+  font-size: 18px;
+}
+
+.size-value {
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
+}
+
+/* ========== QUICKSTART ========== */
+.quickstart-wrapper {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.quickstart-code {
+  background: #111133;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(99,102,241,0.1);
+}
+
+.quickstart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.quickstart-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quickstart-code pre {
+  padding: 24px;
+  font-size: 14px;
+  line-height: 1.8;
+  overflow-x: auto;
+}
+
+.quickstart-copy-btn {
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  color: #8888a8;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s, background 0.2s;
+}
+
+.quickstart-copy-btn:hover {
+  color: #e8e8f0;
+  background: rgba(255,255,255,0.1);
+}
+
+/* ========== FOOTER ========== */
+#footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 48px 0;
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.footer-logo {
+  font-family: 'Sora', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-links a {
+  color: #8888a8;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #e8e8f0;
+}
+
+.footer-credit {
+  font-size: 14px;
+  color: #555577;
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* Tablet: 640px - 1024px */
+@media (max-width: 1024px) {
+  .tab-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .steps-grid::before {
+    display: none;
+  }
+}
+
+/* Mobile: < 640px */
+@media (max-width: 640px) {
+  h2 {
+    font-size: 28px;
+  }
+
+  .section-padding {
+    padding: 80px 0;
+  }
+
+  .section-subtitle {
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  /* Hero */
+  #hero h1 {
+    font-size: 36px;
+    letter-spacing: -1px;
+  }
+
+  .hero-tagline {
+    font-size: 17px;
+  }
+
+  .install-block code {
+    font-size: 13px;
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 24px;
+  }
+
+  .btn-primary, .btn-secondary {
+    justify-content: center;
+  }
+
+  /* What */
+  .what-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  /* Features */
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Steps */
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .steps-grid::before {
+    display: none;
+  }
+
+  /* Gallery */
+  .tab-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gallery-tabs label {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  /* Table */
+  .comparison-table {
+    font-size: 14px;
+  }
+
+  /* Quickstart */
+  .quickstart-code pre {
+    font-size: 13px;
+    padding: 16px;
+  }
+}
+
+/* ========== ACCESSIBILITY ========== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-anim] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Focus visible for keyboard nav */
+:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 4px;
+}
+</style>
+</head>
+
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ===== HERO ===== -->
+<header id="hero">
+  <div class="hero-inner">
+    <div class="hero-logo" data-anim="fadeIn" data-anim-trigger="load">
+      <span class="gradient-text">data-anim</span>
+    </div>
+
+    <h1 data-anim="fadeInUp" data-anim-trigger="load" data-anim-delay="200">
+      Zero-JS animation library powered by <span class="gradient-text">data attributes</span>.
+    </h1>
+
+    <p class="hero-tagline" data-anim="fadeInUp" data-anim-trigger="load" data-anim-delay="400">
+      Add a <code>&lt;script&gt;</code> tag. Write attributes. Your HTML comes alive.
+    </p>
+
+    <div class="install-block" data-anim="zoomIn" data-anim-trigger="load" data-anim-delay="600">
+      <code>npm install data-anim</code>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('npm install data-anim')" aria-label="Copy install command">Copy</button>
+    </div>
+
+    <div class="hero-ctas" data-anim="fadeInUp" data-anim-trigger="load" data-anim-delay="800">
+      <a href="#quickstart" class="btn-primary" aria-label="Get started with data-anim">Get Started</a>
+      <a href="https://github.com/AimWhy/data-anim" class="btn-secondary" target="_blank" rel="noopener noreferrer" aria-label="View data-anim on GitHub">GitHub &#9733;</a>
+    </div>
+
+    <div class="hero-badges" data-anim="fadeIn" data-anim-trigger="load" data-anim-delay="1000">
+      <span class="badge">&lt; 2KB gzip</span>
+      <span class="badge">0 deps</span>
+      <span class="badge">30+ animations</span>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+
+<!-- ===== WHAT ===== -->
+<section id="what" class="section-padding">
+  <div class="container">
+    <h2 class="text-center" data-anim="fadeIn" data-anim-once>What is data-anim?</h2>
+    <p class="section-subtitle" data-anim="fadeIn" data-anim-once>A declarative animation library. No JavaScript authoring required &mdash; just HTML attributes.</p>
+
+    <div class="what-grid">
+      <div class="code-editor" data-anim="fadeInLeft" data-anim-once>
+        <div class="code-editor-header">
+          <span class="code-dot"></span>
+          <span class="code-dot"></span>
+          <span class="code-dot"></span>
+          <span class="code-editor-title">index.html</span>
+        </div>
+        <pre><code><span class="comment">&lt;!-- Just add attributes --&gt;</span>
+<span class="tag">&lt;h1</span>
+  <span class="attr">data-anim</span>=<span class="value">"fadeInUp"</span>
+  <span class="attr">data-anim-trigger</span>=<span class="value">"scroll"</span><span class="tag">&gt;</span>
+  <span class="text-content">Hello World</span>
+<span class="tag">&lt;/h1&gt;</span>
+
+<span class="tag">&lt;div</span>
+  <span class="attr">data-anim</span>=<span class="value">"zoomIn"</span>
+  <span class="attr">data-anim-trigger</span>=<span class="value">"hover"</span>
+  <span class="attr">data-anim-once</span><span class="tag">&gt;</span>
+  <span class="text-content">Hover me!</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="tag">&lt;ul</span>
+  <span class="attr">data-anim-stagger</span>=<span class="value">"100"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;li</span> <span class="attr">data-anim</span>=<span class="value">"fadeInRight"</span><span class="tag">&gt;</span><span class="text-content">Item 1</span><span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li</span> <span class="attr">data-anim</span>=<span class="value">"fadeInRight"</span><span class="tag">&gt;</span><span class="text-content">Item 2</span><span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li</span> <span class="attr">data-anim</span>=<span class="value">"fadeInRight"</span><span class="tag">&gt;</span><span class="text-content">Item 3</span><span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span></code></pre>
+      </div>
+
+      <div class="what-preview" data-anim="fadeInRight" data-anim-once>
+        <div class="preview-card" data-anim="fadeInUp" data-anim-once>
+          <h4>Hello World</h4>
+          <p>This element faded in from below when it scrolled into view.</p>
+        </div>
+        <div class="preview-card" data-anim="zoomIn" data-anim-trigger="hover">
+          <h4>Hover me!</h4>
+          <p>This element zooms in when you hover over it.</p>
+        </div>
+        <div class="preview-card" data-anim="fadeInRight" data-anim-once>
+          <h4>Staggered Items</h4>
+          <p>These cards appear one after another with a stagger delay.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section id="features" class="section-padding">
+  <div class="container">
+    <h2 class="text-center" data-anim="fadeIn" data-anim-once>Why data-anim?</h2>
+    <p class="section-subtitle" data-anim="fadeIn" data-anim-once>Six reasons to choose a declarative approach over imperative animation code.</p>
+
+    <div class="features-grid" data-anim-stagger="100" data-anim-stagger-from="center">
+      <div class="feature-card" data-anim="fadeInUp" data-anim-once>
+        <span class="feature-icon" aria-hidden="true">&#x1F6E1;&#xFE0F;</span>
+        <h3>Anti-FOUC</h3>
+        <p>3-layer flash prevention ensures elements stay hidden until their animation fires. No flicker, ever.</p>
+      </div>
+      <div class="feature-card" data-anim="fadeInUp" data-anim-once>
+        <span class="feature-icon" aria-hidden="true">&#x26A1;</span>
+        <h3>&lt; 2KB gzip</h3>
+        <p>Zero dependencies. Ships as a single file &mdash; smaller than most loading spinners.</p>
+      </div>
+      <div class="feature-card" data-anim="fadeInUp" data-anim-once>
+        <span class="feature-icon" aria-hidden="true">&#x1F3AF;</span>
+        <h3>4 Triggers</h3>
+        <p>Scroll, load, click, and hover. Combine them to build complex interactions without writing code.</p>
+      </div>
+      <div class="feature-card" data-anim="fadeInUp" data-anim-once>
+        <span class="feature-icon" aria-hidden="true">&#x1F3AC;</span>
+        <h3>30+ Animations</h3>
+        <p>Fade, slide, zoom, bounce, rotate, and attention seekers. All built in, all customizable.</p>
+      </div>
+      <div class="feature-card" data-anim="fadeInUp" data-anim-once>
+        <span class="feature-icon" aria-hidden="true">&#x1F4F1;</span>
+        <h3>Responsive</h3>
+        <p>Disable or swap animations per breakpoint with data-anim-mobile and data-anim-tablet attributes.</p>
+      </div>
+      <div class="feature-card" data-anim="fadeInUp" data-anim-once>
+        <span class="feature-icon" aria-hidden="true">&#x267F;</span>
+        <h3>Accessible</h3>
+        <p>Automatically respects prefers-reduced-motion. Your users' preferences are honoured by default.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section id="how" class="section-padding">
+  <div class="container">
+    <h2 class="text-center" data-anim="fadeIn" data-anim-once>How It Works</h2>
+    <p class="section-subtitle" data-anim="fadeIn" data-anim-once>Three steps. No build tools. No configuration files.</p>
+
+    <div class="steps-grid" data-anim-stagger="200">
+      <div class="step-card" data-anim="fadeInRight" data-anim-once>
+        <div class="step-number">1</div>
+        <h3>Add Script</h3>
+        <p>Include the library via CDN or npm. One line in your HTML head.</p>
+        <div class="step-code">
+          <code><span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="value">"data-anim.js"</span><span class="tag">&gt;&lt;/script&gt;</span></code>
+        </div>
+      </div>
+
+      <div class="step-card" data-anim="fadeInRight" data-anim-once>
+        <div class="step-number">2</div>
+        <h3>Write Attributes</h3>
+        <p>Add data-anim attributes to any HTML element you want to animate.</p>
+        <div class="step-code">
+          <code><span class="tag">&lt;div</span> <span class="attr">data-anim</span>=<span class="value">"fadeInUp"</span><span class="tag">&gt;</span></code>
+        </div>
+      </div>
+
+      <div class="step-card" data-anim="fadeInRight" data-anim-once>
+        <div class="step-number">3</div>
+        <h3>Done &#10024;</h3>
+        <p>No build step. No config. Your elements animate on scroll, load, click, or hover.</p>
+        <div class="step-code">
+          <code><span class="comment">&lt;!-- That's it. Seriously. --&gt;</span></code>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GALLERY ===== -->
+<section id="gallery" class="section-padding">
+  <div class="container">
+    <h2 class="text-center" data-anim="fadeIn" data-anim-once>Animation Gallery</h2>
+    <p class="section-subtitle" data-anim="fadeIn" data-anim-once>Hover over each card to preview the animation. 30+ built-in animations across 6 categories.</p>
+
+    <div class="gallery-wrapper">
+      <!-- Radio inputs (must be siblings of .gallery-content for ~ selector) -->
+      <input type="radio" id="tab-fade" name="gallery-tab" checked>
+      <input type="radio" id="tab-slide" name="gallery-tab">
+      <input type="radio" id="tab-zoom" name="gallery-tab">
+      <input type="radio" id="tab-bounce" name="gallery-tab">
+      <input type="radio" id="tab-attention" name="gallery-tab">
+      <input type="radio" id="tab-rotate" name="gallery-tab">
+
+      <!-- Tab labels -->
+      <div class="gallery-tabs">
+        <label for="tab-fade">Fade</label>
+        <label for="tab-slide">Slide</label>
+        <label for="tab-zoom">Zoom</label>
+        <label for="tab-bounce">Bounce</label>
+        <label for="tab-attention">Attention</label>
+        <label for="tab-rotate">Rotate</label>
+      </div>
+
+      <!-- Tab content panels -->
+      <div class="gallery-content">
+        <!-- Fade -->
+        <div class="tab-content tab-content-fade">
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="fadeIn">Aa</div>
+            </div>
+            <span class="anim-name">fadeIn</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="fadeInUp">Aa</div>
+            </div>
+            <span class="anim-name">fadeInUp</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="fadeInDown">Aa</div>
+            </div>
+            <span class="anim-name">fadeInDown</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="fadeInLeft">Aa</div>
+            </div>
+            <span class="anim-name">fadeInLeft</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="fadeInRight">Aa</div>
+            </div>
+            <span class="anim-name">fadeInRight</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="fadeOut">Aa</div>
+            </div>
+            <span class="anim-name">fadeOut</span>
+          </div>
+        </div>
+
+        <!-- Slide -->
+        <div class="tab-content tab-content-slide">
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="slideInUp">Aa</div>
+            </div>
+            <span class="anim-name">slideInUp</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="slideInDown">Aa</div>
+            </div>
+            <span class="anim-name">slideInDown</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="slideInLeft">Aa</div>
+            </div>
+            <span class="anim-name">slideInLeft</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="slideInRight">Aa</div>
+            </div>
+            <span class="anim-name">slideInRight</span>
+          </div>
+        </div>
+
+        <!-- Zoom -->
+        <div class="tab-content tab-content-zoom">
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="zoomIn">Aa</div>
+            </div>
+            <span class="anim-name">zoomIn</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="zoomOut">Aa</div>
+            </div>
+            <span class="anim-name">zoomOut</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="zoomInUp">Aa</div>
+            </div>
+            <span class="anim-name">zoomInUp</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="zoomInDown">Aa</div>
+            </div>
+            <span class="anim-name">zoomInDown</span>
+          </div>
+        </div>
+
+        <!-- Bounce -->
+        <div class="tab-content tab-content-bounce">
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="bounce">Aa</div>
+            </div>
+            <span class="anim-name">bounce</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="bounceIn">Aa</div>
+            </div>
+            <span class="anim-name">bounceIn</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="bounceInUp">Aa</div>
+            </div>
+            <span class="anim-name">bounceInUp</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="bounceInDown">Aa</div>
+            </div>
+            <span class="anim-name">bounceInDown</span>
+          </div>
+        </div>
+
+        <!-- Attention -->
+        <div class="tab-content tab-content-attention">
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="shake">Aa</div>
+            </div>
+            <span class="anim-name">shake</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="pulse">Aa</div>
+            </div>
+            <span class="anim-name">pulse</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="wobble">Aa</div>
+            </div>
+            <span class="anim-name">wobble</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="flip">Aa</div>
+            </div>
+            <span class="anim-name">flip</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="swing">Aa</div>
+            </div>
+            <span class="anim-name">swing</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="rubberBand">Aa</div>
+            </div>
+            <span class="anim-name">rubberBand</span>
+          </div>
+        </div>
+
+        <!-- Rotate -->
+        <div class="tab-content tab-content-rotate">
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="rotateIn">Aa</div>
+            </div>
+            <span class="anim-name">rotateIn</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="rotateInDownLeft">Aa</div>
+            </div>
+            <span class="anim-name">rotateInDownLeft</span>
+          </div>
+          <div class="anim-card">
+            <div class="anim-stage">
+              <div class="anim-preview" data-gallery-anim="rotateInDownRight">Aa</div>
+            </div>
+            <span class="anim-name">rotateInDownRight</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== COMPARISON ===== -->
+<section id="comparison" class="section-padding">
+  <div class="container">
+    <h2 class="text-center" data-anim="fadeIn" data-anim-once>How It Compares</h2>
+    <p class="section-subtitle" data-anim="fadeIn" data-anim-once>Feature comparison against popular animation approaches.</p>
+
+    <div class="table-wrapper" data-anim="fadeInUp" data-anim-once>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="highlight">data-anim</th>
+            <th>AOS</th>
+            <th>Animate.css</th>
+            <th>GSAP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feature-name">Zero JS authoring</td>
+            <td class="highlight"><span class="check">&#10004;</span></td>
+            <td><span class="check">&#10004;</span></td>
+            <td><span class="check">&#10004;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Anti-FOUC</td>
+            <td class="highlight"><span class="check">&#10004;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Bundle size</td>
+            <td class="highlight"><span class="size-value">&lt; 2KB</span></td>
+            <td><span class="size-value">~14KB</span></td>
+            <td><span class="size-value">~80KB</span></td>
+            <td><span class="size-value">~70KB</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Scroll trigger</td>
+            <td class="highlight"><span class="check">&#10004;</span></td>
+            <td><span class="check">&#10004;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="check">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Click / Hover trigger</td>
+            <td class="highlight"><span class="check">&#10004;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="check">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Built-in animations</td>
+            <td class="highlight"><span class="check">&#10004;</span></td>
+            <td><span class="check">&#10004;</span></td>
+            <td><span class="check">&#10004;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Stagger (attr only)</td>
+            <td class="highlight"><span class="check">&#10004;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Dynamic elements</td>
+            <td class="highlight"><span class="check">&#10004;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="check">&#10004;</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Reduced motion</td>
+            <td class="highlight"><span class="check">&#10004;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+            <td><span class="cross">&#10008;</span></td>
+          </tr>
+          <tr>
+            <td class="feature-name">Separate CSS required</td>
+            <td class="highlight"><span class="check">&#10004;</span> No</td>
+            <td><span class="check">&#10004;</span> No</td>
+            <td><span class="cross">&#10008;</span> Yes</td>
+            <td><span class="check">&#10004;</span> No</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUICKSTART ===== -->
+<section id="quickstart" class="section-padding">
+  <div class="container">
+    <h2 class="text-center" data-anim="fadeIn" data-anim-once>Quick Start</h2>
+    <p class="section-subtitle" data-anim="fadeIn" data-anim-once>Copy this complete HTML file and open it in your browser. That's it.</p>
+
+    <div class="quickstart-wrapper" data-anim="fadeInUp" data-anim-once>
+      <div class="quickstart-code">
+        <div class="quickstart-header">
+          <div class="quickstart-header-left">
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-dot"></span>
+            <span class="code-editor-title">quickstart.html</span>
+          </div>
+          <button class="quickstart-copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('quickstart-source').textContent)" aria-label="Copy quick start code">Copy</button>
+        </div>
+        <pre><code id="quickstart-source"><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="value">"en"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="value">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"viewport"</span>
+    <span class="attr">content</span>=<span class="value">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span><span class="text-content">My Page</span><span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="value">"https://unpkg.com/data-anim"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="tag">&lt;h1</span> <span class="attr">data-anim</span>=<span class="value">"fadeInUp"</span><span class="tag">&gt;</span>
+    <span class="text-content">Hello data-anim!</span>
+  <span class="tag">&lt;/h1&gt;</span>
+
+  <span class="tag">&lt;p</span> <span class="attr">data-anim</span>=<span class="value">"fadeInUp"</span>
+     <span class="attr">data-anim-delay</span>=<span class="value">"200"</span><span class="tag">&gt;</span>
+    <span class="text-content">I animate on scroll with a 200ms delay.</span>
+  <span class="tag">&lt;/p&gt;</span>
+
+  <span class="tag">&lt;div</span> <span class="attr">data-anim</span>=<span class="value">"zoomIn"</span>
+       <span class="attr">data-anim-trigger</span>=<span class="value">"hover"</span><span class="tag">&gt;</span>
+    <span class="text-content">Hover to zoom!</span>
+  <span class="tag">&lt;/div&gt;</span>
+
+  <span class="tag">&lt;ul</span> <span class="attr">data-anim-stagger</span>=<span class="value">"100"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;li</span> <span class="attr">data-anim</span>=<span class="value">"fadeInRight"</span><span class="tag">&gt;</span><span class="text-content">One</span><span class="tag">&lt;/li&gt;</span>
+    <span class="tag">&lt;li</span> <span class="attr">data-anim</span>=<span class="value">"fadeInRight"</span><span class="tag">&gt;</span><span class="text-content">Two</span><span class="tag">&lt;/li&gt;</span>
+    <span class="tag">&lt;li</span> <span class="attr">data-anim</span>=<span class="value">"fadeInRight"</span><span class="tag">&gt;</span><span class="text-content">Three</span><span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;/ul&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="gradient-text">data-anim</span>
+      </div>
+      <p style="font-size:15px;">Zero-JS animation library powered by data attributes.</p>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="https://github.com/AimWhy/data-anim" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub">GitHub</a>
+        <a href="https://www.npmjs.com/package/data-anim" target="_blank" rel="noopener noreferrer" aria-label="View package on npm">npm</a>
+        <a href="#what" aria-label="Read documentation">Documentation</a>
+        <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer" aria-label="View MIT License">MIT License</a>
+      </nav>
+      <p class="footer-credit">Made with &#9829; by Ryo</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Gallery hover: detect on stable .anim-card parent, animate child .anim-preview -->
+<script>
+document.querySelectorAll('.anim-card').forEach(function(card) {
+  var preview = card.querySelector('.anim-preview[data-gallery-anim]');
+  if (!preview) return;
+  var name = preview.getAttribute('data-gallery-anim');
+  var animating = false;
+  card.addEventListener('mouseenter', function() {
+    if (animating) return;
+    animating = true;
+    preview.style.animation = 'none';
+    void preview.offsetWidth;
+    preview.style.animation = 'da-' + name + ' 1.2s ease both';
+    preview.addEventListener('animationend', function() {
+      animating = false;
+      preview.style.animation = '';
+    }, { once: true });
+  });
+});
+</script>
+
+</body>
+</html>

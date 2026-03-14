@@ -1,0 +1,170 @@
+# data-anim
+
+> Zero-JS animation library powered by data attributes. Add a single `<script>` tag, write data attributes, and your HTML comes alive.
+
+## Quick Start
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/data-anim@1/dist/data-anim.min.js"></script>
+
+<h1 data-anim="fadeInUp">Hello, World!</h1>
+```
+
+No `init()`. No import. No CSS file. No build step.
+
+## Core Concept
+
+Users add `data-anim` attributes to HTML elements. The library auto-initializes on script load, injects CSS keyframes, and uses IntersectionObserver to trigger animations. Zero JavaScript knowledge required from the end user.
+
+## Data Attributes
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `data-anim` | string | (required) | Animation name: fadeIn, fadeInUp, fadeInDown, fadeInLeft, fadeInRight, fadeOut, slideInUp, slideInDown, slideInLeft, slideInRight, zoomIn, zoomOut, zoomInUp, zoomInDown, bounce, bounceIn, bounceInUp, bounceInDown, shake, pulse, wobble, flip, swing, rubberBand, rotateIn, rotateInDownLeft, rotateInDownRight, blur, clipReveal, typewriter |
+| `data-anim-trigger` | string | "scroll" | Trigger type: scroll, load, click, hover |
+| `data-anim-duration` | number | 500 | Duration in ms |
+| `data-anim-delay` | number | 0 | Delay in ms |
+| `data-anim-easing` | string | "ease" | CSS easing or preset: ease, ease-out-expo, ease-out-back, spring |
+| `data-anim-once` | boolean | false | Play animation only once |
+| `data-anim-offset` | number | 0.2 | Scroll trigger threshold (0-1) |
+| `data-anim-mirror` | boolean | false | Reverse animation on scroll out |
+| `data-anim-distance` | number | 30 | Translation distance in px |
+| `data-anim-scale` | number | 0.9 | Scale factor for zoom animations |
+| `data-anim-fill` | string | "both" | CSS animation-fill-mode |
+| `data-anim-iteration` | number | 1 | CSS animation-iteration-count |
+| `data-anim-stagger` | number | — | Parent attr: delay between children (ms) |
+| `data-anim-stagger-from` | string | "start" | Stagger direction: start, end, center, edges |
+| `data-anim-disable` | string | — | Disable at breakpoint: mobile, tablet, desktop, or px value |
+| `data-anim-mobile` | string | — | Override animation name on mobile |
+| `data-anim-anchor` | string | — | CSS selector of anchor element for scroll trigger |
+
+## Built-in Animations (30)
+
+**Fade (6):** fadeIn, fadeOut, fadeInUp, fadeInDown, fadeInLeft, fadeInRight
+**Slide (4):** slideInUp, slideInDown, slideInLeft, slideInRight
+**Zoom (4):** zoomIn, zoomOut, zoomInUp, zoomInDown
+**Bounce (4):** bounce, bounceIn, bounceInUp, bounceInDown
+**Attention (6):** shake, pulse, wobble, flip, swing, rubberBand
+**Rotate (3):** rotateIn, rotateInDownLeft, rotateInDownRight
+**Special (3):** blur, clipReveal, typewriter
+
+## Triggers
+
+- **scroll** (default): IntersectionObserver-based. Animates when element enters viewport.
+- **load**: Fires on DOMContentLoaded. Use `data-anim-delay` to stagger.
+- **click**: Replays animation on every click. Uses animation reset trick (reflow).
+- **hover**: Plays on mouseenter, resets on mouseleave. Also responds to focus-visible. Elements with hover trigger are NOT hidden initially.
+
+## Stagger
+
+Apply `data-anim-stagger` to a parent element. All direct children with `data-anim` get incremental delays.
+
+```html
+<ul data-anim-stagger="100" data-anim-stagger-from="center">
+  <li data-anim="fadeInUp">0ms from center</li>
+  <li data-anim="fadeInUp">100ms from center</li>
+  <li data-anim="fadeInUp">200ms from center</li>
+</ul>
+```
+
+## Anti-FOUC (Flash of Unstyled Content)
+
+Three-layer defense:
+1. **Inline CSS injection**: Script immediately injects `opacity: 0` on `[data-anim]` elements before paint.
+2. **`<noscript>` fallback**: Auto-injects noscript block to show content if JS fails.
+3. **5-second timeout**: Forces all hidden elements visible if initialization stalls.
+
+Above-fold elements get a fast-reveal (150ms) instead of full animation to prevent perceived blinking.
+
+## Global Configuration
+
+```html
+<script>
+window.__dataAnim = {
+  duration: 500,
+  easing: "ease",
+  offset: 0.2,
+  distance: 30,
+  once: false,
+  debug: false,
+  breakpoints: { mobile: 768, tablet: 1024 },
+  reducedMotion: "respect"
+};
+</script>
+<script src="data-anim.min.js"></script>
+```
+
+## Accessibility
+
+- `prefers-reduced-motion: reduce` automatically disables all animations.
+- Hover triggers also respond to `focus-visible` for keyboard users.
+- No content reflow or position changes that confuse screen readers.
+
+## Technical Details
+
+- **CSS Animations only** (no Web Animations API)
+- **GPU-accelerated**: Only animates transform + opacity (exceptions: blur uses filter, clipReveal uses clip-path)
+- **IntersectionObserver** for scroll detection (no scroll event listeners)
+- **MutationObserver** for dynamic elements (no manual refresh needed)
+- **Bundle size**: ~2.8KB gzip, 0 dependencies
+- **Browser support**: All modern browsers (Chrome, Firefox, Safari, Edge)
+
+## Installation
+
+**CDN:**
+```html
+<script src="https://cdn.jsdelivr.net/npm/data-anim@1/dist/data-anim.min.js"></script>
+```
+
+**npm:**
+```bash
+npm install data-anim
+```
+
+```js
+import 'data-anim'; // auto-initializes
+```
+
+## Easing Presets
+
+| Name | cubic-bezier |
+|------|-------------|
+| ease | (0.25, 0.1, 0.25, 1) |
+| ease-out-expo | (0.16, 1, 0.3, 1) |
+| ease-out-back | (0.34, 1.56, 0.64, 1) |
+| spring | (0.175, 0.885, 0.32, 1.275) |
+
+## Common Patterns
+
+**Hero with staggered load animation:**
+```html
+<h1 data-anim="fadeIn" data-anim-trigger="load">Title</h1>
+<p data-anim="fadeInUp" data-anim-trigger="load" data-anim-delay="200">Subtitle</p>
+<button data-anim="fadeInUp" data-anim-trigger="load" data-anim-delay="400">CTA</button>
+```
+
+**Card grid with stagger:**
+```html
+<div data-anim-stagger="100" data-anim-stagger-from="center">
+  <div data-anim="fadeInUp" data-anim-once>Card 1</div>
+  <div data-anim="fadeInUp" data-anim-once>Card 2</div>
+  <div data-anim="fadeInUp" data-anim-once>Card 3</div>
+</div>
+```
+
+**Mobile-optimized animation:**
+```html
+<div data-anim="slideInLeft" data-anim-mobile="fadeIn">
+  Desktop: slide in from left. Mobile: simple fade.
+</div>
+```
+
+**Interactive button:**
+```html
+<button data-anim="bounce" data-anim-trigger="click">Click me!</button>
+```
+
+**Hover effect:**
+```html
+<div data-anim="pulse" data-anim-trigger="hover">Hover me</div>
+```

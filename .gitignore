@@ -1,0 +1,10 @@
+node_modules/
+dist/
+docs/node_modules/
+docs/.astro/
+docs/dist/
+*.log
+.DS_Store
+memo.md
+spec/
+prompt.md

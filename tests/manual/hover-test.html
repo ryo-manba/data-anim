@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hover Test</title>
+<script src="../../dist/data-anim.min.js"></script>
+<style>
+body { background: #111; color: #fff; font-family: sans-serif; padding: 40px; }
+.box { width: 80px; height: 80px; background: purple; border-radius: 8px; margin: 20px; display: inline-block; }
+.card { border: 1px solid #333; padding: 20px; margin: 10px; display: inline-block; text-align: center; }
+h2 { margin-top: 40px; }
+</style>
+</head>
+<body>
+<h1>data-anim Hover Test</h1>
+<p>Open DevTools console to check for errors.</p>
+
+<h2>Hover triggers (hover over each box):</h2>
+<div class="card">
+  <div class="box" data-anim="shake" data-anim-trigger="hover"></div>
+  <div>shake</div>
+</div>
+<div class="card">
+  <div class="box" data-anim="pulse" data-anim-trigger="hover"></div>
+  <div>pulse</div>
+</div>
+<div class="card">
+  <div class="box" data-anim="fadeIn" data-anim-trigger="hover"></div>
+  <div>fadeIn</div>
+</div>
+<div class="card">
+  <div class="box" data-anim="bounce" data-anim-trigger="hover"></div>
+  <div>bounce</div>
+</div>
+<div class="card">
+  <div class="box" data-anim="flip" data-anim-trigger="hover"></div>
+  <div>flip</div>
+</div>
+
+<h2>Load triggers (should animate on page load):</h2>
+<div class="box" data-anim="fadeInUp" data-anim-trigger="load"></div>
+<div class="box" data-anim="zoomIn" data-anim-trigger="load" data-anim-delay="200"></div>
+<div class="box" data-anim="fadeInRight" data-anim-trigger="load" data-anim-delay="400"></div>
+
+<h2>Scroll triggers (scroll down):</h2>
+<div style="height: 600px"></div>
+<div class="box" data-anim="fadeInUp"></div>
+<div class="box" data-anim="slideInLeft"></div>
+<div class="box" data-anim="bounceIn"></div>
+
+<script>
+console.log('=== data-anim debug ===');
+console.log('window.__dataAnim:', window.__dataAnim);
+console.log('[data-anim] elements:', document.querySelectorAll('[data-anim]').length);
+document.querySelectorAll('[data-anim]').forEach(el => {
+  console.log('  -', el.getAttribute('data-anim'), 'trigger:', el.getAttribute('data-anim-trigger') || 'scroll', 'opacity:', getComputedStyle(el).opacity);
+});
+</script>
+</body>
+</html>

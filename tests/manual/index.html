@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>data-anim Manual Test</title>
+  <script>window.__dataAnim = { debug: true };</script>
+  <script src="../../dist/data-anim.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; padding: 20px; max-width: 900px; margin: 0 auto; }
+    h1 { margin-bottom: 20px; }
+    h2 { margin: 40px 0 15px; color: #333; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+    .box { width: 150px; height: 80px; background: #4ecdc4; display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 12px; font-weight: bold; margin: 10px; border-radius: 8px; text-align: center; }
+    .spacer { height: 100vh; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 24px; }
+    .stagger-group { display: flex; flex-wrap: wrap; }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>data-anim Manual Test</h1>
+
+  <!-- LOAD TRIGGER -->
+  <h2>Load Trigger</h2>
+  <div class="row">
+    <div class="box" data-anim="fadeIn" data-anim-trigger="load">fadeIn (load)</div>
+    <div class="box" data-anim="zoomIn" data-anim-trigger="load">zoomIn (load)</div>
+  </div>
+
+  <!-- CLICK TRIGGER -->
+  <h2>Click Trigger</h2>
+  <div class="row">
+    <div class="box" data-anim="shake" data-anim-trigger="click" style="cursor:pointer;opacity:1">shake (click)</div>
+    <div class="box" data-anim="bounce" data-anim-trigger="click" style="cursor:pointer;opacity:1">bounce (click)</div>
+    <div class="box" data-anim="rubberBand" data-anim-trigger="click" style="cursor:pointer;opacity:1">rubberBand (click)</div>
+  </div>
+
+  <!-- HOVER TRIGGER -->
+  <h2>Hover Trigger</h2>
+  <div class="row">
+    <div class="box" data-anim="pulse" data-anim-trigger="hover" style="cursor:pointer">pulse (hover)</div>
+    <div class="box" data-anim="swing" data-anim-trigger="hover" style="cursor:pointer">swing (hover)</div>
+    <div class="box" data-anim="wobble" data-anim-trigger="hover" style="cursor:pointer">wobble (hover)</div>
+  </div>
+
+  <!-- STAGGER -->
+  <h2>Stagger (from start, 100ms)</h2>
+  <div class="stagger-group" data-anim-stagger="100">
+    <div class="box" data-anim="fadeInUp">1</div>
+    <div class="box" data-anim="fadeInUp">2</div>
+    <div class="box" data-anim="fadeInUp">3</div>
+    <div class="box" data-anim="fadeInUp">4</div>
+    <div class="box" data-anim="fadeInUp">5</div>
+  </div>
+
+  <h2>Stagger (from center)</h2>
+  <div class="stagger-group" data-anim-stagger="120" data-anim-stagger-from="center">
+    <div class="box" data-anim="zoomIn">1</div>
+    <div class="box" data-anim="zoomIn">2</div>
+    <div class="box" data-anim="zoomIn">3</div>
+    <div class="box" data-anim="zoomIn">4</div>
+    <div class="box" data-anim="zoomIn">5</div>
+  </div>
+
+  <div class="spacer">↓ Scroll down for scroll-trigger animations ↓</div>
+
+  <!-- FADE -->
+  <h2>Fade Animations (scroll trigger)</h2>
+  <div class="row">
+    <div class="box" data-anim="fadeIn" data-anim-once>fadeIn</div>
+    <div class="box" data-anim="fadeInUp">fadeInUp</div>
+    <div class="box" data-anim="fadeInDown">fadeInDown</div>
+    <div class="box" data-anim="fadeInLeft">fadeInLeft</div>
+    <div class="box" data-anim="fadeInRight">fadeInRight</div>
+  </div>
+
+  <!-- SLIDE -->
+  <h2>Slide Animations</h2>
+  <div class="row">
+    <div class="box" data-anim="slideInUp">slideInUp</div>
+    <div class="box" data-anim="slideInDown">slideInDown</div>
+    <div class="box" data-anim="slideInLeft">slideInLeft</div>
+    <div class="box" data-anim="slideInRight">slideInRight</div>
+  </div>
+
+  <!-- ZOOM -->
+  <h2>Zoom Animations</h2>
+  <div class="row">
+    <div class="box" data-anim="zoomIn">zoomIn</div>
+    <div class="box" data-anim="zoomOut">zoomOut</div>
+    <div class="box" data-anim="zoomInUp">zoomInUp</div>
+    <div class="box" data-anim="zoomInDown">zoomInDown</div>
+  </div>
+
+  <!-- BOUNCE -->
+  <h2>Bounce Animations</h2>
+  <div class="row">
+    <div class="box" data-anim="bounce">bounce</div>
+    <div class="box" data-anim="bounceIn">bounceIn</div>
+    <div class="box" data-anim="bounceInUp">bounceInUp</div>
+    <div class="box" data-anim="bounceInDown">bounceInDown</div>
+  </div>
+
+  <!-- ATTENTION -->
+  <h2>Attention Animations</h2>
+  <div class="row">
+    <div class="box" data-anim="shake">shake</div>
+    <div class="box" data-anim="pulse">pulse</div>
+    <div class="box" data-anim="wobble">wobble</div>
+    <div class="box" data-anim="flip">flip</div>
+    <div class="box" data-anim="swing">swing</div>
+    <div class="box" data-anim="rubberBand">rubberBand</div>
+  </div>
+
+  <!-- ROTATE -->
+  <h2>Rotate Animations</h2>
+  <div class="row">
+    <div class="box" data-anim="rotateIn">rotateIn</div>
+    <div class="box" data-anim="rotateInDownLeft">rotateInDL</div>
+    <div class="box" data-anim="rotateInDownRight">rotateInDR</div>
+  </div>
+
+  <!-- SPECIAL -->
+  <h2>Special Animations</h2>
+  <div class="row">
+    <div class="box" data-anim="blur">blur</div>
+    <div class="box" data-anim="clipReveal">clipReveal</div>
+    <div class="box" data-anim="typewriter" style="width:auto;background:none;color:#333;font-size:16px">typewriter effect text</div>
+  </div>
+
+  <!-- CUSTOM OPTIONS -->
+  <h2>Custom Duration & Easing</h2>
+  <div class="row">
+    <div class="box" data-anim="fadeInUp" data-anim-duration="1500" data-anim-easing="ease-out-expo">1.5s expo</div>
+    <div class="box" data-anim="fadeInUp" data-anim-duration="800" data-anim-easing="ease-out-back">0.8s back</div>
+    <div class="box" data-anim="fadeInUp" data-anim-duration="1000" data-anim-easing="spring">1s spring</div>
+  </div>
+
+  <!-- MIRROR -->
+  <h2>Mirror (scroll up to reverse)</h2>
+  <div class="row">
+    <div class="box" data-anim="fadeInUp" data-anim-mirror>mirror fadeInUp</div>
+    <div class="box" data-anim="zoomIn" data-anim-mirror>mirror zoomIn</div>
+  </div>
+
+  <!-- CUSTOM DISTANCE -->
+  <h2>Custom Distance</h2>
+  <div class="row">
+    <div class="box" data-anim="fadeInUp" data-anim-distance="80px">80px</div>
+    <div class="box" data-anim="fadeInUp" data-anim-distance="10px">10px</div>
+  </div>
+
+  <!-- RESPONSIVE -->
+  <h2>Responsive (disabled on mobile)</h2>
+  <div class="row">
+    <div class="box" data-anim="fadeInUp" data-anim-disable="mobile">disabled mobile</div>
+    <div class="box" data-anim="fadeInUp" data-anim-mobile="fadeIn">mobile: fadeIn</div>
+  </div>
+
+  <div style="height:200px"></div>
+</body>
+</html>
