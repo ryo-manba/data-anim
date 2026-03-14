@@ -1,0 +1,18 @@
+---
+// src/layouts/Layout.astro
+---
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astro + data-anim</title>
+    <script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+    <style is:global>
+      body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; }
+      .spacer { height: 100vh; display: flex; align-items: center; justify-content: center; color: #999; }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

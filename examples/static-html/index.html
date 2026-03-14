@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>data-anim Static HTML Example</title>
+  <script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem; }
+    section { margin: 2rem 0; padding: 2rem; background: #f5f5f5; border-radius: 8px; }
+    .spacer { height: 100vh; display: flex; align-items: center; justify-content: center; color: #999; }
+  </style>
+</head>
+<body>
+  <h1 data-anim="fadeInUp">Hello World</h1>
+  <p data-anim="fadeInUp" data-anim-delay="200ms">
+    Welcome to my site.
+  </p>
+
+  <div class="spacer">↓ Scroll down to see more animations ↓</div>
+
+  <section data-anim-stagger="100">
+    <h2 data-anim="fadeInUp">Features</h2>
+    <div data-anim="fadeInUp">Fast</div>
+    <div data-anim="fadeInUp">Lightweight</div>
+    <div data-anim="fadeInUp">Zero config</div>
+  </section>
+
+  <section>
+    <h2 data-anim="fadeInLeft">Slide In</h2>
+    <p data-anim="fadeInRight" data-anim-delay="300ms">This slides in from the right.</p>
+  </section>
+
+  <section>
+    <h2 data-anim="zoomIn">Zoom In</h2>
+    <p data-anim="zoomIn" data-anim-delay="200ms" data-anim-duration="800ms">Custom duration zoom.</p>
+  </section>
+</body>
+</html>
