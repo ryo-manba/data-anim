@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "data-anim": "^0.1.0",
+    "data-anim": "file:../..",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

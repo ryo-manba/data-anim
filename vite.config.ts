@@ -25,7 +25,8 @@ export default defineConfig({
   },
   plugins: [
     dts({
-      rollupTypes: true,
+      rollupTypes: false,
+      entryRoot: 'src',
     }),
   ],
 });

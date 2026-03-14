@@ -5,15 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-tsc --noEmit && vite build",
+    "type-check": "vue-tsc --noEmit",
     "preview": "vite preview"
   },
   "dependencies": {
-    "data-anim": "^0.1.0",
+    "data-anim": "file:../..",
     "vue": "^3.5.30"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.5",
-    "vite": "^8.0.0"
+    "typescript": "^5.9.3",
+    "vite": "^8.0.0",
+    "vue-tsc": "^3.2.5"
   }
 }

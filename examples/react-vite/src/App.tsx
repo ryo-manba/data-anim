@@ -6,6 +6,8 @@ function App() {
         Built with Vite + React + data-anim
       </p>
 
+      <div data-anim="foo"></div>
+
       <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>
         ↓ Scroll down ↓
       </div>
