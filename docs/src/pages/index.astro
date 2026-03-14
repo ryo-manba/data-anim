@@ -3,6 +3,51 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import CodeBlock from '../components/CodeBlock.astro';
 import Footer from '../components/Footer.astro';
+
+const categories = [
+  {
+    name: 'Fade',
+    desc: 'Smooth opacity transitions with optional directional movement.',
+    anims: ['fadeIn', 'fadeInUp', 'fadeInDown', 'fadeInLeft', 'fadeInRight'],
+    color: 'from-violet-500 to-indigo-500',
+    span: 'md:col-span-2',
+  },
+  {
+    name: 'Slide',
+    desc: 'Full-width entrance animations from any direction.',
+    anims: ['slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight'],
+    color: 'from-blue-500 to-cyan-400',
+    span: '',
+  },
+  {
+    name: 'Zoom',
+    desc: 'Scale-based entrances for impactful reveals.',
+    anims: ['zoomIn', 'zoomOut', 'zoomInUp', 'zoomInDown'],
+    color: 'from-emerald-500 to-teal-400',
+    span: '',
+  },
+  {
+    name: 'Bounce',
+    desc: 'Playful multi-step animations with overshoot.',
+    anims: ['bounce', 'bounceIn', 'bounceInUp', 'bounceInDown'],
+    color: 'from-amber-500 to-orange-400',
+    span: 'md:col-span-2',
+  },
+  {
+    name: 'Attention',
+    desc: 'In-place effects for drawing the eye. Perfect for hover and click.',
+    anims: ['shake', 'pulse', 'wobble', 'flip', 'swing', 'rubberBand'],
+    color: 'from-pink-500 to-rose-400',
+    span: 'md:col-span-2',
+  },
+  {
+    name: 'Rotate & Special',
+    desc: 'Rotation entrances, blur reveals, and more.',
+    anims: ['rotateIn', 'blur', 'clipReveal', 'typewriter'],
+    color: 'from-fuchsia-500 to-purple-500',
+    span: '',
+  },
+];
 ---
 
 <BaseLayout title="data-anim — Zero-JS Animation Library">
@@ -33,10 +78,10 @@ import Footer from '../components/Footer.astro';
 
       <!-- CTAs -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-anim="fadeInUp" data-anim-delay="300ms">
-        <a href="/docs/getting-started" class="px-6 py-3 rounded-lg bg-gradient-to-r from-accent to-accent-light text-white font-medium hover:from-[#818cf8] hover:to-[#c084fc] hover:shadow-[0_4px_20px_rgba(99,102,241,0.4)] transition-all no-underline">
+        <a href={`${import.meta.env.BASE_URL}docs/getting-started`} class="btn-primary">
           Get Started
         </a>
-        <a href="/playground" class="px-6 py-3 rounded-lg border border-border text-text hover:bg-bg-hover transition-colors no-underline">
+        <a href={`${import.meta.env.BASE_URL}playground`} class="btn-secondary">
           Playground
         </a>
       </div>
@@ -108,7 +153,7 @@ import Footer from '../components/Footer.astro';
       </div>
 
       <div class="text-center mt-8" data-anim="fadeInUp" data-anim-delay="300ms">
-        <a href="/docs/getting-started" class="text-accent hover:text-accent-light font-semibold text-lg">
+        <a href={`${import.meta.env.BASE_URL}docs/getting-started`} class="text-accent hover:text-accent-light font-semibold text-lg">
           Read the full docs &rarr;
         </a>
       </div>
@@ -118,27 +163,45 @@ import Footer from '../components/Footer.astro';
   <!-- Animation Showcase -->
   <section class="py-20 px-4 sm:px-6 border-t border-border">
     <div class="max-w-5xl mx-auto">
-      <h2 class="text-3xl font-heading font-bold text-center mb-4" data-anim="fadeInUp">
-        30+ Animations
+      <p class="text-center text-xs font-semibold tracking-widest text-text-muted uppercase mb-4" data-anim="fadeInUp">Animation Library</p>
+      <h2 class="text-3xl md:text-4xl font-heading font-bold text-center mb-4" data-anim="fadeInUp">
+        30+ built-in animations
       </h2>
-      <p class="text-center text-text-secondary mb-12" data-anim="fadeInUp" data-anim-delay="100ms">
-        Fade, slide, zoom, bounce, rotate, and more.
+      <p class="text-center text-text-secondary mb-12 max-w-xl mx-auto" data-anim="fadeInUp" data-anim-delay="100ms">
+        From subtle fades to playful bounces. Every animation is GPU-accelerated and respects <code class="text-accent-light">prefers-reduced-motion</code>.
       </p>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" data-anim-stagger="50ms">
-        {['fadeInUp', 'slideInLeft', 'zoomIn', 'bounceIn', 'rotateIn', 'blur', 'pulse', 'shake', 'flip', 'clipReveal'].map((anim) => (
-          <div
-            class="glass-card p-4 flex flex-col items-center gap-2"
-            data-anim="fadeInUp"
-          >
-            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-accent to-accent-light" data-anim={anim}></div>
-            <code class="text-xs font-mono text-text-muted">{anim}</code>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {categories.map((cat) => (
+          <div class={`showcase-card glass-card overflow-hidden ${cat.span}`} data-anim="fadeInUp" data-anim-once>
+            <!-- Preview area -->
+            <div class="showcase-preview">
+              <div class="flex flex-wrap gap-2 justify-center">
+                {cat.anims.map((anim) => (
+                  <div
+                    class={`showcase-dot bg-gradient-to-br ${cat.color}`}
+                    data-anim={anim}
+                    data-anim-trigger="hover"
+                  />
+                ))}
+              </div>
+            </div>
+            <!-- Info -->
+            <div class="p-5">
+              <h3 class="text-base font-heading font-semibold mb-1">{cat.name}</h3>
+              <p class="text-sm text-text-secondary mb-3">{cat.desc}</p>
+              <div class="flex flex-wrap gap-1.5">
+                {cat.anims.map((anim) => (
+                  <code class="text-[11px] font-mono px-1.5 py-0.5 rounded bg-bg-surface text-text-muted">{anim}</code>
+                ))}
+              </div>
+            </div>
           </div>
         ))}
       </div>
 
-      <div class="text-center mt-8" data-anim="fadeInUp">
-        <a href="/docs/animations" class="text-accent hover:text-accent-light font-semibold text-lg">
+      <div class="text-center mt-10" data-anim="fadeInUp">
+        <a href={`${import.meta.env.BASE_URL}docs/animations`} class="text-accent hover:text-accent-light font-semibold text-lg">
           Browse all animations &rarr;
         </a>
       </div>
@@ -147,6 +210,66 @@ import Footer from '../components/Footer.astro';
 
   <Footer />
 </BaseLayout>
+
+<style>
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    color: #fff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #818cf8, #c084fc);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    color: #fff;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover {
+    background-color: var(--color-bg-hover);
+    color: var(--color-text);
+  }
+
+  .showcase-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .showcase-preview {
+    padding: 2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, transparent 100%);
+  }
+
+  .showcase-dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .showcase-dot:hover {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+</style>
 
 <script>
   document.getElementById('copy-install')?.addEventListener('click', async () => {

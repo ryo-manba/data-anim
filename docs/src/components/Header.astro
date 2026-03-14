@@ -1,23 +1,24 @@
 ---
+const base = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 border-b border-border bg-bg/80 backdrop-blur-md">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-    <a href="/" class="flex items-center gap-2 text-text hover:text-text no-underline">
+    <a href={base} class="flex items-center gap-2 text-text hover:text-text no-underline">
       <span class="font-heading font-bold text-xl gradient-text">data-anim</span>
     </a>
 
     <nav class="hidden md:flex items-center gap-6">
       <a
-        href="/docs/getting-started"
-        class:list={['text-sm font-medium transition-colors no-underline', currentPath.startsWith('/docs') ? 'text-text' : 'text-text-secondary hover:text-text']}
+        href={`${base}docs/getting-started`}
+        class:list={['text-sm font-medium transition-colors no-underline', currentPath.includes('/docs') ? 'text-text' : 'text-text-secondary hover:text-text']}
       >
         Docs
       </a>
       <a
-        href="/playground"
-        class:list={['text-sm font-medium transition-colors no-underline', currentPath === '/playground' || currentPath === '/playground/' ? 'text-text' : 'text-text-secondary hover:text-text']}
+        href={`${base}playground`}
+        class:list={['text-sm font-medium transition-colors no-underline', currentPath.includes('/playground') ? 'text-text' : 'text-text-secondary hover:text-text']}
       >
         Playground
       </a>
@@ -48,8 +49,8 @@ const currentPath = Astro.url.pathname;
   <!-- Mobile menu -->
   <div id="mobile-menu" class="md:hidden hidden border-t border-border bg-bg/95 backdrop-blur-md">
     <nav class="flex flex-col p-4 gap-3">
-      <a href="/docs/getting-started" class="text-sm font-medium text-text-secondary hover:text-text no-underline">Docs</a>
-      <a href="/playground" class="text-sm font-medium text-text-secondary hover:text-text no-underline">Playground</a>
+      <a href={`${base}docs/getting-started`} class="text-sm font-medium text-text-secondary hover:text-text no-underline">Docs</a>
+      <a href={`${base}playground`} class="text-sm font-medium text-text-secondary hover:text-text no-underline">Playground</a>
       <a href="https://github.com/ryo-manba/data-anim" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-text-secondary hover:text-text no-underline">GitHub</a>
     </nav>
   </div>

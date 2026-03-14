@@ -1,0 +1,346 @@
+# data-anim — Full API Reference for AI Assistants
+
+> This document provides exhaustive detail for AI assistants generating HTML with data-anim animations.
+
+## Overview
+
+data-anim is a zero-configuration animation library. Users include one `<script>` tag and add `data-anim` attributes to HTML elements. The library:
+
+1. Immediately injects anti-FOUC CSS (hides animated elements)
+2. On DOMContentLoaded, scans for `[data-anim]` elements
+3. Sets up IntersectionObserver for scroll triggers
+4. Attaches event listeners for click/hover triggers
+5. Fires load triggers immediately
+6. MutationObserver watches for dynamically added elements
+
+## Required Script Placement
+
+For anti-FOUC protection, the script MUST be placed synchronously in `<head>`:
+
+```html
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/data-anim@1/dist/data-anim.min.js"></script>
+</head>
+```
+
+If placed with `defer` or at end of `<body>`, elements may flash briefly on load.
+
+---
+
+## Complete Attribute Reference
+
+### `data-anim` (REQUIRED)
+
+The animation to play. Must be one of the 30 built-in animation names.
+
+**Values:** fadeIn, fadeOut, fadeInUp, fadeInDown, fadeInLeft, fadeInRight, slideInUp, slideInDown, slideInLeft, slideInRight, zoomIn, zoomOut, zoomInUp, zoomInDown, bounce, bounceIn, bounceInUp, bounceInDown, shake, pulse, wobble, flip, swing, rubberBand, rotateIn, rotateInDownLeft, rotateInDownRight, blur, clipReveal, typewriter
+
+**Multiple animations** (comma-separated, sequential):
+```html
+<div data-anim="fadeIn, pulse">Fades in, then pulses</div>
+```
+
+### `data-anim-trigger`
+
+**Values:** `scroll` (default), `load`, `click`, `hover`
+
+**Behavior by trigger:**
+
+| Trigger | Initial State | When Fired | Repeat |
+|---------|--------------|------------|--------|
+| scroll | opacity: 0 | Element enters viewport (IntersectionObserver) | Re-animates on re-entry (unless `data-anim-once`) |
+| load | opacity: 0 | DOMContentLoaded | Once |
+| click | opacity: 1 | Element click | Every click (unless `data-anim-once`) |
+| hover | opacity: 1 | mouseenter / focus-visible | Every hover (unless `data-anim-once`) |
+
+**Important:** Hover and click elements are NOT hidden initially. They remain visible and animate in-place.
+
+### `data-anim-duration`
+
+Animation duration in milliseconds. Any positive integer.
+
+**Default:** 500
+**Example:** `data-anim-duration="800"` → 800ms animation
+
+### `data-anim-delay`
+
+Delay before animation starts, in milliseconds.
+
+**Default:** 0
+**Example:** `data-anim-delay="300"` → 300ms delay
+
+**Note:** When used with `data-anim-stagger`, the stagger delay is ADDED to this value.
+
+### `data-anim-easing`
+
+CSS `animation-timing-function` value or named preset.
+
+**Default:** `ease` → `cubic-bezier(0.25, 0.1, 0.25, 1)`
+
+**Named presets:**
+- `ease` → `cubic-bezier(0.25, 0.1, 0.25, 1)` — Balanced
+- `ease-out-expo` → `cubic-bezier(0.16, 1, 0.3, 1)` — Snappy entrance
+- `ease-out-back` → `cubic-bezier(0.34, 1.56, 0.64, 1)` — Slight overshoot
+- `spring` → `cubic-bezier(0.175, 0.885, 0.32, 1.275)` — Bouncy
+
+**Custom:** Any valid CSS value: `cubic-bezier(...)`, `ease-in-out`, `linear`, etc.
+
+### `data-anim-once`
+
+Boolean attribute (no value needed). If present, animation plays only once.
+
+**Default behavior without `once`:**
+- scroll: Re-animates every time element enters viewport
+- click: Replays every click
+- hover: Replays every hover
+
+**With `once`:**
+- scroll: Plays once, element stays visible, observer disconnected
+- click: First click only
+- hover: First hover only
+
+```html
+<div data-anim="fadeIn" data-anim-once>Never re-animates</div>
+```
+
+### `data-anim-offset`
+
+For scroll trigger only. Fraction of viewport where animation triggers.
+
+**Default:** 0.2 (element is 20% into viewport)
+**Range:** 0 (top edge) to 1 (bottom edge)
+**Maps to:** IntersectionObserver threshold
+
+### `data-anim-mirror`
+
+Boolean. For scroll trigger. Plays reverse animation when element leaves viewport (scrolling back up).
+
+```html
+<div data-anim="fadeInUp" data-anim-mirror>
+  Fades in going down, fades out going up
+</div>
+```
+
+### `data-anim-distance`
+
+Override translation distance for directional animations (fadeInUp, slideInLeft, etc.).
+
+**Default:** 30 (pixels)
+**Applies to:** All fade and slide animations with directional component.
+
+```html
+<div data-anim="fadeInUp" data-anim-distance="80">Moves 80px instead of 30px</div>
+```
+
+### `data-anim-scale`
+
+Override scale factor for zoom animations.
+
+**Default:** 0.9 for zoomIn, 1.1 for zoomOut
+
+```html
+<div data-anim="zoomIn" data-anim-scale="0.5">Zooms from 50%</div>
+```
+
+### `data-anim-fill`
+
+CSS `animation-fill-mode`.
+
+**Default:** `both`
+**Values:** `none`, `forwards`, `backwards`, `both`
+
+### `data-anim-iteration`
+
+CSS `animation-iteration-count`.
+
+**Default:** 1
+**Values:** Any positive integer or `infinite`
+
+```html
+<div data-anim="pulse" data-anim-trigger="load" data-anim-iteration="3">Pulses 3×</div>
+```
+
+### `data-anim-stagger`
+
+**Applied to PARENT element.** Automatically adds incremental delay to children with `data-anim`.
+
+**Value:** Delay interval in ms between children.
+
+```html
+<div data-anim-stagger="100">
+  <div data-anim="fadeInUp">0ms delay</div>
+  <div data-anim="fadeInUp">100ms delay</div>
+  <div data-anim="fadeInUp">200ms delay</div>
+</div>
+```
+
+**Only direct children with `data-anim` are counted.** Other children are skipped.
+
+### `data-anim-stagger-from`
+
+Direction of stagger sequence. Used with `data-anim-stagger`.
+
+**Values:**
+- `start` (default): First → last
+- `end`: Last → first
+- `center`: Center outward (center child has 0 delay)
+- `edges`: Edges inward (edge children have 0 delay)
+
+**Center calculation for 5 children with interval 100ms:**
+```
+Index:   0    1    2    3    4
+Delay:  200  100   0   100  200
+```
+
+### `data-anim-disable`
+
+Disable animation at specific viewport widths.
+
+**Values:**
+- `mobile` → disabled at ≤ 768px
+- `tablet` → disabled at ≤ 1024px
+- `desktop` → disabled at > 1024px
+- Custom number → disabled below that px width
+
+When disabled, element shows immediately (opacity: 1, no animation).
+
+### `data-anim-mobile`
+
+Override animation name on mobile (≤ 768px). Useful for replacing complex animations with simpler ones on small screens.
+
+```html
+<div data-anim="slideInLeft" data-anim-mobile="fadeIn">
+  Desktop: slides from left. Mobile: simple fade.
+</div>
+```
+
+### `data-anim-anchor`
+
+CSS selector for anchor element. Animation triggers based on anchor element's viewport position instead of the animated element's position.
+
+```html
+<div id="trigger">Trigger point</div>
+<div data-anim="fadeIn" data-anim-anchor="#trigger">Animates when #trigger enters viewport</div>
+```
+
+---
+
+## Animation Details
+
+### Fade Animations
+All use opacity transition. Directional variants add translateX/Y.
+
+| Name | From State | To State |
+|------|-----------|----------|
+| fadeIn | opacity: 0 | opacity: 1 |
+| fadeOut | opacity: 1 | opacity: 0 |
+| fadeInUp | opacity: 0; translateY(30px) | opacity: 1; transform: none |
+| fadeInDown | opacity: 0; translateY(-30px) | opacity: 1; transform: none |
+| fadeInLeft | opacity: 0; translateX(-30px) | opacity: 1; transform: none |
+| fadeInRight | opacity: 0; translateX(30px) | opacity: 1; transform: none |
+
+Distance customizable via `data-anim-distance`.
+
+### Slide Animations
+Full-width/height translation with opacity.
+
+| Name | From State |
+|------|-----------|
+| slideInUp | translateY(100%), opacity: 0 |
+| slideInDown | translateY(-100%), opacity: 0 |
+| slideInLeft | translateX(-100%), opacity: 0 |
+| slideInRight | translateX(100%), opacity: 0 |
+
+### Zoom Animations
+
+| Name | From State |
+|------|-----------|
+| zoomIn | scale(0.9), opacity: 0 |
+| zoomOut | scale(1.1), opacity: 0 |
+| zoomInUp | scale(0.9) translateY(30px), opacity: 0 |
+| zoomInDown | scale(0.9) translateY(-30px), opacity: 0 |
+
+Scale customizable via `data-anim-scale`.
+
+### Bounce Animations
+Multi-step keyframes with overshoot.
+
+- **bounce**: Bouncing in place (Y-axis)
+- **bounceIn**: Scale from 0.3 → 1.05 → 0.9 → 1
+- **bounceInUp**: translateY(50px) with bounce
+- **bounceInDown**: translateY(-50px) with bounce
+
+### Attention Seekers
+In-place animations for drawing attention. Do NOT change opacity. Element stays visible.
+
+- **shake**: Horizontal oscillation (±10px)
+- **pulse**: Scale up to 1.05 and back
+- **wobble**: Translate + rotate oscillation
+- **flip**: Full 360° Y-axis rotation
+- **swing**: Pendulum rotation (±15°)
+- **rubberBand**: ScaleX/scaleY stretch and snap
+
+Best used with `data-anim-trigger="hover"` or `data-anim-trigger="click"`.
+
+### Rotate Animations
+
+- **rotateIn**: rotate(-200deg) → 0, opacity 0 → 1
+- **rotateInDownLeft**: origin left bottom, rotate(-45deg) → 0
+- **rotateInDownRight**: origin right bottom, rotate(45deg) → 0
+
+### Special Animations
+These use non-standard CSS properties:
+
+- **blur**: filter: blur(10px) → blur(0) + opacity
+- **clipReveal**: clip-path: inset(0 100% 0 0) → inset(0)
+- **typewriter**: max-width: 0 → 100% with overflow:hidden
+
+---
+
+## Global Configuration
+
+Set `window.__dataAnim` BEFORE the script loads:
+
+```html
+<script>
+window.__dataAnim = {
+  duration: 500,        // Default duration (ms)
+  easing: "ease",       // Default easing
+  offset: 0.2,          // Default scroll offset
+  distance: 30,         // Default translate distance (px)
+  once: false,          // Default once behavior
+  debug: false,         // Enable debug mode (colored outlines + console logs)
+  breakpoints: {
+    mobile: 768,        // Mobile breakpoint (px)
+    tablet: 1024        // Tablet breakpoint (px)
+  },
+  reducedMotion: "respect",  // "respect" | "ignore" | "disable"
+  aboveFold: "fast-reveal",  // "fast-reveal" | "skip" | "animate"
+  aboveFoldDuration: 150,    // Fast-reveal duration (ms)
+  fallbackTimeout: 5000      // Safety timeout (ms)
+};
+</script>
+```
+
+## Debug Mode
+
+When `debug: true`:
+- Blue outline: waiting for trigger
+- Green outline: has been animated
+- Red outline: error or never animated
+- Yellow outline: disabled (responsive/reduced-motion)
+- Console logs: initialization info, trigger events, performance timing
+
+---
+
+## Best Practices for AI-Generated HTML
+
+1. **Always place script in `<head>` synchronously** for anti-FOUC
+2. **Use `data-anim-once` for scroll-triggered content** that users see once
+3. **Limit to 2-3 animation types per section** for visual coherence
+4. **Use stagger for groups** instead of manual delays on each element
+5. **Use `data-anim-mobile="fadeIn"`** for horizontal slides on mobile
+6. **Avoid `data-anim-iteration="infinite"`** on content elements
+7. **Use attention seekers (shake, pulse) only for hover/click triggers**
+8. **Keep delays under 1000ms** for good UX
+9. **Use `data-anim-trigger="load"` sparingly** — only for hero/above-fold content

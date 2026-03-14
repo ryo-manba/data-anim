@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://data-anim.dev/sitemap-index.xml
+Sitemap: https://ryo-manba.github.io/data-anim/sitemap-index.xml

@@ -26,7 +26,7 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
     <meta name="twitter:description" content={description} />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,7 +37,7 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astr
     />
 
     <!-- data-anim library (stub) -->
-    <script is:inline src="/data-anim.js"></script>
+    <script is:inline src={`${import.meta.env.BASE_URL}data-anim.js`}></script>
 
     <title>{title}</title>
   </head>

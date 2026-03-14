@@ -1,36 +1,37 @@
 ---
+const base = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
 
 const sections = [
   {
     title: 'Getting Started',
     links: [
-      { href: '/docs/getting-started', label: 'Installation & Setup' },
+      { href: `${base}docs/getting-started`, label: 'Installation & Setup' },
     ],
   },
   {
     title: 'Core Concepts',
     links: [
-      { href: '/docs/attributes', label: 'Attributes' },
-      { href: '/docs/animations', label: 'Animations' },
-      { href: '/docs/triggers', label: 'Triggers' },
-      { href: '/docs/stagger', label: 'Stagger' },
+      { href: `${base}docs/attributes`, label: 'Attributes' },
+      { href: `${base}docs/animations`, label: 'Animations' },
+      { href: `${base}docs/triggers`, label: 'Triggers' },
+      { href: `${base}docs/stagger`, label: 'Stagger' },
     ],
   },
   {
     title: 'Advanced',
     links: [
-      { href: '/docs/responsive', label: 'Responsive' },
-      { href: '/docs/anti-fouc', label: 'Anti-FOUC' },
-      { href: '/docs/configuration', label: 'Configuration' },
-      { href: '/docs/debug', label: 'Debug' },
+      { href: `${base}docs/responsive`, label: 'Responsive' },
+      { href: `${base}docs/anti-fouc`, label: 'Anti-FOUC' },
+      { href: `${base}docs/configuration`, label: 'Configuration' },
+      { href: `${base}docs/debug`, label: 'Debug' },
     ],
   },
   {
     title: 'Guides',
     links: [
-      { href: '/docs/integration', label: 'Integration' },
-      { href: '/docs/migration', label: 'Migration from AOS' },
+      { href: `${base}docs/integration`, label: 'Integration' },
+      { href: `${base}docs/migration`, label: 'Migration from AOS' },
     ],
   },
 ];
