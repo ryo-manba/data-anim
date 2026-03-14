@@ -1,0 +1,163 @@
+---
+---
+
+<div class="trigger-demo">
+  <div class="trigger-tabs">
+    <button class="trigger-tab active" data-trigger="viewport">Viewport</button>
+    <button class="trigger-tab" data-trigger="hover">Hover</button>
+    <button class="trigger-tab" data-trigger="click">Click</button>
+    <button class="trigger-tab" data-trigger="focus">Focus</button>
+  </div>
+
+  <div class="trigger-stage">
+    <div class="trigger-preview">
+      <div id="trigger-target" class="trigger-box" tabindex="0">
+        <span id="trigger-box-label">Scroll into view</span>
+      </div>
+    </div>
+    <p id="trigger-hint" class="trigger-hint">Default trigger. Animates when the element enters the viewport.</p>
+    <div id="trigger-viewport-btn-wrap" class="trigger-btn-wrap">
+      <button id="trigger-simulate" class="trigger-simulate-btn">Simulate scroll</button>
+    </div>
+  </div>
+
+  <div class="trigger-code-area">
+    <code id="trigger-code" class="trigger-code-text">&lt;div data-anim="fadeInUp"&gt;...&lt;/div&gt;</code>
+    <button id="trigger-copy" class="trigger-copy-btn" aria-label="Copy code">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .trigger-demo { margin: 2rem 0; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; }
+  .trigger-tabs { display: flex; border-bottom: 1px solid var(--color-border); background: var(--color-bg-surface); }
+  .trigger-tab {
+    flex: 1; padding: 12px 16px; border: none; background: none;
+    color: var(--color-text-secondary); font-family: var(--font-mono); font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: color 0.2s, background 0.2s; border-bottom: 2px solid transparent;
+  }
+  .trigger-tab:hover { color: var(--color-text); background: var(--color-bg-hover); }
+  .trigger-tab.active { color: var(--color-accent-light); border-bottom-color: var(--color-accent); background: rgba(99, 102, 241, 0.05); }
+  .trigger-stage { padding: 2rem; text-align: center; }
+  .trigger-preview {
+    display: flex; align-items: center; justify-content: center; min-height: 200px;
+    background: var(--color-bg); border: 1px solid var(--color-border); border-radius: 10px;
+    margin-bottom: 1rem; overflow: hidden;
+  }
+  .trigger-box {
+    width: 140px; height: 140px; border-radius: 20px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: var(--font-heading); font-weight: 600; font-size: 14px;
+    text-align: center; padding: 12px; box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3);
+    line-height: 1.3; outline: none;
+  }
+  .trigger-box:focus-visible { box-shadow: 0 0 0 3px var(--color-accent-light), 0 8px 32px rgba(99, 102, 241, 0.3); }
+  .trigger-hint { color: var(--color-text-muted) !important; font-size: 14px !important; margin: 0 0 8px 0 !important; }
+  .trigger-btn-wrap { min-height: 36px; }
+  .trigger-simulate-btn {
+    padding: 6px 16px; border: 1px solid var(--color-border); border-radius: 6px;
+    background: none; color: var(--color-text-secondary); font-family: var(--font-mono);
+    font-size: 13px; cursor: pointer; transition: all 0.2s;
+  }
+  .trigger-simulate-btn:hover { border-color: var(--color-accent); color: var(--color-accent-light); }
+  .trigger-code-area { display: flex; align-items: center; background: var(--color-code-bg); border-top: 1px solid var(--color-border); padding: 12px 16px; gap: 12px; }
+  .trigger-code-text { flex: 1; font-family: var(--font-mono) !important; font-size: 13px !important; color: var(--color-text-secondary) !important; background: none !important; padding: 0 !important; white-space: nowrap; overflow-x: auto; }
+  .trigger-copy-btn { padding: 6px; background: none; border: 1px solid var(--color-border); border-radius: 6px; color: var(--color-text-muted); cursor: pointer; transition: color 0.15s; flex-shrink: 0; display: flex; align-items: center; }
+  .trigger-copy-btn:hover { color: var(--color-text); }
+</style>
+
+<script is:inline>
+  (function() {
+    var triggers = {
+      viewport: { label: 'Scroll into view', hint: 'Default. Animates when the element enters the viewport. Click "Simulate scroll" to preview.', code: '<div data-anim="fadeInUp">...</div>', cursor: 'default', showSimulate: true },
+      hover:    { label: 'Hover me', hint: 'Hover over the box to see the animation.', code: '<div data-anim="pulse" data-anim-trigger="hover">...</div>', cursor: 'pointer', showSimulate: false },
+      click:    { label: 'Click me', hint: 'Click the box to trigger the animation.', code: '<button data-anim="bounce" data-anim-trigger="click">...</button>', cursor: 'pointer', showSimulate: false },
+      focus:    { label: 'Tab to focus', hint: 'Press Tab to focus the box and trigger the animation.', code: '<input data-anim="pulse" data-anim-trigger="focus" />', cursor: 'default', showSimulate: false },
+    };
+
+    var target = document.getElementById('trigger-target');
+    var boxLabel = document.getElementById('trigger-box-label');
+    var hintEl = document.getElementById('trigger-hint');
+    var codeEl = document.getElementById('trigger-code');
+    var copyBtn = document.getElementById('trigger-copy');
+    var simulateBtn = document.getElementById('trigger-simulate');
+    var simulateWrap = document.getElementById('trigger-viewport-btn-wrap');
+    var tabs = document.querySelectorAll('.trigger-tab');
+    var currentTrigger = 'viewport';
+    var currentCode = triggers.viewport.code;
+
+    function playAnim() {
+      if (!target) return;
+      target.style.transition = 'none';
+      target.style.opacity = '0';
+      target.style.transform = 'translateY(20px) scale(0.95)';
+      target.offsetWidth;
+      target.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      target.style.opacity = '1';
+      target.style.transform = 'none';
+    }
+
+    function resetBox() {
+      if (!target) return;
+      target.style.transition = 'none';
+      target.style.opacity = '1';
+      target.style.transform = 'none';
+    }
+
+    function switchTrigger(type) {
+      var t = triggers[type];
+      if (!t || !target) return;
+      currentTrigger = type;
+      currentCode = t.code;
+      boxLabel.textContent = t.label;
+      hintEl.textContent = t.hint;
+      codeEl.textContent = t.code;
+      target.style.cursor = t.cursor;
+      simulateWrap.style.display = t.showSimulate ? '' : 'none';
+      tabs.forEach(function(tab) {
+        tab.classList.toggle('active', tab.getAttribute('data-trigger') === type);
+      });
+      // Viewport auto-plays on tab switch (simulates scroll-in)
+      if (type === 'viewport') {
+        playAnim();
+      } else {
+        resetBox();
+      }
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() { switchTrigger(tab.getAttribute('data-trigger')); });
+    });
+
+    // Viewport: simulate scroll button
+    simulateBtn.addEventListener('click', function() {
+      if (currentTrigger === 'viewport') playAnim();
+    });
+
+    // Hover
+    target.addEventListener('mouseenter', function() {
+      if (currentTrigger === 'hover') playAnim();
+    });
+
+    // Click
+    target.addEventListener('click', function() {
+      if (currentTrigger === 'click') playAnim();
+    });
+
+    // Focus
+    target.addEventListener('focus', function() {
+      if (currentTrigger === 'focus') playAnim();
+    });
+
+    // Copy
+    copyBtn.addEventListener('click', function() {
+      navigator.clipboard.writeText(currentCode);
+      copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+      setTimeout(function() {
+        copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+      }, 1500);
+    });
+  })();
+</script>

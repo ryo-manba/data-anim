@@ -5,87 +5,64 @@ description: Learn about the four animation triggers in data-anim.
 ---
 
 import CodeBlock from '../../components/CodeBlock.astro';
-import AnimationDemo from '../../components/AnimationDemo.astro';
+import TriggerDemo from '../../components/TriggerDemo.astro';
 
 # Triggers
 
-data-anim supports four trigger types that control when an animation plays. Set them with the `data-anim-trigger` attribute.
+data-anim supports four trigger types. Click each tab to see it in action.
+
+<TriggerDemo />
 
 ## Viewport (Default)
 
-The animation plays when the element scrolls into the viewport. This is the default behavior.
+The element animates when it scrolls into the viewport using `IntersectionObserver`.
 
 <CodeBlock
-  code={'<!-- These are equivalent -->\n<div data-anim="fadeInUp">\n  Viewport trigger (implicit)\n</div>\n\n<div data-anim="fadeInUp" data-anim-trigger="viewport">\n  Viewport trigger (explicit)\n</div>'}
-  lang="html"
-/>
-
-<AnimationDemo name="fadeInUp" />
-
-### Offset
-
-Use `data-anim-offset` to control how far into the viewport the element must be before triggering:
-
-<CodeBlock
-  code={'<div\n  data-anim="fadeIn"\n  data-anim-offset="200"\n>\n  Triggers 200px after entering viewport\n</div>'}
+  code={'<div data-anim="fadeInUp">\n  Animates on scroll (default)\n</div>\n\n<!-- With custom offset -->\n<div\n  data-anim="fadeIn"\n  data-anim-offset="200"\n>\n  Triggers 200px into viewport\n</div>'}
   lang="html"
 />
 
 ## Hover
 
-Animation plays when the user hovers over the element. Great for interactive UI elements.
+Plays on `mouseenter`, resets on `mouseleave`. Also responds to `focus-visible` for keyboard users.
 
 <CodeBlock
   code={'<div data-anim="pulse" data-anim-trigger="hover">\n  Hover over me\n</div>'}
   lang="html"
 />
 
-<AnimationDemo name="pulse" trigger="hover" />
-
-Hover animations also respond to `focus-visible` for keyboard users, ensuring accessibility without extra work.
-
 ## Click
 
-Animation plays when the user clicks the element.
+Replays on every click. Great for buttons and toggles.
 
 <CodeBlock
   code={'<button data-anim="bounce" data-anim-trigger="click">\n  Click me to bounce\n</button>'}
   lang="html"
 />
 
-<AnimationDemo name="bounce" trigger="click" />
-
 ## Focus
 
-Animation plays when the element receives focus. Ideal for form inputs.
+Plays when the element receives focus. Ideal for form inputs.
 
 <CodeBlock
   code={'<input\n  type="text"\n  data-anim="pulse"\n  data-anim-trigger="focus"\n  placeholder="Focus me"\n/>'}
   lang="html"
 />
 
-<AnimationDemo name="pulse" trigger="focus" />
-
-### Accessibility Notes
-
-- Works with both mouse focus and keyboard focus (`Tab` key)
-- Animations respect `prefers-reduced-motion` media query
-- Use subtle animations (like `pulse` or `shake`) for focus rather than large movements
-
 ## Combining Triggers
 
-Each element can only have one trigger. If you need multiple interactions, wrap the element:
+Each element can only have one trigger. Nest elements for multiple interactions:
 
 <CodeBlock
-  code={'<!-- Viewport trigger for entrance, hover for interaction -->\n<div data-anim="fadeInUp" data-anim-trigger="viewport">\n  <button data-anim="pulse" data-anim-trigger="hover">\n    Interactive button\n  </button>\n</div>'}
+  code={'<div data-anim="fadeInUp">\n  <button data-anim="pulse" data-anim-trigger="hover">\n    Interactive button\n  </button>\n</div>'}
   lang="html"
 />
 
 ## Summary
 
-| Trigger | Attribute Value | Use Case |
-|---------|----------------|----------|
-| Viewport | `viewport` (default) | Scroll animations, page load reveals |
-| Hover | `hover` | Buttons, cards, interactive elements |
-| Click | `click` | Buttons, toggles, confirmations |
-| Focus | `focus` | Form inputs, links, interactive widgets |
+| Trigger | Value | Use Case |
+|---------|-------|----------|
+| Viewport | `viewport` (default) | Scroll reveals |
+| Hover | `hover` | Buttons, cards |
+| Click | `click` | Toggles, confirmations |
+| Focus | `focus` | Form inputs |

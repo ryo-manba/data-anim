@@ -5,107 +5,28 @@ description: Create sequenced animations with data-anim stagger patterns.
 ---
 
 import CodeBlock from '../../components/CodeBlock.astro';
-import AnimationDemo from '../../components/AnimationDemo.astro';
+import StaggerDemo from '../../components/StaggerDemo.astro';
 
 # Stagger
 
-Stagger creates cascading animation sequences where child elements animate one after another with a controlled delay between each.
+Stagger creates cascading animation sequences. Select a pattern to preview.
 
-## Concept
+<StaggerDemo />
 
-Wrap animated children in a parent with `data-anim-stagger`. Each child gets an increasing delay automatically.
+## How It Works
+
+Wrap children in a parent with `data-anim-stagger`. Each child with `data-anim` gets an increasing delay.
 
 <CodeBlock
-  code={'<div data-anim-stagger="100ms">\n  <div data-anim="fadeInUp">Item 1 \u2014 0ms delay</div>\n  <div data-anim="fadeInUp">Item 2 \u2014 100ms delay</div>\n  <div data-anim="fadeInUp">Item 3 \u2014 200ms delay</div>\n  <div data-anim="fadeInUp">Item 4 \u2014 300ms delay</div>\n  <div data-anim="fadeInUp">Item 5 \u2014 400ms delay</div>\n</div>'}
+  code={'<div data-anim-stagger="100ms">\n  <div data-anim="fadeInUp">0ms delay</div>\n  <div data-anim="fadeInUp">100ms delay</div>\n  <div data-anim="fadeInUp">200ms delay</div>\n</div>'}
   lang="html"
 />
 
-## Stagger Patterns
+## Patterns
 
-Control the order in which children animate with `data-anim-stagger-pattern`.
-
-### Start (Default)
-
-Children animate from first to last.
-
-<CodeBlock
-  code={'<div data-anim-stagger="100ms" data-anim-stagger-pattern="start">\n  <div data-anim="fadeInUp">1st</div>\n  <div data-anim="fadeInUp">2nd</div>\n  <div data-anim="fadeInUp">3rd</div>\n  <div data-anim="fadeInUp">4th</div>\n  <div data-anim="fadeInUp">5th</div>\n</div>'}
-  lang="html"
-/>
-
-```
-Order: [1] → [2] → [3] → [4] → [5]
-Delay:  0    100   200   300   400
-```
-
-### End
-
-Children animate from last to first.
-
-<CodeBlock
-  code={'<div data-anim-stagger="100ms" data-anim-stagger-pattern="end">\n  <div data-anim="fadeInUp">5th</div>\n  <div data-anim="fadeInUp">4th</div>\n  <div data-anim="fadeInUp">3rd</div>\n  <div data-anim="fadeInUp">2nd</div>\n  <div data-anim="fadeInUp">1st</div>\n</div>'}
-  lang="html"
-/>
-
-```
-Order: [5] → [4] → [3] → [2] → [1]
-Delay: 400   300   200   100    0
-```
-
-### Center
-
-Children animate outward from the center.
-
-<CodeBlock
-  code={'<div data-anim-stagger="100ms" data-anim-stagger-pattern="center">\n  <div data-anim="fadeInUp">3rd</div>\n  <div data-anim="fadeInUp">2nd</div>\n  <div data-anim="fadeInUp">1st</div>\n  <div data-anim="fadeInUp">2nd</div>\n  <div data-anim="fadeInUp">3rd</div>\n</div>'}
-  lang="html"
-/>
-
-```
-Order: [3] ← [2] ← [1] → [2] → [3]
-Delay: 200   100    0    100   200
-```
-
-### Edges
-
-Children animate inward from both edges toward the center.
-
-<CodeBlock
-  code={'<div data-anim-stagger="100ms" data-anim-stagger-pattern="edges">\n  <div data-anim="fadeInUp">1st</div>\n  <div data-anim="fadeInUp">2nd</div>\n  <div data-anim="fadeInUp">3rd</div>\n  <div data-anim="fadeInUp">2nd</div>\n  <div data-anim="fadeInUp">1st</div>\n</div>'}
-  lang="html"
-/>
-
-```
-Order: [1] → [2] → [3] ← [2] ← [1]
-Delay:  0    100   200   100    0
-```
-
-## Practical Examples
-
-### Card Grid
-
-<CodeBlock
-  code={'<div class="grid grid-cols-3 gap-4" data-anim-stagger="80ms">\n  <div class="card" data-anim="fadeInUp">Card 1</div>\n  <div class="card" data-anim="fadeInUp">Card 2</div>\n  <div class="card" data-anim="fadeInUp">Card 3</div>\n  <div class="card" data-anim="fadeInUp">Card 4</div>\n  <div class="card" data-anim="fadeInUp">Card 5</div>\n  <div class="card" data-anim="fadeInUp">Card 6</div>\n</div>'}
-  lang="html"
-/>
-
-### Navigation List
-
-<CodeBlock
-  code={'<nav data-anim-stagger="60ms">\n  <a data-anim="fadeInLeft" href="/">Home</a>\n  <a data-anim="fadeInLeft" href="/about">About</a>\n  <a data-anim="fadeInLeft" href="/work">Work</a>\n  <a data-anim="fadeInLeft" href="/contact">Contact</a>\n</nav>'}
-  lang="html"
-/>
-
-### Hero Section
-
-<CodeBlock
-  code={'<section data-anim-stagger="150ms" data-anim-stagger-pattern="start">\n  <h1 data-anim="fadeInUp">Welcome</h1>\n  <p data-anim="fadeInUp">Description text here</p>\n  <button data-anim="fadeInUp">Get Started</button>\n</section>'}
-  lang="html"
-/>
-
-## Tips
-
-- Keep stagger delays short (50-150ms) for snappy sequences
-- Use `center` pattern for hero sections to draw attention to the middle
-- Use `edges` pattern for symmetrical layouts
-- Combine with `data-anim-duration` for fine-tuned control
+| Pattern | Order | Best for |
+|---------|-------|----------|
+| `start` | First → Last | Lists, card grids |
+| `end` | Last → First | Reverse reveals |
+| `center` | Center → Edges | Hero sections |
+| `edges` | Edges → Center | Symmetrical layouts |

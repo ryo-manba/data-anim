@@ -1,0 +1,217 @@
+---
+---
+
+<div class="stagger-demo">
+  <div class="stagger-tabs">
+    <button class="stagger-tab active" data-pattern="start">Start</button>
+    <button class="stagger-tab" data-pattern="end">End</button>
+    <button class="stagger-tab" data-pattern="center">Center</button>
+    <button class="stagger-tab" data-pattern="edges">Edges</button>
+  </div>
+
+  <div class="stagger-stage">
+    <div class="stagger-items" id="stagger-items">
+      <div class="stagger-item">1</div>
+      <div class="stagger-item">2</div>
+      <div class="stagger-item">3</div>
+      <div class="stagger-item">4</div>
+      <div class="stagger-item">5</div>
+    </div>
+    <div class="stagger-delay-row" id="stagger-delays">
+      <span>0ms</span><span>100ms</span><span>200ms</span><span>300ms</span><span>400ms</span>
+    </div>
+  </div>
+
+  <div class="stagger-controls">
+    <button id="stagger-replay" class="stagger-replay-btn">Replay</button>
+  </div>
+
+  <div class="stagger-code-area">
+    <pre id="stagger-code" class="stagger-code-text"></pre>
+    <button id="stagger-copy" class="stagger-copy-btn" aria-label="Copy code">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .stagger-demo {
+    margin: 2rem 0;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .stagger-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-bg-surface);
+  }
+  .stagger-tab {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s, background 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+  .stagger-tab:hover {
+    color: var(--color-text);
+    background: var(--color-bg-hover);
+  }
+  .stagger-tab.active {
+    color: var(--color-accent-light);
+    border-bottom-color: var(--color-accent);
+    background: rgba(99, 102, 241, 0.05);
+  }
+  .stagger-stage { padding: 2.5rem 2rem 1rem; text-align: center; }
+  .stagger-items { display: flex; gap: 12px; justify-content: center; margin-bottom: 12px; }
+  .stagger-item {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+  }
+  .stagger-delay-row { display: flex; gap: 12px; justify-content: center; }
+  .stagger-delay-row span { width: 56px; text-align: center; font-family: var(--font-mono); font-size: 11px; color: var(--color-text-muted); }
+  .stagger-controls { text-align: center; padding: 0 2rem 1.5rem; }
+  .stagger-replay-btn {
+    padding: 8px 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background: none;
+    color: var(--color-text-secondary);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .stagger-replay-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-light);
+    background: rgba(99, 102, 241, 0.05);
+  }
+  .stagger-code-area {
+    display: flex;
+    align-items: flex-start;
+    background: var(--color-code-bg);
+    border-top: 1px solid var(--color-border);
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .stagger-code-text {
+    flex: 1;
+    font-family: var(--font-mono) !important;
+    font-size: 13px !important;
+    color: var(--color-text-secondary) !important;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.6;
+  }
+  .stagger-copy-btn {
+    padding: 6px;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: color 0.15s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+  .stagger-copy-btn:hover { color: var(--color-text); }
+</style>
+
+<script is:inline>
+  (function() {
+    var patterns = {
+      start:  [0, 1, 2, 3, 4],
+      end:    [4, 3, 2, 1, 0],
+      center: [2, 1, 0, 1, 2],
+      edges:  [0, 1, 2, 1, 0],
+    };
+    var items = document.querySelectorAll('.stagger-item');
+    var delayEls = document.querySelectorAll('.stagger-delay-row span');
+    var tabs = document.querySelectorAll('.stagger-tab');
+    var codeEl = document.getElementById('stagger-code');
+    var copyBtn = document.getElementById('stagger-copy');
+    var replayBtn = document.getElementById('stagger-replay');
+    var current = 'start';
+    var interval = 100;
+
+    function getCode(pattern) {
+      var delays = patterns[pattern];
+      var lines = ['<div data-anim-stagger="100ms" data-anim-stagger-pattern="' + pattern + '">'];
+      delays.forEach(function(order, i) {
+        lines.push('  <div data-anim="fadeInUp">' + (i + 1) + '</div>  <!-- ' + (order * interval) + 'ms -->');
+      });
+      lines.push('</div>');
+      return lines.join('\n');
+    }
+
+    function playStagger(pattern) {
+      var delays = patterns[pattern];
+      if (!delays) return;
+      current = pattern;
+      if (codeEl) codeEl.textContent = getCode(pattern);
+
+      items.forEach(function(item) {
+        item.style.transition = 'none';
+        item.style.opacity = '0.15';
+        item.style.transform = 'translateY(16px)';
+      });
+      items[0] && items[0].offsetWidth;
+
+      delays.forEach(function(order, i) {
+        var ms = order * interval;
+        delayEls[i].textContent = ms + 'ms';
+        setTimeout(function() {
+          items[i].style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          items[i].style.opacity = '1';
+          items[i].style.transform = 'none';
+        }, ms + 50);
+      });
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        playStagger(tab.getAttribute('data-pattern'));
+      });
+    });
+
+    if (replayBtn) {
+      replayBtn.addEventListener('click', function() { playStagger(current); });
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function() {
+        navigator.clipboard.writeText(getCode(current));
+        copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+        setTimeout(function() {
+          copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+        }, 1500);
+      });
+    }
+
+    setTimeout(function() { playStagger('start'); }, 300);
+  })();
+</script>
