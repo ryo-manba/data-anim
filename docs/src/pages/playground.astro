@@ -3,18 +3,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-const animations = [
-  'fadeIn', 'fadeOut', 'fadeInUp', 'fadeInDown', 'fadeInLeft', 'fadeInRight',
-  'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight',
-  'zoomIn', 'zoomOut', 'zoomInUp', 'zoomInDown',
-  'bounce', 'bounceIn', 'bounceInUp', 'bounceInDown',
-  'shake', 'pulse', 'wobble', 'flip', 'swing', 'rubberBand',
-  'rotateIn', 'rotateInDownLeft', 'rotateInDownRight',
-  'blur', 'clipReveal', 'typewriter',
+const animGroups = [
+  { label: 'Fade', anims: ['fadeIn', 'fadeOut', 'fadeInUp', 'fadeInDown', 'fadeInLeft', 'fadeInRight'] },
+  { label: 'Slide', anims: ['slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight'] },
+  { label: 'Zoom', anims: ['zoomIn', 'zoomOut', 'zoomInUp', 'zoomInDown'] },
+  { label: 'Bounce', anims: ['bounce', 'bounceIn', 'bounceInUp', 'bounceInDown'] },
+  { label: 'Attention', anims: ['shake', 'pulse', 'wobble', 'flip', 'swing', 'rubberBand'] },
+  { label: 'Rotate', anims: ['rotateIn', 'rotateInDownLeft', 'rotateInDownRight'] },
+  { label: 'Special', anims: ['blur', 'clipReveal', 'typewriter'] },
 ];
 
 const triggers = ['scroll', 'load', 'hover', 'click'];
-
 const easings = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'];
 ---
 
@@ -24,89 +23,16 @@ const easings = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'];
   <div class="pt-16 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <h1 class="text-3xl font-heading font-bold mb-2">Playground</h1>
-      <p class="text-text-secondary mb-8">Experiment with animations in real-time. Tweak settings and copy the code.</p>
+      <p class="text-text-secondary mb-8">Click an animation to preview it. Tweak settings and copy the code.</p>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Controls -->
+        <!-- Left: Preview + Code -->
         <div class="space-y-6">
-          <div class="glass-card p-6 space-y-4">
-            <h2 class="text-lg font-heading font-semibold mb-4">Controls</h2>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm text-text-secondary mb-1" for="anim-select">Animation</label>
-                <select id="anim-select" class="w-full bg-bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text focus:border-accent focus:outline-none">
-                  {animations.map((a) => (
-                    <option value={a} selected={a === 'fadeInUp'}>{a}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-sm text-text-secondary mb-1" for="trigger-select">Trigger</label>
-                <select id="trigger-select" class="w-full bg-bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text focus:border-accent focus:outline-none">
-                  {triggers.map((t) => (
-                    <option value={t} selected={t === 'scroll'}>{t}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-sm text-text-secondary mb-1" for="duration-range">
-                Duration: <span id="duration-val">600ms</span>
-              </label>
-              <input id="duration-range" type="range" min="100" max="3000" step="100" value="600"
-                class="w-full accent-accent" />
-            </div>
-
-            <div>
-              <label class="block text-sm text-text-secondary mb-1" for="delay-range">
-                Delay: <span id="delay-val">0ms</span>
-              </label>
-              <input id="delay-range" type="range" min="0" max="2000" step="50" value="0"
-                class="w-full accent-accent" />
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm text-text-secondary mb-1" for="easing-select">Easing</label>
-                <select id="easing-select" class="w-full bg-bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text focus:border-accent focus:outline-none">
-                  {easings.map((e) => (
-                    <option value={e} selected={e === 'ease'}>{e}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div class="flex items-end">
-                <label class="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
-                  <input id="once-check" type="checkbox" checked class="accent-accent" />
-                  Once
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <!-- Code Output -->
-          <div class="glass-card p-6">
-            <div class="flex items-center justify-between mb-3">
-              <h2 class="text-lg font-heading font-semibold">Generated HTML</h2>
-              <button id="copy-html" class="text-xs px-3 py-1.5 rounded border border-border text-text-secondary hover:text-text hover:border-border-light transition-colors">
-                Copy
-              </button>
-            </div>
-            <pre id="code-output" class="p-4 rounded-lg bg-code-bg border border-border text-sm font-mono text-text-secondary overflow-x-auto whitespace-pre-wrap"></pre>
-          </div>
-        </div>
-
-        <!-- Preview -->
-        <div class="space-y-6">
+          <!-- Preview -->
           <div class="glass-card p-6">
             <div class="flex items-center justify-between mb-4">
               <h2 class="text-lg font-heading font-semibold">Preview</h2>
-              <button id="replay-btn" class="text-xs px-3 py-1.5 rounded border border-border text-text-secondary hover:text-text hover:border-border-light transition-colors">
-                Replay
-              </button>
+              <button id="replay-btn" class="chip-btn">Replay</button>
             </div>
             <div id="preview-area" class="min-h-[300px] rounded-lg bg-bg-surface border border-border flex items-center justify-center p-8">
               <div id="preview-element" class="w-32 h-32 rounded-xl bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-white font-heading font-semibold">
@@ -115,29 +41,91 @@ const easings = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'];
             </div>
           </div>
 
-          <!-- Quick Presets -->
+          <!-- Code Output -->
           <div class="glass-card p-6">
-            <h2 class="text-lg font-heading font-semibold mb-3">Quick Presets</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="fadeInUp">
-                Fade In Up
-              </button>
-              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="bounceIn">
-                Bounce In
-              </button>
-              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="zoomIn">
-                Zoom In
-              </button>
-              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="slideInLeft">
-                Slide In Left
-              </button>
-              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="rotateIn">
-                Rotate In
-              </button>
-              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="blur">
-                Blur
-              </button>
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-lg font-heading font-semibold">Generated HTML</h2>
+              <button id="copy-html" class="chip-btn">Copy</button>
             </div>
+            <pre id="code-output" class="p-4 rounded-lg bg-code-bg border border-border text-sm font-mono text-text-secondary overflow-x-auto whitespace-pre-wrap"></pre>
+          </div>
+        </div>
+
+        <!-- Right: Controls -->
+        <div class="space-y-6">
+          <!-- Animation picker -->
+          <div class="glass-card p-6">
+            <h2 class="text-lg font-heading font-semibold mb-4">Animation</h2>
+            {animGroups.map((group) => (
+              <div class="mb-3">
+                <p class="text-xs text-text-muted uppercase tracking-wider mb-1.5">{group.label}</p>
+                <div class="flex flex-wrap gap-1.5">
+                  {group.anims.map((a) => (
+                    <button
+                      class="anim-btn chip-btn"
+                      data-anim-name={a}
+                      data-active={a === 'fadeInUp' ? 'true' : undefined}
+                    >
+                      {a}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <!-- Trigger picker -->
+          <div class="glass-card p-6">
+            <h2 class="text-lg font-heading font-semibold mb-3">Trigger</h2>
+            <div class="flex flex-wrap gap-1.5">
+              {triggers.map((t) => (
+                <button
+                  class="trigger-btn chip-btn"
+                  data-trigger={t}
+                  data-active={t === 'scroll' ? 'true' : undefined}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Easing picker -->
+          <div class="glass-card p-6">
+            <h2 class="text-lg font-heading font-semibold mb-3">Easing</h2>
+            <div class="flex flex-wrap gap-1.5">
+              {easings.map((e) => (
+                <button
+                  class="easing-btn chip-btn"
+                  data-easing={e}
+                  data-active={e === 'ease' ? 'true' : undefined}
+                >
+                  {e}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <!-- Sliders + once -->
+          <div class="glass-card p-6 space-y-4">
+            <div>
+              <label class="block text-sm text-text-secondary mb-1">
+                Duration: <span id="duration-val">600ms</span>
+              </label>
+              <input id="duration-range" type="range" min="100" max="3000" step="100" value="600"
+                class="w-full accent-accent" />
+            </div>
+            <div>
+              <label class="block text-sm text-text-secondary mb-1">
+                Delay: <span id="delay-val">0ms</span>
+              </label>
+              <input id="delay-range" type="range" min="0" max="2000" step="50" value="0"
+                class="w-full accent-accent" />
+            </div>
+            <label class="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
+              <input id="once-check" type="checkbox" checked class="accent-accent" />
+              Once
+            </label>
           </div>
         </div>
       </div>
@@ -147,12 +135,37 @@ const easings = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'];
   <Footer />
 </BaseLayout>
 
+<style>
+  .chip-btn {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .chip-btn:hover {
+    border-color: var(--color-accent);
+    background: rgba(99, 102, 241, 0.08);
+  }
+  .chip-btn[data-active] {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: var(--color-accent);
+    color: #fff;
+  }
+</style>
+
 <script>
-  const animSelect = document.getElementById('anim-select') as HTMLSelectElement;
-  const triggerSelect = document.getElementById('trigger-select') as HTMLSelectElement;
+  // State
+  let currentAnim = 'fadeInUp';
+  let currentTrigger = 'scroll';
+  let currentEasing = 'ease';
+
   const durationRange = document.getElementById('duration-range') as HTMLInputElement;
   const delayRange = document.getElementById('delay-range') as HTMLInputElement;
-  const easingSelect = document.getElementById('easing-select') as HTMLSelectElement;
   const onceCheck = document.getElementById('once-check') as HTMLInputElement;
   const durationVal = document.getElementById('duration-val')!;
   const delayVal = document.getElementById('delay-val')!;
@@ -161,13 +174,14 @@ const easings = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'];
   const replayBtn = document.getElementById('replay-btn')!;
   const copyHtmlBtn = document.getElementById('copy-html')!;
 
+
   function getState() {
     return {
-      anim: animSelect.value,
-      trigger: triggerSelect.value,
+      anim: currentAnim,
+      trigger: currentTrigger,
       duration: durationRange.value,
       delay: delayRange.value,
-      easing: easingSelect.value,
+      easing: currentEasing,
       once: onceCheck.checked,
     };
   }
@@ -182,26 +196,74 @@ const easings = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'];
     return `<div\n  ${attrs}\n>\n  Your content here\n</div>`;
   }
 
-  function replay() {
+  // Animations that don't transition from opacity:0
+  const inPlaceAnims = new Set(['bounce', 'shake', 'pulse', 'wobble', 'flip', 'swing', 'rubberBand']);
+  const clipAnims = new Set(['clipReveal', 'typewriter']);
+
+  function resolveEasing(name: string) {
+    if (name === 'ease-out-expo') return 'cubic-bezier(0.16,1,0.3,1)';
+    if (name === 'ease-out-back') return 'cubic-bezier(0.34,1.56,0.64,1)';
+    if (name === 'spring') return 'cubic-bezier(0.175,0.885,0.32,1.275)';
+    return name;
+  }
+
+  function playAnim() {
     const state = getState();
-    // Clear animation
     previewEl.style.animation = 'none';
-    previewEl.style.opacity = '0';
+    previewEl.offsetHeight;
+    const fill = (state.trigger === 'hover' || state.trigger === 'click') ? 'none' : 'both';
+    previewEl.style.animation = `da-${state.anim} ${state.duration}ms ${resolveEasing(state.easing)} ${state.delay}ms 1 ${fill}`;
+  }
+
+  // Trigger listeners
+  let hoverHandler: (() => void) | null = null;
+  let hoverLeaveHandler: (() => void) | null = null;
+  let clickHandler: (() => void) | null = null;
+
+  function clearTriggerListeners() {
+    if (hoverHandler) { previewEl.removeEventListener('mouseenter', hoverHandler); hoverHandler = null; }
+    if (hoverLeaveHandler) { previewEl.removeEventListener('mouseleave', hoverLeaveHandler); hoverLeaveHandler = null; }
+    if (clickHandler) { previewEl.removeEventListener('click', clickHandler); clickHandler = null; }
+    previewEl.style.cursor = '';
+  }
+
+  function setupTrigger() {
+    clearTriggerListeners();
+    previewEl.style.animation = 'none';
+    previewEl.style.opacity = '1';
     previewEl.style.transform = '';
     previewEl.style.filter = '';
     previewEl.style.clipPath = '';
-    previewEl.offsetHeight; // force reflow
+    previewEl.style.maxWidth = '';
+    previewEl.style.overflow = '';
+    previewEl.style.whiteSpace = '';
 
-    // Build animation string using data-anim's keyframe naming convention
-    const name = 'da-' + state.anim;
-    const dur = state.duration + 'ms';
-    const delay = state.delay + 'ms';
-    const easing = state.easing === 'ease-out-expo' ? 'cubic-bezier(0.16,1,0.3,1)'
-      : state.easing === 'ease-out-back' ? 'cubic-bezier(0.34,1.56,0.64,1)'
-      : state.easing === 'spring' ? 'cubic-bezier(0.175,0.885,0.32,1.275)'
-      : state.easing;
-
-    previewEl.style.animation = `${name} ${dur} ${easing} ${delay} 1 both`;
+    if (currentTrigger === 'hover') {
+      previewEl.style.cursor = 'pointer';
+      hoverHandler = () => playAnim();
+      hoverLeaveHandler = () => { previewEl.style.animation = 'none'; };
+      previewEl.addEventListener('mouseenter', hoverHandler);
+      previewEl.addEventListener('mouseleave', hoverLeaveHandler);
+    } else if (currentTrigger === 'click') {
+      previewEl.style.cursor = 'pointer';
+      clickHandler = () => playAnim();
+      previewEl.addEventListener('click', clickHandler);
+    } else {
+      // Set initial state based on animation type
+      if (inPlaceAnims.has(currentAnim)) {
+        // In-place animations: element stays visible
+      } else if (currentAnim === 'clipReveal') {
+        previewEl.style.clipPath = 'inset(0 100% 0 0)';
+      } else if (currentAnim === 'typewriter') {
+        previewEl.style.maxWidth = '0';
+        previewEl.style.overflow = 'hidden';
+        previewEl.style.whiteSpace = 'nowrap';
+      } else {
+        previewEl.style.opacity = '0';
+      }
+      previewEl.offsetHeight;
+      playAnim();
+    }
   }
 
   function updateCode() {
@@ -213,14 +275,77 @@ const easings = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'];
 
   function update() {
     updateCode();
-    replay();
+    setupTrigger();
   }
 
-  // Event listeners
-  [animSelect, triggerSelect, easingSelect].forEach(el => el.addEventListener('change', update));
+  // Active state helper
+  function setActive(selector: string, attr: string, value: string) {
+    document.querySelectorAll(selector).forEach(btn => {
+      if ((btn as HTMLElement).dataset[attr] === value) {
+        btn.setAttribute('data-active', 'true');
+      } else {
+        btn.removeAttribute('data-active');
+      }
+    });
+  }
+
+  // Animation buttons
+  document.querySelectorAll('.anim-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentAnim = (btn as HTMLElement).dataset.animName!;
+      setActive('.anim-btn', 'animName', currentAnim);
+      update();
+    });
+  });
+
+  // Trigger buttons
+  document.querySelectorAll('.trigger-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentTrigger = (btn as HTMLElement).dataset.trigger!;
+      setActive('.trigger-btn', 'trigger', currentTrigger);
+      update();
+    });
+  });
+
+  // Easing buttons
+  document.querySelectorAll('.easing-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentEasing = (btn as HTMLElement).dataset.easing!;
+      setActive('.easing-btn', 'easing', currentEasing);
+      update();
+    });
+  });
+
+  // Sliders & once
   [durationRange, delayRange].forEach(el => el.addEventListener('input', update));
   onceCheck.addEventListener('change', updateCode);
-  replayBtn.addEventListener('click', replay);
+  replayBtn.addEventListener('click', () => {
+    // Reset all styles first
+    previewEl.style.animation = 'none';
+    previewEl.style.opacity = '1';
+    previewEl.style.transform = '';
+    previewEl.style.filter = '';
+    previewEl.style.clipPath = '';
+    previewEl.style.maxWidth = '';
+    previewEl.style.overflow = '';
+    previewEl.style.whiteSpace = '';
+    previewEl.offsetHeight;
+
+    // Set initial state based on animation type
+    if (!inPlaceAnims.has(currentAnim)) {
+      if (currentAnim === 'clipReveal') {
+        previewEl.style.clipPath = 'inset(0 100% 0 0)';
+      } else if (currentAnim === 'typewriter') {
+        previewEl.style.maxWidth = '0';
+        previewEl.style.overflow = 'hidden';
+        previewEl.style.whiteSpace = 'nowrap';
+      } else {
+        previewEl.style.opacity = '0';
+      }
+    }
+    previewEl.offsetHeight;
+    playAnim();
+  });
 
   copyHtmlBtn.addEventListener('click', async () => {
     await navigator.clipboard.writeText(generateHTML(getState()));
@@ -228,15 +353,7 @@ const easings = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'];
     setTimeout(() => { copyHtmlBtn.textContent = 'Copy'; }, 2000);
   });
 
-  document.querySelectorAll('.preset-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      animSelect.value = (btn as HTMLElement).dataset.preset!;
-      update();
-    });
-  });
-
   // Initial render
   updateCode();
-  // Auto-play on load
-  setTimeout(replay, 300);
+  setTimeout(() => setupTrigger(), 300);
 </script>

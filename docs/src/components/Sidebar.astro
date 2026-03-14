@@ -46,7 +46,7 @@ function isSectionActive(links: { href: string }[]): boolean {
   <nav class="sticky top-20 overflow-y-auto max-h-[calc(100vh-5rem)] pb-8 pr-4">
     {sections.map((section) => (
       <details open={isSectionActive(section.links) || true} class="mb-4">
-        <summary class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-2 py-1">
+        <summary class="text-sm font-semibold uppercase tracking-wider text-text-secondary mb-2 py-1">
           {section.title}
         </summary>
         <ul class="space-y-1 ml-3">
@@ -55,10 +55,10 @@ function isSectionActive(links: { href: string }[]): boolean {
               <a
                 href={link.href}
                 class:list={[
-                  'block text-sm py-1.5 px-3 rounded-md no-underline transition-colors',
+                  'block text-[15px] py-1.5 px-3 rounded-md no-underline transition-colors',
                   isActive(link.href)
-                    ? 'bg-accent/10 text-accent border-l-2 border-accent'
-                    : 'text-text-secondary hover:text-text hover:bg-bg-hover',
+                    ? 'bg-accent/10 border-l-2 border-accent font-medium sidebar-active'
+                    : 'text-text hover:text-accent-readable hover:bg-bg-hover',
                 ]}
               >
                 {link.label}
