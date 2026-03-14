@@ -1,0 +1,63 @@
+---
+import { Code } from 'astro:components';
+
+interface Props {
+  code: string;
+  lang?: string;
+  filename?: string;
+}
+
+const { code, lang = 'html', filename } = Astro.props;
+const id = `code-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class="relative group mb-6 rounded-lg border border-border overflow-hidden">
+  {filename && (
+    <div class="flex items-center px-4 py-2 bg-bg-surface border-b border-border">
+      <span class="text-xs text-text-muted font-mono">{filename}</span>
+    </div>
+  )}
+  <div class="relative">
+    <div id={id} class="codeblock-shiki">
+      <Code code={code} lang={lang} theme="dracula" />
+    </div>
+    <button
+      class="copy-btn absolute top-3 right-3 p-1.5 rounded-md bg-bg-hover border border-border text-text-muted hover:text-text opacity-0 group-hover:opacity-100 transition-opacity z-10"
+      data-code-text={code}
+      aria-label="Copy code"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+        <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style is:global>
+  .codeblock-shiki pre {
+    margin: 0 !important;
+    border-radius: 0 !important;
+    padding: 1rem !important;
+    overflow-x: auto;
+  }
+  .codeblock-shiki code {
+    font-size: 0.875rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-code-text');
+      if (text) {
+        await navigator.clipboard.writeText(text);
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+        setTimeout(() => {
+          btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+        }, 2000);
+      }
+    });
+  });
+</script>

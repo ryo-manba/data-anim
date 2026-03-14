@@ -1,0 +1,92 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Configuration
+description: Configure data-anim globally with window.__dataAnim options.
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+import AttributeTable from '../../components/AttributeTable.astro';
+
+# Configuration
+
+While data-anim works with zero configuration, you can customize global defaults using `window.__dataAnim`.
+
+## Global Options
+
+Set options before the data-anim script loads:
+
+<CodeBlock
+  code={`<script>
+  window.__dataAnim = {
+    duration: '800ms',
+    easing: 'ease-out',
+    once: true,
+    offset: 50,
+    debug: false,
+  };
+</script>
+<script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>`}
+  lang="html"
+  filename="index.html"
+/>
+
+## Options Reference
+
+<AttributeTable attributes={[
+  { name: 'duration', type: 'string', default: '"600ms"', description: 'Default animation duration for all elements.' },
+  { name: 'easing', type: 'string', default: '"ease"', description: 'Default CSS easing function.' },
+  { name: 'once', type: 'boolean', default: 'true', description: 'Whether animations play only once by default.' },
+  { name: 'offset', type: 'number', default: '0', description: 'Default viewport offset in pixels.' },
+  { name: 'debug', type: 'boolean', default: 'false', description: 'Enable debug mode with visual overlays and console logging.' },
+  { name: 'disableOnMobile', type: 'boolean', default: 'false', description: 'Disable all animations on mobile devices.' },
+]} />
+
+## Attribute Override
+
+Individual `data-anim-*` attributes always override global config:
+
+<CodeBlock
+  code={`<script>
+  window.__dataAnim = { duration: '800ms', easing: 'ease-out' };
+</script>
+
+<!-- Uses global: 800ms, ease-out -->
+<div data-anim="fadeIn">Default timing</div>
+
+<!-- Overrides to: 400ms, ease-in -->
+<div data-anim="fadeIn" data-anim-duration="400ms" data-anim-easing="ease-in">
+  Custom timing
+</div>`}
+  lang="html"
+/>
+
+## Examples
+
+### Fast, snappy animations
+
+<CodeBlock
+  code={`window.__dataAnim = {
+  duration: '400ms',
+  easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+};`}
+  lang="js"
+/>
+
+### Slow, elegant animations
+
+<CodeBlock
+  code={`window.__dataAnim = {
+  duration: '1200ms',
+  easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+};`}
+  lang="js"
+/>
+
+### Disable on mobile globally
+
+<CodeBlock
+  code={`window.__dataAnim = {
+  disableOnMobile: true,
+};`}
+  lang="js"
+/>

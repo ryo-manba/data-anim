@@ -1,0 +1,46 @@
+---
+interface Row {
+  feature: string;
+  dataAnim: string;
+  aos: string;
+  animateCss: string;
+  gsap: string;
+}
+
+interface Props {
+  rows: Row[];
+}
+
+const { rows } = Astro.props;
+
+function icon(val: string) {
+  if (val === 'yes') return '\u2705';
+  if (val === 'no') return '\u274C';
+  return val;
+}
+---
+
+<div class="overflow-x-auto mb-6 rounded-lg border border-border">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-bg-surface">
+        <th class="text-left p-3 font-semibold text-text">Feature</th>
+        <th class="text-left p-3 font-semibold text-accent">data-anim</th>
+        <th class="text-left p-3 font-semibold text-text">AOS</th>
+        <th class="text-left p-3 font-semibold text-text">Animate.css</th>
+        <th class="text-left p-3 font-semibold text-text">GSAP</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr class="border-t border-border hover:bg-bg-hover/50 transition-colors">
+          <td class="p-3 text-text-secondary">{row.feature}</td>
+          <td class="p-3 text-accent bg-accent/5 font-medium">{icon(row.dataAnim)}</td>
+          <td class="p-3 text-text-secondary">{icon(row.aos)}</td>
+          <td class="p-3 text-text-secondary">{icon(row.animateCss)}</td>
+          <td class="p-3 text-text-secondary">{icon(row.gsap)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

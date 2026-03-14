@@ -1,0 +1,74 @@
+---
+const currentPath = Astro.url.pathname;
+
+const sections = [
+  {
+    title: 'Getting Started',
+    links: [
+      { href: '/docs/getting-started', label: 'Installation & Setup' },
+    ],
+  },
+  {
+    title: 'Core Concepts',
+    links: [
+      { href: '/docs/attributes', label: 'Attributes' },
+      { href: '/docs/animations', label: 'Animations' },
+      { href: '/docs/triggers', label: 'Triggers' },
+      { href: '/docs/stagger', label: 'Stagger' },
+    ],
+  },
+  {
+    title: 'Advanced',
+    links: [
+      { href: '/docs/responsive', label: 'Responsive' },
+      { href: '/docs/anti-fouc', label: 'Anti-FOUC' },
+      { href: '/docs/configuration', label: 'Configuration' },
+      { href: '/docs/debug', label: 'Debug' },
+    ],
+  },
+  {
+    title: 'Guides',
+    links: [
+      { href: '/docs/integration', label: 'Integration' },
+      { href: '/docs/migration', label: 'Migration from AOS' },
+    ],
+  },
+];
+
+function isActive(href: string): boolean {
+  return currentPath === href || currentPath === href + '/';
+}
+
+function isSectionActive(links: { href: string }[]): boolean {
+  return links.some(link => isActive(link.href));
+}
+---
+
+<aside class="w-[260px] shrink-0 hidden lg:block">
+  <nav class="sticky top-20 overflow-y-auto max-h-[calc(100vh-5rem)] pb-8 pr-4">
+    {sections.map((section) => (
+      <details open={isSectionActive(section.links) || true} class="mb-4">
+        <summary class="text-xs font-semibold uppercase tracking-wider text-text-muted mb-2 py-1">
+          {section.title}
+        </summary>
+        <ul class="space-y-1 ml-3">
+          {section.links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class:list={[
+                  'block text-sm py-1.5 px-3 rounded-md no-underline transition-colors',
+                  isActive(link.href)
+                    ? 'bg-accent/10 text-accent border-l-2 border-accent'
+                    : 'text-text-secondary hover:text-text hover:bg-bg-hover',
+                ]}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    ))}
+  </nav>
+</aside>

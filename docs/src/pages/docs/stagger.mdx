@@ -1,0 +1,157 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Stagger
+description: Create sequenced animations with data-anim stagger patterns.
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+import AnimationDemo from '../../components/AnimationDemo.astro';
+
+# Stagger
+
+Stagger creates cascading animation sequences where child elements animate one after another with a controlled delay between each.
+
+## Concept
+
+Wrap animated children in a parent with `data-anim-stagger`. Each child gets an increasing delay automatically.
+
+<CodeBlock
+  code={`<div data-anim-stagger="100ms">
+  <div data-anim="fadeInUp">Item 1 — 0ms delay</div>
+  <div data-anim="fadeInUp">Item 2 — 100ms delay</div>
+  <div data-anim="fadeInUp">Item 3 — 200ms delay</div>
+  <div data-anim="fadeInUp">Item 4 — 300ms delay</div>
+  <div data-anim="fadeInUp">Item 5 — 400ms delay</div>
+</div>`}
+  lang="html"
+/>
+
+## Stagger Patterns
+
+Control the order in which children animate with `data-anim-stagger-pattern`.
+
+### Start (Default)
+
+Children animate from first to last.
+
+<CodeBlock
+  code={`<div data-anim-stagger="100ms" data-anim-stagger-pattern="start">
+  <div data-anim="fadeInUp">1st</div>
+  <div data-anim="fadeInUp">2nd</div>
+  <div data-anim="fadeInUp">3rd</div>
+  <div data-anim="fadeInUp">4th</div>
+  <div data-anim="fadeInUp">5th</div>
+</div>`}
+  lang="html"
+/>
+
+```
+Order: [1] → [2] → [3] → [4] → [5]
+Delay:  0    100   200   300   400
+```
+
+### End
+
+Children animate from last to first.
+
+<CodeBlock
+  code={`<div data-anim-stagger="100ms" data-anim-stagger-pattern="end">
+  <div data-anim="fadeInUp">5th</div>
+  <div data-anim="fadeInUp">4th</div>
+  <div data-anim="fadeInUp">3rd</div>
+  <div data-anim="fadeInUp">2nd</div>
+  <div data-anim="fadeInUp">1st</div>
+</div>`}
+  lang="html"
+/>
+
+```
+Order: [5] → [4] → [3] → [2] → [1]
+Delay: 400   300   200   100    0
+```
+
+### Center
+
+Children animate outward from the center.
+
+<CodeBlock
+  code={`<div data-anim-stagger="100ms" data-anim-stagger-pattern="center">
+  <div data-anim="fadeInUp">3rd</div>
+  <div data-anim="fadeInUp">2nd</div>
+  <div data-anim="fadeInUp">1st</div>
+  <div data-anim="fadeInUp">2nd</div>
+  <div data-anim="fadeInUp">3rd</div>
+</div>`}
+  lang="html"
+/>
+
+```
+Order: [3] ← [2] ← [1] → [2] → [3]
+Delay: 200   100    0    100   200
+```
+
+### Edges
+
+Children animate inward from both edges toward the center.
+
+<CodeBlock
+  code={`<div data-anim-stagger="100ms" data-anim-stagger-pattern="edges">
+  <div data-anim="fadeInUp">1st</div>
+  <div data-anim="fadeInUp">2nd</div>
+  <div data-anim="fadeInUp">3rd</div>
+  <div data-anim="fadeInUp">2nd</div>
+  <div data-anim="fadeInUp">1st</div>
+</div>`}
+  lang="html"
+/>
+
+```
+Order: [1] → [2] → [3] ← [2] ← [1]
+Delay:  0    100   200   100    0
+```
+
+## Practical Examples
+
+### Card Grid
+
+<CodeBlock
+  code={`<div class="grid grid-cols-3 gap-4" data-anim-stagger="80ms">
+  <div class="card" data-anim="fadeInUp">Card 1</div>
+  <div class="card" data-anim="fadeInUp">Card 2</div>
+  <div class="card" data-anim="fadeInUp">Card 3</div>
+  <div class="card" data-anim="fadeInUp">Card 4</div>
+  <div class="card" data-anim="fadeInUp">Card 5</div>
+  <div class="card" data-anim="fadeInUp">Card 6</div>
+</div>`}
+  lang="html"
+/>
+
+### Navigation List
+
+<CodeBlock
+  code={`<nav data-anim-stagger="60ms">
+  <a data-anim="fadeInLeft" href="/">Home</a>
+  <a data-anim="fadeInLeft" href="/about">About</a>
+  <a data-anim="fadeInLeft" href="/work">Work</a>
+  <a data-anim="fadeInLeft" href="/contact">Contact</a>
+</nav>`}
+  lang="html"
+/>
+
+### Hero Section
+
+<CodeBlock
+  code={`<section data-anim-stagger="150ms" data-anim-stagger-pattern="start">
+  <h1 data-anim="fadeInUp">Welcome</h1>
+  <p data-anim="fadeInUp">Description text here</p>
+  <button data-anim="fadeInUp">Get Started</button>
+</section>`}
+  lang="html"
+/>
+
+## Tips
+
+- Keep stagger delays short (50-150ms) for snappy sequences
+- Use `center` pattern for hero sections to draw attention to the middle
+- Use `edges` pattern for symmetrical layouts
+- Combine with `data-anim-duration` for fine-tuned control

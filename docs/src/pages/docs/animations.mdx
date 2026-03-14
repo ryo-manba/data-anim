@@ -1,0 +1,143 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Animations
+description: Browse all 30+ built-in animations in data-anim.
+---
+
+import AnimationDemo from '../../components/AnimationDemo.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+# Animations
+
+data-anim ships with 30+ animations out of the box. Each one is a pure CSS keyframe animation, optimized for performance.
+
+## Fade
+
+Smooth opacity transitions, optionally combined with directional movement.
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <AnimationDemo name="fadeIn" />
+  <AnimationDemo name="fadeOut" />
+  <AnimationDemo name="fadeInUp" />
+  <AnimationDemo name="fadeInDown" />
+  <AnimationDemo name="fadeInLeft" />
+  <AnimationDemo name="fadeInRight" />
+</div>
+
+<CodeBlock
+  code={`<div data-anim="fadeInUp">Fades in from below</div>`}
+  lang="html"
+/>
+
+## Slide
+
+Elements slide in from a direction without opacity change.
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <AnimationDemo name="slideInUp" />
+  <AnimationDemo name="slideInDown" />
+  <AnimationDemo name="slideInLeft" />
+  <AnimationDemo name="slideInRight" />
+</div>
+
+<CodeBlock
+  code={`<div data-anim="slideInLeft">Slides in from the left</div>`}
+  lang="html"
+/>
+
+## Zoom
+
+Scale-based entrance animations.
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <AnimationDemo name="zoomIn" />
+  <AnimationDemo name="zoomOut" />
+  <AnimationDemo name="zoomInUp" />
+  <AnimationDemo name="zoomInDown" />
+</div>
+
+<CodeBlock
+  code={`<div data-anim="zoomIn">Zooms in</div>`}
+  lang="html"
+/>
+
+## Bounce
+
+Playful, spring-like animations.
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  <AnimationDemo name="bounce" />
+  <AnimationDemo name="bounceIn" />
+  <AnimationDemo name="bounceInUp" />
+  <AnimationDemo name="bounceInDown" />
+</div>
+
+<CodeBlock
+  code={`<div data-anim="bounceIn">Bounces in</div>`}
+  lang="html"
+/>
+
+## Attention Seekers
+
+Draw attention to elements already on screen. Great with `data-anim-trigger="hover"`.
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <AnimationDemo name="shake" />
+  <AnimationDemo name="pulse" />
+  <AnimationDemo name="wobble" />
+  <AnimationDemo name="flip" />
+  <AnimationDemo name="swing" />
+  <AnimationDemo name="rubberBand" />
+</div>
+
+<CodeBlock
+  code={`<button data-anim="shake" data-anim-trigger="hover">
+  Shake on hover
+</button>`}
+  lang="html"
+/>
+
+## Rotate
+
+Rotation-based entrance animations.
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <AnimationDemo name="rotateIn" />
+  <AnimationDemo name="rotateInDownLeft" />
+  <AnimationDemo name="rotateInDownRight" />
+</div>
+
+<CodeBlock
+  code={`<div data-anim="rotateIn">Rotates in</div>`}
+  lang="html"
+/>
+
+## Special
+
+Unique animations for specific use cases.
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <AnimationDemo name="blur" />
+  <AnimationDemo name="clipReveal" />
+  <AnimationDemo name="typewriter" />
+</div>
+
+<CodeBlock
+  code={`<h1 data-anim="typewriter">Hello World</h1>
+<div data-anim="clipReveal">Revealed with clip-path</div>
+<div data-anim="blur">Blurs into focus</div>`}
+  lang="html"
+/>
+
+## Using Animations
+
+Every animation name is passed to the `data-anim` attribute:
+
+<CodeBlock
+  code={`<div data-anim="fadeInUp" data-anim-duration="800ms">
+  This element fades in from below over 800ms
+</div>`}
+  lang="html"
+/>
+
+See [Attributes](/docs/attributes) for all customization options, or try them in the [Playground](/playground).

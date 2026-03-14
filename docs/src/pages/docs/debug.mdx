@@ -1,0 +1,101 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Debug
+description: Debug data-anim animations with visual overlays and console output.
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+
+# Debug
+
+data-anim includes a debug mode that helps you visualize and troubleshoot animations during development.
+
+## Enable Debug Mode
+
+### Via Configuration
+
+<CodeBlock
+  code={`<script>
+  window.__dataAnim = { debug: true };
+</script>
+<script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>`}
+  lang="html"
+  filename="index.html"
+/>
+
+### Via URL Parameter
+
+Append `?data-anim-debug=true` to any page URL:
+
+```
+https://yoursite.com/page?data-anim-debug=true
+```
+
+## Color Outlines
+
+When debug mode is active, all `[data-anim]` elements receive colored outlines indicating their state:
+
+| Color | State | Meaning |
+|-------|-------|---------|
+| Red | Waiting | Element is hidden, waiting for trigger |
+| Yellow | Ready | Element is in viewport, about to animate |
+| Green | Animated | Animation has completed |
+| Blue | Hover/Focus | Element is using hover or focus trigger |
+
+<CodeBlock
+  code={`/* Debug mode adds these outlines automatically */
+[data-anim][data-debug="waiting"]   { outline: 2px dashed red; }
+[data-anim][data-debug="ready"]     { outline: 2px dashed yellow; }
+[data-anim][data-debug="animated"]  { outline: 2px dashed green; }
+[data-anim][data-debug="hover"]     { outline: 2px dashed blue; }`}
+  lang="css"
+/>
+
+## Console Output
+
+Debug mode logs animation events to the browser console:
+
+```
+[data-anim] Initialized: 12 elements found
+[data-anim] Trigger: fadeInUp on <div.hero-title> (viewport)
+[data-anim] Animated: fadeInUp on <div.hero-title> (600ms)
+[data-anim] Trigger: slideInLeft on <div.card> (viewport, stagger: 100ms)
+[data-anim] Skipped: pulse on <button.cta> (mobile disabled)
+```
+
+## Troubleshooting
+
+### Element not animating
+
+1. Check that `data-anim` has a valid animation name
+2. Verify the element is in the viewport (check `data-anim-offset`)
+3. Check if `data-anim-disable` is hiding it at your breakpoint
+4. Ensure the script is loaded (check console for `[data-anim] Initialized`)
+
+### Animation fires too early
+
+- Increase `data-anim-offset` to require more of the element to be visible
+- Check if the element is already in the viewport on page load
+
+### Animation plays multiple times
+
+- Set `data-anim-once="true"` to play only once
+- Check global config for `once` setting
+
+### FOUC on page load
+
+- Ensure the script is in `<head>` without `async` or `defer`
+- See [Anti-FOUC](/docs/anti-fouc) for details
+
+## Disable for Production
+
+Debug mode should only be used during development. Remove it before deploying:
+
+<CodeBlock
+  code={`<script>
+  window.__dataAnim = {
+    debug: false, // or simply remove this line
+  };
+</script>`}
+  lang="html"
+/>

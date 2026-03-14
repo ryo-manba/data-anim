@@ -1,0 +1,113 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Anti-FOUC
+description: How data-anim prevents Flash of Unstyled Content with a 3-layer defense system.
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+import ComparisonTable from '../../components/ComparisonTable.astro';
+
+# Anti-FOUC
+
+FOUC (Flash of Unstyled Content) is when elements briefly appear in their final state before animations have a chance to run. data-anim solves this with a 3-layer defense system that other libraries lack.
+
+## What is FOUC?
+
+When a page loads, there's a brief moment between HTML rendering and JavaScript execution. During this gap, animated elements are visible in their final position, then "jump" to their start position when the animation library initializes.
+
+```
+Traditional library (AOS, etc):
+  Page loads → Elements visible at final position → JS loads → Elements jump to start → Animate
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        This is FOUC
+```
+
+```
+data-anim:
+  Page loads → Elements hidden by CSS → JS ready → Animate smoothly
+               ^^^^^^^^^^^^^^^^^^^^^^
+               No flash, no jump
+```
+
+## The 3-Layer Defense
+
+### Layer 1: Synchronous Script
+
+data-anim loads as a synchronous `<script>` tag in the `<head>`, not `async` or `defer`. This ensures the CSS is injected before the browser renders any content.
+
+<CodeBlock
+  code={`<!-- Correct: synchronous in <head> -->
+<head>
+  <script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+</head>
+
+<!-- Wrong: async/defer causes FOUC -->
+<head>
+  <script async src="data-anim.js"></script>
+</head>`}
+  lang="html"
+/>
+
+### Layer 2: Inline Critical CSS
+
+The script immediately injects a tiny CSS rule that hides all `[data-anim]` elements:
+
+```css
+[data-anim] { opacity: 0; }
+```
+
+This happens before the browser's first paint, so elements are never visible in their un-animated state.
+
+### Layer 3: Animation Keyframes
+
+Each animation's keyframes start from the hidden state (opacity: 0, transformed position) and animate to the final state. When the animation triggers, the element smoothly transitions from invisible to visible.
+
+## Timing Diagram
+
+```
+Browser Timeline:
+─────────────────────────────────────────────────────>
+
+1. HTML parsing begins
+2. <script> encountered in <head>
+   ├─ CSS injected: [data-anim] { opacity: 0 }     ← Layer 2
+   └─ IntersectionObserver set up
+3. First paint - elements with data-anim are hidden  ← No FOUC!
+4. Element enters viewport
+5. Animation plays: opacity 0 → 1 + transform        ← Layer 3
+```
+
+## Why Sync Script?
+
+Other libraries use `async` or `defer` to avoid blocking page render. But this creates a race condition where the page can paint before the library hides elements.
+
+data-anim's script is tiny (under 2KB), so the blocking time is negligible — typically under 5ms. This is a deliberate trade-off: 5ms of blocking time eliminates all FOUC.
+
+## Comparison with Other Libraries
+
+<ComparisonTable rows={[
+  { feature: 'Anti-FOUC built-in', dataAnim: 'yes', aos: 'no', animateCss: 'no', gsap: 'no' },
+  { feature: 'No flash on load', dataAnim: 'yes', aos: 'no', animateCss: 'no', gsap: 'no' },
+  { feature: 'Works without JS fallback', dataAnim: 'yes', aos: 'no', animateCss: 'yes', gsap: 'no' },
+  { feature: 'Zero config anti-FOUC', dataAnim: 'yes', aos: 'no', animateCss: 'no', gsap: 'no' },
+]} />
+
+### AOS Workaround
+
+AOS users typically need manual CSS to prevent FOUC:
+
+<CodeBlock
+  code={`/* Manual FOUC fix for AOS */
+[data-aos] {
+  opacity: 0;
+  transition-property: opacity, transform;
+}
+[data-aos].aos-animate {
+  opacity: 1;
+}
+
+/* But this still flashes if CSS loads after HTML */`}
+  lang="css"
+/>
+
+data-anim handles all of this automatically. No extra CSS needed.

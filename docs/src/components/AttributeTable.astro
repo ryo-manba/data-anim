@@ -1,0 +1,37 @@
+---
+interface Attribute {
+  name: string;
+  type: string;
+  default?: string;
+  description: string;
+}
+
+interface Props {
+  attributes: Attribute[];
+}
+
+const { attributes } = Astro.props;
+---
+
+<div class="overflow-x-auto mb-6 rounded-lg border border-border">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-bg-surface">
+        <th class="text-left p-3 font-semibold text-text whitespace-nowrap">Attribute</th>
+        <th class="text-left p-3 font-semibold text-text whitespace-nowrap">Type</th>
+        <th class="text-left p-3 font-semibold text-text whitespace-nowrap">Default</th>
+        <th class="text-left p-3 font-semibold text-text">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {attributes.map((attr) => (
+        <tr class="border-t border-border hover:bg-bg-hover/50 transition-colors">
+          <td class="p-3 font-mono text-accent text-xs whitespace-nowrap">{attr.name}</td>
+          <td class="p-3 text-text-muted whitespace-nowrap">{attr.type}</td>
+          <td class="p-3 text-text-muted font-mono text-xs whitespace-nowrap">{attr.default || '—'}</td>
+          <td class="p-3 text-text-secondary">{attr.description}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

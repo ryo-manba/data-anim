@@ -1,0 +1,165 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Integration
+description: Use data-anim with any framework or static site generator.
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+
+# Integration
+
+data-anim works with any HTML-based project. Since it uses HTML attributes and injects its own CSS, there's nothing framework-specific to configure.
+
+## Static HTML
+
+The simplest integration. Add the script tag and start using attributes.
+
+<CodeBlock
+  code={`<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+</head>
+<body>
+  <h1 data-anim="fadeInUp">Hello World</h1>
+  <p data-anim="fadeInUp" data-anim-delay="200ms">
+    Welcome to my site.
+  </p>
+</body>
+</html>`}
+  lang="html"
+  filename="index.html"
+/>
+
+## WordPress
+
+Add the script to your theme's `header.php` or use a plugin to inject it in the `<head>`.
+
+<CodeBlock
+  code={`// functions.php
+function enqueue_data_anim() {
+  wp_enqueue_script(
+    'data-anim',
+    'https://unpkg.com/data-anim@latest/dist/data-anim.js',
+    array(),
+    null,
+    false // Load in <head>, not footer
+  );
+}
+add_action('wp_enqueue_scripts', 'enqueue_data_anim');`}
+  lang="php"
+  filename="functions.php"
+/>
+
+Then use attributes in your templates or the block editor (Custom HTML block):
+
+<CodeBlock
+  code={`<div data-anim="fadeInUp" class="wp-block-group">
+  <h2>Section Title</h2>
+  <p>Section content goes here.</p>
+</div>`}
+  lang="html"
+/>
+
+## Hugo
+
+Add the script to your base template's `<head>`:
+
+<CodeBlock
+  code={`<!-- layouts/_default/baseof.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  {{ partial "head.html" . }}
+  <script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+</head>
+<body>
+  {{ block "main" . }}{{ end }}
+</body>
+</html>`}
+  lang="html"
+  filename="layouts/_default/baseof.html"
+/>
+
+Use in your Markdown with raw HTML:
+
+<CodeBlock
+  code={`<!-- content/posts/my-post.md -->
+<div data-anim="fadeInUp">
+
+## My Animated Section
+
+This content will fade in when scrolled into view.
+
+</div>`}
+  lang="markdown"
+/>
+
+## Astro
+
+Add to your base layout:
+
+<CodeBlock
+  code={`---
+// src/layouts/Layout.astro
+---
+<html>
+  <head>
+    <script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>`}
+  lang="astro"
+  filename="src/layouts/Layout.astro"
+/>
+
+Use in any `.astro` or `.mdx` page:
+
+<CodeBlock
+  code={`<section data-anim-stagger="100ms">
+  <h1 data-anim="fadeInUp">Welcome</h1>
+  <p data-anim="fadeInUp">Built with Astro + data-anim</p>
+</section>`}
+  lang="astro"
+/>
+
+## HTMX
+
+data-anim works seamlessly with HTMX's dynamic content swapping. After HTMX swaps content, data-anim's MutationObserver automatically picks up new `[data-anim]` elements.
+
+<CodeBlock
+  code={`<div hx-get="/api/content" hx-trigger="click" hx-swap="innerHTML">
+  <button>Load More</button>
+</div>
+
+<!-- Server returns: -->
+<div data-anim="fadeInUp">
+  New content animates automatically!
+</div>`}
+  lang="html"
+/>
+
+No extra configuration needed. data-anim watches the DOM for changes.
+
+## Turbo (Hotwire)
+
+Similar to HTMX, Turbo replaces page content dynamically. data-anim re-initializes automatically on `turbo:load`.
+
+<CodeBlock
+  code={`<!-- Just include data-anim in your layout head -->
+<head>
+  <script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+</head>
+
+<!-- Use normally in any Turbo-driven page -->
+<div data-anim="fadeInUp">
+  This works across Turbo page transitions
+</div>`}
+  lang="html"
+/>
+
+## Key Principle
+
+data-anim is framework-agnostic by design. It works anywhere you can write HTML attributes. The only requirement is loading the script in the `<head>` (synchronously) for anti-FOUC protection.

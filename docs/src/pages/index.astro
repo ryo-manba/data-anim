@@ -1,0 +1,160 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="data-anim — Zero-JS Animation Library">
+  <Header />
+
+  <!-- Hero -->
+  <section class="pt-32 pb-20 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-5xl md:text-7xl font-heading font-bold mb-6" data-anim="fadeInUp">
+        Animate with <span class="gradient-text">zero JavaScript</span>
+      </h1>
+      <p class="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-8" data-anim="fadeInUp" data-anim-delay="100ms">
+        Drop-in scroll animations using HTML attributes. Built-in anti-FOUC protection. Under 2KB. No dependencies.
+      </p>
+
+      <!-- Install one-liner -->
+      <div class="inline-flex items-center gap-3 bg-code-bg border border-border rounded-lg px-5 py-3 mb-8" data-anim="fadeInUp" data-anim-delay="200ms">
+        <code class="font-mono text-sm text-text-secondary">
+          <span class="text-text-muted">$</span> npm install data-anim
+        </code>
+        <button id="copy-install" class="text-text-muted hover:text-text transition-colors" aria-label="Copy install command">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- CTAs -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-anim="fadeInUp" data-anim-delay="300ms">
+        <a href="/docs/getting-started" class="px-6 py-3 rounded-lg bg-gradient-to-r from-accent to-accent-light text-white font-medium hover:from-[#818cf8] hover:to-[#c084fc] hover:shadow-[0_4px_20px_rgba(99,102,241,0.4)] transition-all no-underline">
+          Get Started
+        </a>
+        <a href="/playground" class="px-6 py-3 rounded-lg border border-border text-text hover:bg-bg-hover transition-colors no-underline">
+          Playground
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20 px-4 sm:px-6 border-t border-border">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-anim-stagger="100ms">
+        <div class="glass-card p-6" data-anim="fadeInUp">
+          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-semibold mb-2">Zero JavaScript</h3>
+          <p class="text-sm text-text-secondary">Pure CSS animations triggered by HTML attributes. No runtime JS after initialization.</p>
+        </div>
+
+        <div class="glass-card p-6" data-anim="fadeInUp">
+          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-semibold mb-2">Anti-FOUC Built-in</h3>
+          <p class="text-sm text-text-secondary">3-layer defense against Flash of Unstyled Content. No manual CSS workarounds needed.</p>
+        </div>
+
+        <div class="glass-card p-6" data-anim="fadeInUp">
+          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-semibold mb-2">Under 2KB</h3>
+          <p class="text-sm text-text-secondary">Tiny footprint. No dependencies. Loads in under 5ms. Smaller than most favicons.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="py-20 px-4 sm:px-6 border-t border-border">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl font-heading font-bold text-center mb-4" data-anim="fadeInUp">
+        Three lines. That's it.
+      </h2>
+      <p class="text-center text-text-secondary mb-8" data-anim="fadeInUp" data-anim-delay="100ms">
+        No config files. No build step. No framework required.
+      </p>
+
+      <div data-anim="fadeInUp" data-anim-delay="200ms">
+        <CodeBlock
+          code={`<!-- 1. Add the script -->
+<script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+
+<!-- 2. Add the attribute -->
+<div data-anim="fadeInUp">
+  Your content animates on scroll
+</div>
+
+<!-- 3. There is no step 3 -->`}
+          lang="html"
+          filename="index.html"
+        />
+      </div>
+
+      <div class="text-center mt-8" data-anim="fadeInUp" data-anim-delay="300ms">
+        <a href="/docs/getting-started" class="text-accent hover:text-accent-light font-semibold text-lg">
+          Read the full docs &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Animation Showcase -->
+  <section class="py-20 px-4 sm:px-6 border-t border-border">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-3xl font-heading font-bold text-center mb-4" data-anim="fadeInUp">
+        30+ Animations
+      </h2>
+      <p class="text-center text-text-secondary mb-12" data-anim="fadeInUp" data-anim-delay="100ms">
+        Fade, slide, zoom, bounce, rotate, and more.
+      </p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3" data-anim-stagger="50ms">
+        {['fadeInUp', 'slideInLeft', 'zoomIn', 'bounceIn', 'rotateIn', 'blur', 'pulse', 'shake', 'flip', 'clipReveal'].map((anim) => (
+          <div
+            class="glass-card p-4 flex flex-col items-center gap-2"
+            data-anim="fadeInUp"
+          >
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-accent to-accent-light" data-anim={anim}></div>
+            <code class="text-xs font-mono text-text-muted">{anim}</code>
+          </div>
+        ))}
+      </div>
+
+      <div class="text-center mt-8" data-anim="fadeInUp">
+        <a href="/docs/animations" class="text-accent hover:text-accent-light font-semibold text-lg">
+          Browse all animations &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  document.getElementById('copy-install')?.addEventListener('click', async () => {
+    await navigator.clipboard.writeText('npm install data-anim');
+    const btn = document.getElementById('copy-install')!;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+    setTimeout(() => {
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+    }, 2000);
+  });
+</script>

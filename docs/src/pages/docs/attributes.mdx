@@ -1,0 +1,113 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Attributes
+description: Complete reference for all data-anim HTML attributes.
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+import AttributeTable from '../../components/AttributeTable.astro';
+import AnimationDemo from '../../components/AnimationDemo.astro';
+
+# Attributes
+
+Every data-anim feature is controlled through HTML attributes. No JavaScript configuration needed.
+
+## Required
+
+<AttributeTable attributes={[
+  { name: 'data-anim', type: 'string', description: 'The animation name to apply. See Animations for the full list.' },
+]} />
+
+<CodeBlock
+  code={`<div data-anim="fadeInUp">Animated element</div>`}
+  lang="html"
+/>
+
+## Trigger & Timing
+
+<AttributeTable attributes={[
+  { name: 'data-anim-trigger', type: '"viewport" | "hover" | "click" | "focus"', default: 'viewport', description: 'What triggers the animation.' },
+  { name: 'data-anim-duration', type: 'string', default: '600ms', description: 'Animation duration (e.g., "400ms", "1.2s").' },
+  { name: 'data-anim-delay', type: 'string', default: '0ms', description: 'Delay before animation starts.' },
+  { name: 'data-anim-easing', type: 'string', default: 'ease', description: 'CSS easing function (e.g., "ease-out", "cubic-bezier(0.4, 0, 0.2, 1)").' },
+]} />
+
+<CodeBlock
+  code={`<div
+  data-anim="slideInRight"
+  data-anim-trigger="viewport"
+  data-anim-duration="800ms"
+  data-anim-delay="200ms"
+  data-anim-easing="ease-out"
+>
+  Customized timing
+</div>`}
+  lang="html"
+/>
+
+<AnimationDemo name="slideInRight" />
+
+## Behavior
+
+<AttributeTable attributes={[
+  { name: 'data-anim-once', type: '"true" | "false"', default: 'true', description: 'If true, animation plays only once. If false, replays each time the trigger fires.' },
+  { name: 'data-anim-offset', type: 'number', default: '0', description: 'Viewport offset in pixels before triggering.' },
+  { name: 'data-anim-mirror', type: '"true" | "false"', default: 'false', description: 'Reverse animation when element leaves viewport.' },
+]} />
+
+<CodeBlock
+  code={`<div data-anim="zoomIn" data-anim-once="false" data-anim-offset="100">
+  Repeats with 100px offset
+</div>`}
+  lang="html"
+/>
+
+## Stagger
+
+<AttributeTable attributes={[
+  { name: 'data-anim-stagger', type: 'string', default: '100ms', description: 'Delay between staggered child animations.' },
+  { name: 'data-anim-stagger-pattern', type: '"start" | "end" | "center" | "edges"', default: 'start', description: 'Pattern for stagger order.' },
+]} />
+
+<CodeBlock
+  code={`<div data-anim-stagger="150ms" data-anim-stagger-pattern="center">
+  <div data-anim="fadeInUp">Item 1</div>
+  <div data-anim="fadeInUp">Item 2</div>
+  <div data-anim="fadeInUp">Item 3</div>
+</div>`}
+  lang="html"
+/>
+
+## Responsive
+
+<AttributeTable attributes={[
+  { name: 'data-anim-disable', type: 'string', description: 'Disable animations at a breakpoint (e.g., "mobile", "tablet").' },
+  { name: 'data-anim-mobile', type: 'string', description: 'Override animation for mobile screens.' },
+]} />
+
+<CodeBlock
+  code={`<!-- Disable on mobile -->
+<div data-anim="slideInLeft" data-anim-disable="mobile">
+  Desktop only animation
+</div>
+
+<!-- Different animation on mobile -->
+<div data-anim="slideInLeft" data-anim-mobile="fadeIn">
+  Slides on desktop, fades on mobile
+</div>`}
+  lang="html"
+/>
+
+## Advanced
+
+<AttributeTable attributes={[
+  { name: 'data-anim-fill', type: '"forwards" | "backwards" | "both" | "none"', default: 'forwards', description: 'CSS animation-fill-mode.' },
+  { name: 'data-anim-iteration', type: 'number | "infinite"', default: '1', description: 'Number of times to play the animation.' },
+]} />
+
+<CodeBlock
+  code={`<div data-anim="pulse" data-anim-iteration="infinite">
+  Infinite pulse
+</div>`}
+  lang="html"
+/>

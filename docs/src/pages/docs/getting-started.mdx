@@ -1,0 +1,109 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Getting Started
+description: Install data-anim and create your first zero-JS animation in under a minute.
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+import AnimationDemo from '../../components/AnimationDemo.astro';
+
+# Getting Started
+
+Add smooth, performant animations to your website with zero JavaScript. data-anim uses pure CSS animations triggered by HTML attributes, with built-in anti-FOUC protection.
+
+## Installation
+
+### CDN (Recommended)
+
+Add a single script tag to your HTML. That's it.
+
+<CodeBlock
+  code={`<script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>`}
+  lang="html"
+  filename="index.html"
+/>
+
+### npm
+
+<CodeBlock
+  code={`npm install data-anim`}
+  lang="bash"
+/>
+
+Then import in your entry file:
+
+<CodeBlock
+  code={`import 'data-anim';`}
+  lang="js"
+  filename="main.js"
+/>
+
+## Your First Animation
+
+It takes just one attribute to animate an element:
+
+<CodeBlock
+  code={`<div data-anim="fadeInUp">
+  Hello, animated world!
+</div>`}
+  lang="html"
+  filename="index.html"
+/>
+
+<AnimationDemo name="fadeInUp" />
+
+## Adding a Trigger
+
+By default, animations play when the element enters the viewport. You can change this:
+
+<CodeBlock
+  code={`<!-- Animate on hover -->
+<div data-anim="pulse" data-anim-trigger="hover">
+  Hover me
+</div>
+
+<!-- Animate on click -->
+<button data-anim="bounce" data-anim-trigger="click">
+  Click me
+</button>`}
+  lang="html"
+/>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <AnimationDemo name="pulse" trigger="hover" />
+  <AnimationDemo name="bounce" trigger="click" />
+</div>
+
+## Customizing Animations
+
+Control duration, delay, and easing:
+
+<CodeBlock
+  code={`<div
+  data-anim="slideInLeft"
+  data-anim-duration="800ms"
+  data-anim-delay="200ms"
+  data-anim-easing="ease-out"
+>
+  Customized animation
+</div>`}
+  lang="html"
+/>
+
+## Run Once or Repeat
+
+<CodeBlock
+  code={`<!-- Only animate once (default) -->
+<div data-anim="fadeIn" data-anim-once="true">Once</div>
+
+<!-- Re-animate every time element enters viewport -->
+<div data-anim="fadeIn" data-anim-once="false">Every time</div>`}
+  lang="html"
+/>
+
+## Next Steps
+
+- **[Attributes](/docs/attributes)** — Full reference for all data-anim attributes
+- **[Animations](/docs/animations)** — Browse all 30+ animations
+- **[Triggers](/docs/triggers)** — Learn about viewport, hover, click, and focus triggers
+- **[Anti-FOUC](/docs/anti-fouc)** — Understand the built-in flash prevention

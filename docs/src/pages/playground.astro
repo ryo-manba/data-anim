@@ -1,0 +1,322 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const animations = [
+  'fadeIn', 'fadeOut', 'fadeInUp', 'fadeInDown', 'fadeInLeft', 'fadeInRight',
+  'slideInUp', 'slideInDown', 'slideInLeft', 'slideInRight',
+  'zoomIn', 'zoomOut', 'zoomInUp', 'zoomInDown',
+  'bounce', 'bounceIn', 'bounceInUp', 'bounceInDown',
+  'shake', 'pulse', 'wobble', 'flip', 'swing', 'rubberBand',
+  'rotateIn', 'rotateInDownLeft', 'rotateInDownRight',
+  'blur', 'clipReveal', 'typewriter',
+];
+
+const triggers = ['viewport', 'hover', 'click', 'focus'];
+
+const easings = ['ease', 'ease-in', 'ease-out', 'ease-in-out', 'linear', 'cubic-bezier(0.4, 0, 0.2, 1)'];
+---
+
+<BaseLayout title="Playground - data-anim" description="Experiment with data-anim animations in real-time.">
+  <Header />
+
+  <div class="pt-16 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <h1 class="text-3xl font-heading font-bold mb-2">Playground</h1>
+      <p class="text-text-secondary mb-8">Experiment with animations in real-time. Tweak settings and copy the code.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Controls -->
+        <div class="space-y-6">
+          <!-- Controls Panel -->
+          <div class="glass-card p-6 space-y-4">
+            <h2 class="text-lg font-heading font-semibold mb-4">Controls</h2>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm text-text-secondary mb-1" for="anim-select">Animation</label>
+                <select id="anim-select" class="w-full bg-bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text focus:border-accent focus:outline-none">
+                  {animations.map((a) => (
+                    <option value={a} selected={a === 'fadeInUp'}>{a}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm text-text-secondary mb-1" for="trigger-select">Trigger</label>
+                <select id="trigger-select" class="w-full bg-bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text focus:border-accent focus:outline-none">
+                  {triggers.map((t) => (
+                    <option value={t} selected={t === 'viewport'}>{t}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm text-text-secondary mb-1" for="duration-range">
+                Duration: <span id="duration-val">600ms</span>
+              </label>
+              <input id="duration-range" type="range" min="100" max="3000" step="100" value="600"
+                class="w-full accent-accent" />
+            </div>
+
+            <div>
+              <label class="block text-sm text-text-secondary mb-1" for="delay-range">
+                Delay: <span id="delay-val">0ms</span>
+              </label>
+              <input id="delay-range" type="range" min="0" max="2000" step="50" value="0"
+                class="w-full accent-accent" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm text-text-secondary mb-1" for="easing-select">Easing</label>
+                <select id="easing-select" class="w-full bg-bg-surface border border-border rounded-lg px-3 py-2 text-sm text-text focus:border-accent focus:outline-none">
+                  {easings.map((e) => (
+                    <option value={e} selected={e === 'ease'}>{e}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div class="flex items-end">
+                <label class="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
+                  <input id="once-check" type="checkbox" checked class="accent-accent" />
+                  Once
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Code Output -->
+          <div class="glass-card p-6">
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="text-lg font-heading font-semibold">Generated HTML</h2>
+              <div class="flex gap-2">
+                <button id="copy-html" class="text-xs px-3 py-1.5 rounded border border-border text-text-secondary hover:text-text hover:border-border-light transition-colors">
+                  Copy HTML
+                </button>
+                <button id="copy-full" class="text-xs px-3 py-1.5 rounded border border-border text-text-secondary hover:text-text hover:border-border-light transition-colors">
+                  Copy Full Page
+                </button>
+              </div>
+            </div>
+            <pre id="code-output" class="p-4 rounded-lg bg-code-bg border border-border text-sm font-mono text-text-secondary overflow-x-auto whitespace-pre-wrap"></pre>
+          </div>
+
+          <!-- Editor -->
+          <div class="glass-card p-6">
+            <h2 class="text-lg font-heading font-semibold mb-3">Custom HTML</h2>
+            <textarea
+              id="html-editor"
+              rows="6"
+              class="w-full bg-code-bg border border-border rounded-lg px-4 py-3 text-sm font-mono text-text-secondary focus:border-accent focus:outline-none resize-y"
+              placeholder="Enter custom HTML with data-anim attributes..."
+            ></textarea>
+            <button id="apply-custom" class="mt-2 text-xs px-3 py-1.5 rounded bg-accent text-white hover:bg-accent-dim transition-colors">
+              Apply to Preview
+            </button>
+          </div>
+        </div>
+
+        <!-- Preview -->
+        <div class="space-y-6">
+          <div class="glass-card p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-heading font-semibold">Preview</h2>
+              <button id="replay-btn" class="text-xs px-3 py-1.5 rounded border border-border text-text-secondary hover:text-text hover:border-border-light transition-colors">
+                Replay
+              </button>
+            </div>
+            <div id="preview-area" class="min-h-[300px] rounded-lg bg-bg-surface border border-border flex items-center justify-center p-8">
+              <div id="preview-element" class="w-32 h-32 rounded-xl bg-gradient-to-br from-accent to-accent-light flex items-center justify-center text-white font-heading font-semibold"
+                data-anim="fadeInUp">
+                data-anim
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="glass-card p-6">
+            <h2 class="text-lg font-heading font-semibold mb-3">Quick Presets</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="fadeInUp">
+                Fade In Up
+              </button>
+              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="bounceIn">
+                Bounce In
+              </button>
+              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="zoomIn">
+                Zoom In
+              </button>
+              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="slideInLeft">
+                Slide In Left
+              </button>
+              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="rotateIn">
+                Rotate In
+              </button>
+              <button class="preset-btn text-xs px-3 py-2 rounded border border-border text-text-secondary hover:text-text hover:border-accent transition-colors" data-preset="blur">
+                Blur
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  const animSelect = document.getElementById('anim-select') as HTMLSelectElement;
+  const triggerSelect = document.getElementById('trigger-select') as HTMLSelectElement;
+  const durationRange = document.getElementById('duration-range') as HTMLInputElement;
+  const delayRange = document.getElementById('delay-range') as HTMLInputElement;
+  const easingSelect = document.getElementById('easing-select') as HTMLSelectElement;
+  const onceCheck = document.getElementById('once-check') as HTMLInputElement;
+  const durationVal = document.getElementById('duration-val')!;
+  const delayVal = document.getElementById('delay-val')!;
+  const codeOutput = document.getElementById('code-output')!;
+  const previewEl = document.getElementById('preview-element')!;
+  const replayBtn = document.getElementById('replay-btn')!;
+  const copyHtmlBtn = document.getElementById('copy-html')!;
+  const copyFullBtn = document.getElementById('copy-full')!;
+  const htmlEditor = document.getElementById('html-editor') as HTMLTextAreaElement;
+  const applyCustomBtn = document.getElementById('apply-custom')!;
+  const previewArea = document.getElementById('preview-area')!;
+
+  function getState() {
+    return {
+      anim: animSelect.value,
+      trigger: triggerSelect.value,
+      duration: durationRange.value + 'ms',
+      delay: delayRange.value + 'ms',
+      easing: easingSelect.value,
+      once: onceCheck.checked,
+    };
+  }
+
+  function generateHTML(state: ReturnType<typeof getState>) {
+    let attrs = `data-anim="${state.anim}"`;
+    if (state.trigger !== 'viewport') attrs += `\n  data-anim-trigger="${state.trigger}"`;
+    if (state.duration !== '600ms') attrs += `\n  data-anim-duration="${state.duration}"`;
+    if (state.delay !== '0ms') attrs += `\n  data-anim-delay="${state.delay}"`;
+    if (state.easing !== 'ease') attrs += `\n  data-anim-easing="${state.easing}"`;
+    if (!state.once) attrs += `\n  data-anim-once="false"`;
+    return `<div\n  ${attrs}\n>\n  Your content here\n</div>`;
+  }
+
+  function generateFullPage(state: ReturnType<typeof getState>) {
+    const html = generateHTML(state);
+    return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"><\/script>
+</head>
+<body>
+  ${html}
+</body>
+</html>`;
+  }
+
+  function updatePreview() {
+    const state = getState();
+    durationVal.textContent = state.duration;
+    delayVal.textContent = state.delay;
+    codeOutput.textContent = generateHTML(state);
+
+    // Update preview element
+    previewEl.removeAttribute('data-anim');
+    previewEl.removeAttribute('data-anim-trigger');
+    previewEl.removeAttribute('data-anim-duration');
+    previewEl.removeAttribute('data-anim-delay');
+    previewEl.removeAttribute('data-anim-easing');
+    previewEl.removeAttribute('data-anim-once');
+
+    previewEl.offsetHeight; // force reflow
+
+    previewEl.setAttribute('data-anim', state.anim);
+    if (state.trigger !== 'viewport') previewEl.setAttribute('data-anim-trigger', state.trigger);
+    if (state.duration !== '600ms') previewEl.setAttribute('data-anim-duration', state.duration);
+    if (state.delay !== '0ms') previewEl.setAttribute('data-anim-delay', state.delay);
+    if (state.easing !== 'ease') previewEl.setAttribute('data-anim-easing', state.easing);
+    if (!state.once) previewEl.setAttribute('data-anim-once', 'false');
+    previewEl.style.opacity = '1';
+
+    // Update URL params
+    const params = new URLSearchParams();
+    params.set('anim', state.anim);
+    if (state.trigger !== 'viewport') params.set('trigger', state.trigger);
+    if (state.duration !== '600ms') params.set('duration', state.duration);
+    if (state.delay !== '0ms') params.set('delay', state.delay);
+    if (state.easing !== 'ease') params.set('easing', state.easing);
+    if (!state.once) params.set('once', 'false');
+    history.replaceState(null, '', '?' + params.toString());
+  }
+
+  function replay() {
+    previewEl.removeAttribute('data-anim');
+    previewEl.style.opacity = '0';
+    previewEl.offsetHeight;
+    previewEl.setAttribute('data-anim', animSelect.value);
+    previewEl.style.opacity = '1';
+  }
+
+  // Load from URL params
+  function loadFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('anim')) animSelect.value = params.get('anim')!;
+    if (params.has('trigger')) triggerSelect.value = params.get('trigger')!;
+    if (params.has('duration')) {
+      const dur = parseInt(params.get('duration')!);
+      if (!isNaN(dur)) durationRange.value = dur.toString();
+    }
+    if (params.has('delay')) {
+      const del = parseInt(params.get('delay')!);
+      if (!isNaN(del)) delayRange.value = del.toString();
+    }
+    if (params.has('easing')) easingSelect.value = params.get('easing')!;
+    if (params.has('once')) onceCheck.checked = params.get('once') !== 'false';
+  }
+
+  // Event listeners
+  [animSelect, triggerSelect, easingSelect].forEach(el => el.addEventListener('change', updatePreview));
+  [durationRange, delayRange].forEach(el => el.addEventListener('input', updatePreview));
+  onceCheck.addEventListener('change', updatePreview);
+  replayBtn.addEventListener('click', replay);
+
+  copyHtmlBtn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(generateHTML(getState()));
+    copyHtmlBtn.textContent = 'Copied!';
+    setTimeout(() => { copyHtmlBtn.textContent = 'Copy HTML'; }, 2000);
+  });
+
+  copyFullBtn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(generateFullPage(getState()));
+    copyFullBtn.textContent = 'Copied!';
+    setTimeout(() => { copyFullBtn.textContent = 'Copy Full Page'; }, 2000);
+  });
+
+  applyCustomBtn.addEventListener('click', () => {
+    if (htmlEditor.value.trim()) {
+      previewArea.innerHTML = htmlEditor.value;
+      previewArea.querySelectorAll('[data-anim]').forEach(el => {
+        (el as HTMLElement).style.opacity = '1';
+      });
+    }
+  });
+
+  document.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      animSelect.value = (btn as HTMLElement).dataset.preset!;
+      updatePreview();
+      replay();
+    });
+  });
+
+  loadFromURL();
+  updatePreview();
+</script>

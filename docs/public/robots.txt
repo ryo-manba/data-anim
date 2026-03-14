@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://data-anim.dev/sitemap-index.xml

@@ -1,0 +1,64 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 border-b border-border bg-bg/80 backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 text-text hover:text-text no-underline">
+      <span class="font-heading font-bold text-xl gradient-text">data-anim</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-6">
+      <a
+        href="/docs/getting-started"
+        class:list={['text-sm font-medium transition-colors no-underline', currentPath.startsWith('/docs') ? 'text-text' : 'text-text-secondary hover:text-text']}
+      >
+        Docs
+      </a>
+      <a
+        href="/playground"
+        class:list={['text-sm font-medium transition-colors no-underline', currentPath === '/playground' || currentPath === '/playground/' ? 'text-text' : 'text-text-secondary hover:text-text']}
+      >
+        Playground
+      </a>
+      <a
+        href="https://github.com/ryo-manba/data-anim"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm font-medium text-text-secondary hover:text-text transition-colors no-underline"
+      >
+        GitHub
+      </a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="mobile-menu-btn"
+      class="md:hidden p-2 text-text-secondary hover:text-text"
+      aria-label="Toggle menu"
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="md:hidden hidden border-t border-border bg-bg/95 backdrop-blur-md">
+    <nav class="flex flex-col p-4 gap-3">
+      <a href="/docs/getting-started" class="text-sm font-medium text-text-secondary hover:text-text no-underline">Docs</a>
+      <a href="/playground" class="text-sm font-medium text-text-secondary hover:text-text no-underline">Playground</a>
+      <a href="https://github.com/ryo-manba/data-anim" target="_blank" rel="noopener noreferrer" class="text-sm font-medium text-text-secondary hover:text-text no-underline">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden');
+  });
+</script>

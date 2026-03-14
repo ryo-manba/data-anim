@@ -1,0 +1,158 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Migration from AOS
+description: Step-by-step guide to migrate from AOS to data-anim.
+---
+
+import CodeBlock from '../../components/CodeBlock.astro';
+import ComparisonTable from '../../components/ComparisonTable.astro';
+
+# Migration from AOS
+
+Switching from AOS (Animate On Scroll) to data-anim is straightforward. The attribute-based API is intentionally similar, so most changes are simple find-and-replace operations.
+
+## Why Migrate?
+
+<ComparisonTable rows={[
+  { feature: 'Bundle size', dataAnim: '< 2KB', aos: '~14KB', animateCss: '~80KB', gsap: '~24KB' },
+  { feature: 'Zero JavaScript', dataAnim: 'yes', aos: 'no', animateCss: 'yes', gsap: 'no' },
+  { feature: 'Anti-FOUC built-in', dataAnim: 'yes', aos: 'no', animateCss: 'no', gsap: 'no' },
+  { feature: 'No init() call needed', dataAnim: 'yes', aos: 'no', animateCss: 'yes', gsap: 'no' },
+  { feature: 'Stagger patterns', dataAnim: 'yes', aos: 'no', animateCss: 'no', gsap: 'yes' },
+  { feature: 'Click/hover/focus triggers', dataAnim: 'yes', aos: 'no', animateCss: 'no', gsap: 'yes' },
+]} />
+
+## Step 1: Replace the Script
+
+Remove AOS CSS and JS. Add data-anim.
+
+<CodeBlock
+  code={`<!-- Remove these -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2/dist/aos.css" />
+<script src="https://unpkg.com/aos@2/dist/aos.js"></script>
+<script>AOS.init();</script>
+
+<!-- Add this -->
+<script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>`}
+  lang="html"
+/>
+
+## Step 2: Replace Attributes
+
+The main change is renaming `data-aos` to `data-anim` and updating attribute names.
+
+### Attribute Mapping
+
+| AOS Attribute | data-anim Attribute | Notes |
+|---------------|---------------------|-------|
+| `data-aos="fade-up"` | `data-anim="fadeInUp"` | camelCase naming |
+| `data-aos="fade-down"` | `data-anim="fadeInDown"` | |
+| `data-aos="fade-left"` | `data-anim="fadeInLeft"` | |
+| `data-aos="fade-right"` | `data-anim="fadeInRight"` | |
+| `data-aos="slide-up"` | `data-anim="slideInUp"` | |
+| `data-aos="zoom-in"` | `data-anim="zoomIn"` | |
+| `data-aos="zoom-out"` | `data-anim="zoomOut"` | |
+| `data-aos="flip-up"` | `data-anim="flip"` | |
+| `data-aos-duration` | `data-anim-duration` | Same format |
+| `data-aos-delay` | `data-anim-delay` | Same format |
+| `data-aos-easing` | `data-anim-easing` | CSS easing values |
+| `data-aos-once` | `data-anim-once` | Same values |
+| `data-aos-offset` | `data-anim-offset` | Same values |
+| `data-aos-mirror` | `data-anim-mirror` | Same values |
+
+### Animation Name Mapping
+
+| AOS Name | data-anim Name |
+|----------|---------------|
+| `fade` | `fadeIn` |
+| `fade-up` | `fadeInUp` |
+| `fade-down` | `fadeInDown` |
+| `fade-left` | `fadeInLeft` |
+| `fade-right` | `fadeInRight` |
+| `slide-up` | `slideInUp` |
+| `slide-down` | `slideInDown` |
+| `slide-left` | `slideInLeft` |
+| `slide-right` | `slideInRight` |
+| `zoom-in` | `zoomIn` |
+| `zoom-out` | `zoomOut` |
+| `zoom-in-up` | `zoomInUp` |
+| `zoom-in-down` | `zoomInDown` |
+| `flip-up` | `flip` |
+
+## Step 3: Replace AOS.init() Config
+
+<CodeBlock
+  code={`// AOS config
+AOS.init({
+  duration: 800,
+  easing: 'ease-out-cubic',
+  once: true,
+  offset: 100,
+});
+
+// data-anim equivalent
+window.__dataAnim = {
+  duration: '800ms',
+  easing: 'cubic-bezier(0.33, 1, 0.68, 1)',
+  once: true,
+  offset: 100,
+};`}
+  lang="js"
+/>
+
+## Step 4: Remove FOUC Workarounds
+
+If you added manual CSS to prevent AOS FOUC, you can remove it:
+
+<CodeBlock
+  code={`/* Remove all of this — data-anim handles it automatically */
+[data-aos] {
+  opacity: 0;
+  transition-property: opacity, transform;
+}
+[data-aos].aos-animate {
+  opacity: 1;
+}
+body[data-aos-easing="ease"] [data-aos] {
+  transition-timing-function: ease;
+}`}
+  lang="css"
+/>
+
+## Quick Find & Replace
+
+For most projects, these regex replacements handle the bulk of the migration:
+
+```
+Find:    data-aos="fade-up"
+Replace: data-anim="fadeInUp"
+
+Find:    data-aos="fade-down"
+Replace: data-anim="fadeInDown"
+
+Find:    data-aos="fade-left"
+Replace: data-anim="fadeInLeft"
+
+Find:    data-aos="fade-right"
+Replace: data-anim="fadeInRight"
+
+Find:    data-aos="fade"
+Replace: data-anim="fadeIn"
+
+Find:    data-aos="zoom-in"
+Replace: data-anim="zoomIn"
+
+Find:    data-aos-
+Replace: data-anim-
+```
+
+## What You Gain
+
+After migrating, you get these features for free:
+
+- **Anti-FOUC protection** — No more flash of content on page load
+- **Smaller bundle** — From ~14KB to under 2KB
+- **More triggers** — hover, click, and focus triggers (AOS only supports viewport)
+- **Stagger patterns** — center, edges, start, end patterns
+- **No init() call** — Remove your `AOS.init()` and JS setup entirely
+- **Responsive controls** — Disable or swap animations per breakpoint
