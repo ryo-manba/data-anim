@@ -84,13 +84,4 @@ data-anim's script is tiny (under 2KB), so the blocking time is negligible — t
   { feature: 'Zero config anti-FOUC', dataAnim: 'yes', aos: 'no', animateCss: 'no', gsap: 'no' },
 ]} />
 
-### AOS Workaround
-
-AOS users typically need manual CSS to prevent FOUC:
-
-<CodeBlock
-  code={'/* Manual FOUC fix for AOS */\n[data-aos] {\n  opacity: 0;\n  transition-property: opacity, transform;\n}\n[data-aos].aos-animate {\n  opacity: 1;\n}\n\n/* But this still flashes if CSS loads after HTML */'}
-  lang="css"
-/>
-
 data-anim handles all of this automatically. No extra CSS needed.
