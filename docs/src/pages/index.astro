@@ -56,14 +56,14 @@ const categories = [
 ];
 ---
 
-<BaseLayout title="data-anim — Zero-JS Animation Library">
+<BaseLayout title="data-anim — Animate with Just HTML">
   <Header />
 
   <!-- Hero -->
   <section class="pt-32 pb-20 px-4 sm:px-6">
     <div class="max-w-4xl mx-auto text-center">
       <h1 class="text-5xl md:text-7xl font-heading font-bold mb-6" data-anim="fadeInUp">
-        Animate with <span class="gradient-text">zero JavaScript</span>
+        Animate with <span class="gradient-text">just HTML</span>
       </h1>
       <p class="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-8" data-anim="fadeInUp" data-anim-delay="100ms">
         Drop-in scroll animations using HTML attributes. Built-in anti-FOUC protection. Under 2KB. No dependencies.
@@ -104,8 +104,8 @@ const categories = [
               <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
             </svg>
           </div>
-          <h3 class="text-lg font-heading font-semibold mb-2">Zero JavaScript</h3>
-          <p class="text-sm text-text-secondary">Pure CSS animations triggered by HTML attributes. No runtime JS after initialization.</p>
+          <h3 class="text-lg font-heading font-semibold mb-2">No JS to Write</h3>
+          <p class="text-sm text-text-secondary">Pure CSS animations triggered by HTML attributes. Just add data attributes.</p>
         </div>
 
         <div class="glass-card p-6" data-anim="fadeInUp">
@@ -159,7 +159,7 @@ const categories = [
       </div>
 
       <div class="text-center mt-8" data-anim="fadeInUp" data-anim-delay="300ms">
-        <a href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}docs/getting-started`} class="text-accent hover:text-accent-light font-semibold text-lg">
+        <a href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}docs/getting-started`} class="text-accent-readable hover:text-[#c4b5fd] font-semibold text-lg">
           Read the full docs &rarr;
         </a>
       </div>
@@ -174,7 +174,7 @@ const categories = [
         30+ built-in animations
       </h2>
       <p class="text-center text-text-secondary mb-12 max-w-xl mx-auto" data-anim="fadeInUp" data-anim-delay="100ms">
-        From subtle fades to playful bounces. Every animation is GPU-accelerated and respects <code class="text-accent-light">prefers-reduced-motion</code>.
+        From subtle fades to playful bounces. Every animation is GPU-accelerated and respects <code class="text-accent-readable">prefers-reduced-motion</code>.
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -252,7 +252,7 @@ const categories = [
       </div>
 
       <div class="text-center mt-10" data-anim="fadeInUp">
-        <a href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}docs/animations`} class="text-accent hover:text-accent-light font-semibold text-lg">
+        <a href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}docs/animations`} class="text-accent-readable hover:text-[#c4b5fd] font-semibold text-lg">
           Browse all animations &rarr;
         </a>
       </div>
@@ -268,7 +268,7 @@ const categories = [
     align-items: center;
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
-    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
     color: #fff;
     font-weight: 500;
     text-decoration: none;
@@ -441,7 +441,7 @@ const categories = [
   }
   .showcase-card:hover .showcase-tag {
     background: rgba(99, 102, 241, 0.1);
-    color: var(--color-accent-light);
+    color: var(--color-accent-readable);
   }
 </style>
 
