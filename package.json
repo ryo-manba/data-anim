@@ -1,6 +1,6 @@
 {
   "name": "data-anim",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Animate with just HTML. Powered by data attributes.",
   "type": "module",
   "packageManager": "pnpm@10.11.0",
@@ -35,7 +35,11 @@
     "scroll",
     "intersection-observer"
   ],
-  "author": "",
+  "author": "Ryo Matsukawa",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ryo-manba/data-anim"
+  },
   "license": "MIT",
   "devDependencies": {
     "@oxfmt/binding-darwin-arm64": "0.40.0",
