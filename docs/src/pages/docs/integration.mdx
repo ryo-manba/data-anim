@@ -14,7 +14,9 @@ data-anim works with any HTML-based project. Since it uses HTML attributes and i
 
 - [Static HTML](#static-html)
 - [React (Vite)](#react-vite)
+- [Vue (Vite)](#vue-vite)
 - [Next.js](#nextjs)
+- [Nuxt](#nuxt)
 - [Astro](#astro)
 - [Hugo](#hugo)
 - [WordPress](#wordpress)
@@ -55,6 +57,30 @@ Then use `data-anim` attributes in any component:
 
 No `useEffect`, no refs, no wrapper components needed.
 
+## Vue (Vite)
+
+Install via npm:
+
+<CodeBlock code={'npm install data-anim'} lang="bash" />
+
+Import once at the top of your entry file. data-anim auto-initializes and uses MutationObserver to detect components as they mount.
+
+<CodeBlock
+  code={'// src/main.js\nimport \'data-anim\';\nimport { createApp } from \'vue\';\nimport App from \'./App.vue\';\n\ncreateApp(App).mount(\'#app\');'}
+  lang="js"
+  filename="src/main.js"
+/>
+
+Then use `data-anim` attributes in any component:
+
+<CodeBlock
+  code={'<template>\n  <section data-anim-stagger="100">\n    <h2 data-anim="fadeInUp">Features</h2>\n    <div data-anim="fadeInUp">Fast</div>\n    <div data-anim="fadeInUp">Lightweight</div>\n    <div data-anim="fadeInUp">Zero config</div>\n  </section>\n</template>'}
+  lang="vue"
+  filename="src/components/Features.vue"
+/>
+
+No `onMounted`, no refs, no directives needed.
+
 ## Next.js
 
 Install via npm:
@@ -69,10 +95,10 @@ Import in your root layout. Use `next/script` with `strategy="beforeInteractive"
   filename="app/layout.tsx"
 />
 
-Alternatively, import the npm package via a Client Component:
+Alternatively, import the npm package via a Client Component. Note: data-anim accesses `document` at module level, so use a dynamic import inside `useEffect` to avoid SSR errors:
 
 <CodeBlock
-  code={'// app/DataAnim.tsx\n\'use client\';\nimport \'data-anim\';\nexport default function DataAnim() {\n  return null;\n}'}
+  code={'// app/DataAnim.tsx\n\'use client\';\nimport { useEffect } from \'react\';\n\nexport default function DataAnim() {\n  useEffect(() => {\n    import(\'data-anim\');\n  }, []);\n  return null;\n}'}
   lang="tsx"
   filename="app/DataAnim.tsx"
 />
@@ -90,6 +116,30 @@ Then use attributes in any Server or Client Component:
   lang="tsx"
   filename="app/page.tsx"
 />
+
+## Nuxt
+
+Install via npm:
+
+<CodeBlock code={'npm install data-anim'} lang="bash" />
+
+Create a client-only plugin. The `.client.ts` suffix ensures data-anim only loads in the browser, avoiding SSR errors:
+
+<CodeBlock
+  code={'// app/plugins/data-anim.client.ts\nimport \'data-anim\';\nexport default defineNuxtPlugin(() => {});'}
+  lang="ts"
+  filename="app/plugins/data-anim.client.ts"
+/>
+
+Then use attributes in any component or page:
+
+<CodeBlock
+  code={'<!-- app/app.vue -->\n<template>\n  <div>\n    <h1 data-anim="fadeInUp">Welcome</h1>\n    <p data-anim="fadeInUp" data-anim-delay="200">\n      Built with Nuxt + data-anim\n    </p>\n  </div>\n</template>'}
+  lang="vue"
+  filename="app/app.vue"
+/>
+
+No extra configuration in `nuxt.config.ts` needed. Nuxt auto-imports plugins from the `app/plugins/` directory.
 
 ## Astro
 
