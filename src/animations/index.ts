@@ -8,13 +8,18 @@ import { rotateAnimations } from './rotate';
 import { specialAnimations } from './special';
 
 export const allAnimations: AnimationDef[] = [
-  ...fadeAnimations, ...slideAnimations, ...zoomAnimations, ...bounceAnimations,
-  ...attentionAnimations, ...rotateAnimations, ...specialAnimations,
+  ...fadeAnimations,
+  ...slideAnimations,
+  ...zoomAnimations,
+  ...bounceAnimations,
+  ...attentionAnimations,
+  ...rotateAnimations,
+  ...specialAnimations,
 ];
 
 export const animationMap = new Map<string, AnimationDef>();
-allAnimations.forEach(a => animationMap.set(a.name, a));
+allAnimations.forEach((a) => animationMap.set(a.name, a));
 
 export function getKeyframesCSS(): string {
-  return allAnimations.map(a => a.keyframes).join('');
+  return allAnimations.map((a) => a.keyframes).join('');
 }

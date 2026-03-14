@@ -1,76 +1,131 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>data-anim Stress Test</title>
-  <script>window.__dataAnim = { debug: false };</script>
-  <script src="../../dist/data-anim.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; padding: 20px; }
-    h1 { margin-bottom: 10px; }
-    p { margin-bottom: 20px; color: #666; }
-    .grid { display: flex; flex-wrap: wrap; gap: 8px; }
-    .item { width: 80px; height: 60px; background: #4ecdc4; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: bold; border-radius: 4px; }
-    #controls { margin: 20px 0; }
-    button { padding: 8px 16px; margin-right: 8px; cursor: pointer; border: 1px solid #ccc; border-radius: 4px; background: #fff; }
-    button:hover { background: #f0f0f0; }
-  </style>
-</head>
-<body>
-  <h1>Stress Test — 100+ Elements</h1>
-  <p>Scroll down to see animations trigger. Use buttons to add dynamic elements.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>data-anim Stress Test</title>
+    <script>
+      window.__dataAnim = { debug: false };
+    </script>
+    <script src="../../dist/data-anim.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 20px;
+      }
+      h1 {
+        margin-bottom: 10px;
+      }
+      p {
+        margin-bottom: 20px;
+        color: #666;
+      }
+      .grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .item {
+        width: 80px;
+        height: 60px;
+        background: #4ecdc4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 10px;
+        font-weight: bold;
+        border-radius: 4px;
+      }
+      #controls {
+        margin: 20px 0;
+      }
+      button {
+        padding: 8px 16px;
+        margin-right: 8px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background: #fff;
+      }
+      button:hover {
+        background: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Stress Test — 100+ Elements</h1>
+    <p>Scroll down to see animations trigger. Use buttons to add dynamic elements.</p>
 
-  <div id="controls">
-    <button onclick="addElements(10)">Add 10 elements</button>
-    <button onclick="addElements(50)">Add 50 elements</button>
-    <button onclick="addStaggerGroup()">Add stagger group</button>
-  </div>
+    <div id="controls">
+      <button onclick="addElements(10)">Add 10 elements</button>
+      <button onclick="addElements(50)">Add 50 elements</button>
+      <button onclick="addStaggerGroup()">Add stagger group</button>
+    </div>
 
-  <div class="grid" id="grid"></div>
+    <div class="grid" id="grid"></div>
 
-  <script>
-    const anims = ['fadeIn','fadeInUp','fadeInDown','fadeInLeft','fadeInRight','slideInUp','slideInLeft','zoomIn','zoomOut','bounceIn','bounceInUp','rotateIn','blur','clipReveal'];
-    const grid = document.getElementById('grid');
+    <script>
+      const anims = [
+        'fadeIn',
+        'fadeInUp',
+        'fadeInDown',
+        'fadeInLeft',
+        'fadeInRight',
+        'slideInUp',
+        'slideInLeft',
+        'zoomIn',
+        'zoomOut',
+        'bounceIn',
+        'bounceInUp',
+        'rotateIn',
+        'blur',
+        'clipReveal',
+      ];
+      const grid = document.getElementById('grid');
 
-    // Generate initial 100 elements
-    for (let i = 0; i < 100; i++) {
-      const el = document.createElement('div');
-      el.className = 'item';
-      el.setAttribute('data-anim', anims[i % anims.length]);
-      el.textContent = `#${i + 1}`;
-      grid.appendChild(el);
-    }
-
-    function addElements(n) {
-      const count = grid.children.length;
-      for (let i = 0; i < n; i++) {
+      // Generate initial 100 elements
+      for (let i = 0; i < 100; i++) {
         const el = document.createElement('div');
         el.className = 'item';
-        el.style.background = '#ff6b6b';
-        el.setAttribute('data-anim', anims[(count + i) % anims.length]);
-        el.textContent = `+${count + i + 1}`;
+        el.setAttribute('data-anim', anims[i % anims.length]);
+        el.textContent = `#${i + 1}`;
         grid.appendChild(el);
       }
-    }
 
-    function addStaggerGroup() {
-      const group = document.createElement('div');
-      group.style.cssText = 'display:flex;gap:8px;margin-top:20px;width:100%';
-      group.setAttribute('data-anim-stagger', '80');
-      group.setAttribute('data-anim-stagger-from', 'center');
-      for (let i = 0; i < 8; i++) {
-        const el = document.createElement('div');
-        el.className = 'item';
-        el.style.background = '#feca57';
-        el.style.color = '#333';
-        el.setAttribute('data-anim', 'fadeInUp');
-        el.textContent = `S${i + 1}`;
-        group.appendChild(el);
+      function addElements(n) {
+        const count = grid.children.length;
+        for (let i = 0; i < n; i++) {
+          const el = document.createElement('div');
+          el.className = 'item';
+          el.style.background = '#ff6b6b';
+          el.setAttribute('data-anim', anims[(count + i) % anims.length]);
+          el.textContent = `+${count + i + 1}`;
+          grid.appendChild(el);
+        }
       }
-      grid.parentNode.appendChild(group);
-    }
-  </script>
-</body>
+
+      function addStaggerGroup() {
+        const group = document.createElement('div');
+        group.style.cssText = 'display:flex;gap:8px;margin-top:20px;width:100%';
+        group.setAttribute('data-anim-stagger', '80');
+        group.setAttribute('data-anim-stagger-from', 'center');
+        for (let i = 0; i < 8; i++) {
+          const el = document.createElement('div');
+          el.className = 'item';
+          el.style.background = '#feca57';
+          el.style.color = '#333';
+          el.setAttribute('data-anim', 'fadeInUp');
+          el.textContent = `S${i + 1}`;
+          group.appendChild(el);
+        }
+        grid.parentNode.appendChild(group);
+      }
+    </script>
+  </body>
 </html>

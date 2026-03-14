@@ -3,7 +3,8 @@ import { getConfig } from './config';
 let dt: ReturnType<typeof setTimeout>;
 
 export const getDevice = (): string => {
-  const w = window.innerWidth, b = getConfig().breakpoints;
+  const w = window.innerWidth,
+    b = getConfig().breakpoints;
   return w < b.mobile ? 'mobile' : w < b.tablet ? 'tablet' : 'desktop';
 };
 
@@ -19,5 +20,8 @@ export const getMobileAnim = (el: HTMLElement): string | null =>
   getDevice() === 'mobile' ? el.getAttribute('data-anim-mobile') : null;
 
 export const onResize = (cb: () => void): void => {
-  window.addEventListener('resize', () => { clearTimeout(dt); dt = setTimeout(cb, 250); });
+  window.addEventListener('resize', () => {
+    clearTimeout(dt);
+    dt = setTimeout(cb, 250);
+  });
 };

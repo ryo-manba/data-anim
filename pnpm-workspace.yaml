@@ -1,0 +1,14 @@
+packages:
+  - "docs"
+
+minimumReleaseAge: 1440
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+
+supportedArchitectures:
+  os:
+    - current
+  cpu:
+    - current

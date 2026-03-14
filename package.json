@@ -2,15 +2,30 @@
   "name": "data-anim",
   "version": "1.0.0",
   "description": "Zero-JS animation library powered by data attributes",
-  "main": "dist/data-anim.min.js",
+  "packageManager": "pnpm@10.11.0",
+  "main": "dist/data-anim.js",
   "module": "dist/data-anim.esm.js",
-  "types": "dist/types.d.ts",
+  "types": "dist/data-anim.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/data-anim.d.ts",
+      "import": "./dist/data-anim.esm.js",
+      "require": "./dist/data-anim.js"
+    }
+  },
+  "unpkg": "dist/data-anim.min.js",
+  "jsdelivr": "dist/data-anim.min.js",
   "files": [
-    "dist/"
+    "dist"
   ],
   "scripts": {
-    "build": "node build.js",
-    "build:watch": "node build.js --watch"
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "lint": "oxlint src/",
+    "lint:fix": "oxlint --fix src/",
+    "format": "oxfmt --write src/ tests/",
+    "format:check": "oxfmt --check src/ tests/",
+    "check": "pnpm lint && pnpm format:check && pnpm build"
   },
   "keywords": [
     "animation",
@@ -22,7 +37,12 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.20.0",
-    "typescript": "^5.3.0"
+    "@oxfmt/binding-darwin-arm64": "0.40.0",
+    "oxfmt": "^0.40.0",
+    "oxlint": "0.16.7",
+    "puppeteer": "^24.39.1",
+    "typescript": "^5.3.0",
+    "vite": "^6.0.0",
+    "vite-plugin-dts": "^4.0.0"
   }
 }
