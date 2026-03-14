@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>data-anim Responsive Test</title>
+  <script src="../dist/data-anim.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #0a0a0f; color: #e8e8f0; padding: 2rem; }
+    h1 { margin-bottom: 1rem; }
+    h2 { margin: 2rem 0 1rem; font-size: 1.2rem; color: #8888a8; }
+    .box {
+      width: 200px; height: 80px; margin: 1rem 0;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 600; font-size: 14px;
+    }
+    .info { font-size: 13px; color: #8888a8; font-family: monospace; margin-bottom: 0.5rem; }
+    #viewport-info { position: fixed; top: 1rem; right: 1rem; background: #111; padding: 8px 16px; border-radius: 8px; font-family: monospace; font-size: 14px; color: #a78bfa; }
+  </style>
+</head>
+<body>
+
+<div id="viewport-info"></div>
+
+<h1>Responsive Test</h1>
+<p style="color:#8888a8; margin-bottom:2rem;">Resize the browser to test. Current breakpoint is shown top-right.</p>
+
+<h2>1. data-anim-mobile="fadeIn" (slideInLeft on desktop, fadeIn on mobile)</h2>
+<div class="info">data-anim="slideInLeft" data-anim-mobile="fadeIn"</div>
+<div class="box" data-anim="slideInLeft" data-anim-mobile="fadeIn">slideInLeft / fadeIn</div>
+
+<h2>2. data-anim-disable="mobile" (no animation on mobile)</h2>
+<div class="info">data-anim="zoomIn" data-anim-disable="mobile"</div>
+<div class="box" data-anim="zoomIn" data-anim-disable="mobile">zoomIn (disabled on mobile)</div>
+
+<h2>3. data-anim-disable="tablet" (no animation on tablet)</h2>
+<div class="info">data-anim="bounceIn" data-anim-disable="tablet"</div>
+<div class="box" data-anim="bounceIn" data-anim-disable="tablet">bounceIn (disabled on tablet)</div>
+
+<h2>4. data-anim-disable="desktop" (no animation on desktop)</h2>
+<div class="info">data-anim="fadeInUp" data-anim-disable="desktop"</div>
+<div class="box" data-anim="fadeInUp" data-anim-disable="desktop">fadeInUp (disabled on desktop)</div>
+
+<h2>5. No responsive attrs (always animates)</h2>
+<div class="info">data-anim="fadeInRight"</div>
+<div class="box" data-anim="fadeInRight">fadeInRight (always)</div>
+
+<script>
+  function updateInfo() {
+    var w = window.innerWidth;
+    var bp = w < 768 ? 'mobile' : w < 1024 ? 'tablet' : 'desktop';
+    document.getElementById('viewport-info').textContent = w + 'px — ' + bp;
+  }
+  updateInfo();
+  window.addEventListener('resize', updateInfo);
+</script>
+
+</body>
+</html>

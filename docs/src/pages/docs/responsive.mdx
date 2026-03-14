@@ -5,85 +5,37 @@ description: Control animations across breakpoints with data-anim responsive att
 ---
 
 import CodeBlock from '../../components/CodeBlock.astro';
-import AttributeTable from '../../components/AttributeTable.astro';
-import AnimationDemo from '../../components/AnimationDemo.astro';
+import ResponsiveDemo from '../../components/ResponsiveDemo.astro';
 
 # Responsive
 
-Not every animation makes sense on every screen size. data-anim provides responsive attributes to disable or swap animations based on viewport width.
+Not every animation works well on mobile. data-anim lets you swap or disable animations based on screen size.
 
-## Disable Animations
+<ResponsiveDemo />
 
-Use `data-anim-disable` to turn off animations at specific breakpoints.
+## data-anim-mobile
 
-<AttributeTable attributes={[
-  { name: 'data-anim-disable', type: '"mobile" | "tablet" | "desktop"', description: 'Disable the animation at the specified breakpoint.' },
-]} />
+Swap to a simpler animation on mobile (< 768px). Desktop gets the original, mobile gets the override.
 
 <CodeBlock
-  code={'<!-- No animation on mobile -->\n<div\n  data-anim="slideInLeft"\n  data-anim-disable="mobile"\n>\n  This only animates on tablet and desktop\n</div>\n\n<!-- No animation on tablet -->\n<div\n  data-anim="fadeInUp"\n  data-anim-disable="tablet"\n>\n  Skips animation on tablet\n</div>'}
+  code={'<div\n  data-anim="slideInLeft"\n  data-anim-mobile="fadeIn"\n>\n  Slides on desktop, fades on mobile\n</div>'}
   lang="html"
 />
 
-### Breakpoints
+## data-anim-disable
 
-| Breakpoint | Range |
-|-----------|-------|
-| `mobile` | < 768px |
-| `tablet` | 768px - 1023px |
-| `desktop` | >= 1024px |
-
-## Mobile Override
-
-Use `data-anim-mobile` to swap to a different (typically simpler) animation on mobile.
-
-<AttributeTable attributes={[
-  { name: 'data-anim-mobile', type: 'string', description: 'Alternative animation name for mobile screens (< 768px).' },
-]} />
+Disable the animation entirely on a specific breakpoint.
 
 <CodeBlock
-  code={'<!-- Full slide on desktop, simple fade on mobile -->\n<div\n  data-anim="slideInLeft"\n  data-anim-mobile="fadeIn"\n>\n  Responsive animation\n</div>'}
+  code={'<!-- No animation on mobile -->\n<div data-anim="slideInLeft" data-anim-disable="mobile">\n  Desktop only\n</div>\n\n<!-- No animation on desktop -->\n<div data-anim="fadeInUp" data-anim-disable="desktop">\n  Mobile only\n</div>'}
   lang="html"
 />
 
-This is useful when:
-- Complex animations cause jank on low-end mobile devices
-- Horizontal slide animations don't work well on narrow screens
-- You want a more subtle experience on mobile
+| Value | Effect |
+|-------|--------|
+| `"mobile"` | Disabled on < 768px |
+| `"desktop"` | Disabled on ≥ 768px |
 
-## Live Examples
+## Reduced Motion
 
-Try resizing your browser to see the difference:
-
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-  <AnimationDemo name="slideInLeft" />
-  <AnimationDemo name="fadeIn" />
-</div>
-
-<CodeBlock
-  code={'<!-- Desktop: slide from left / Mobile: simple fade -->\n<div\n  data-anim="slideInLeft"\n  data-anim-mobile="fadeIn"\n>\n  Responsive content\n</div>\n\n<!-- Disable complex animation on mobile entirely -->\n<div\n  data-anim="rotateIn"\n  data-anim-disable="mobile"\n>\n  Desktop-only rotation\n</div>\n\n<!-- Stagger with responsive override -->\n<div data-anim-stagger="100ms">\n  <div data-anim="slideInRight" data-anim-mobile="fadeInUp">\n    Card 1\n  </div>\n  <div data-anim="slideInRight" data-anim-mobile="fadeInUp">\n    Card 2\n  </div>\n  <div data-anim="slideInRight" data-anim-mobile="fadeInUp">\n    Card 3\n  </div>\n</div>'}
-  lang="html"
-/>
-
-## Best Practices
-
-### Prefer simpler animations on mobile
-
-<CodeBlock
-  code={'<!-- Good: simpler animation on mobile -->\n<div data-anim="slideInLeft" data-anim-mobile="fadeIn">\n  Content\n</div>\n\n<!-- Good: disable unnecessary animation -->\n<div data-anim="rotateIn" data-anim-disable="mobile">\n  Content\n</div>'}
-  lang="html"
-/>
-
-### Consider reduced motion
-
-data-anim automatically respects the `prefers-reduced-motion` media query. When the user has requested reduced motion, all animations are disabled system-wide. You don't need to handle this manually.
-
-### Performance tips
-
-| Animation type | Mobile performance | Recommendation |
-|---|---|---|
-| `fadeIn`, `fadeInUp` | Excellent | Use freely |
-| `zoomIn`, `zoomOut` | Good | GPU-friendly, works well |
-| `slideInLeft/Right` | Caution | Can cause horizontal overflow |
-| `rotateIn`, `flip` | Caution | Use `data-anim-mobile="fadeIn"` |
-| `bounce`, `wobble` | Good | Multi-step but GPU-friendly |
+`prefers-reduced-motion: reduce` automatically disables all animations. No manual handling needed.

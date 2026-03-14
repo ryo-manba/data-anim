@@ -1,0 +1,125 @@
+---
+---
+
+<div class="responsive-demo">
+  <div class="responsive-tabs">
+    <button class="responsive-tab active" data-bp="desktop">Desktop (≥768px)</button>
+    <button class="responsive-tab" data-bp="mobile">Mobile (<768px)</button>
+  </div>
+
+  <div class="responsive-stage">
+    <div class="responsive-box" id="responsive-box">
+      <span id="responsive-box-text">slideInLeft</span>
+    </div>
+  </div>
+
+  <div class="responsive-info">
+    <pre id="responsive-code" class="responsive-code-text"></pre>
+    <button id="responsive-copy" class="responsive-copy-btn" aria-label="Copy code">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .responsive-demo { margin: 2rem 0; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden; }
+  .responsive-tabs { display: flex; border-bottom: 1px solid var(--color-border); background: var(--color-bg-surface); }
+  .responsive-tab {
+    flex: 1; padding: 12px 16px; border: none; background: none;
+    color: var(--color-text-secondary); font-family: var(--font-mono); font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: color 0.2s, background 0.2s; border-bottom: 2px solid transparent;
+  }
+  .responsive-tab:hover { color: var(--color-text); background: var(--color-bg-hover); }
+  .responsive-tab.active { color: var(--color-accent-light); border-bottom-color: var(--color-accent); background: rgba(99, 102, 241, 0.05); }
+  .responsive-stage { padding: 3rem 2rem; display: flex; align-items: center; justify-content: center; min-height: 220px; overflow: hidden; }
+  .responsive-box {
+    width: 160px; height: 100px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-family: var(--font-mono); font-weight: 600; font-size: 14px;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.3); cursor: pointer;
+  }
+  .responsive-info { padding: 12px 16px; background: var(--color-code-bg); border-top: 1px solid var(--color-border); display: flex; align-items: flex-start; gap: 12px; }
+  .responsive-code-text { flex: 1; font-family: var(--font-mono) !important; font-size: 13px !important; color: var(--color-text-secondary) !important; background: none !important; padding: 0 !important; margin: 0 !important; border: none !important; white-space: pre; overflow-x: auto; line-height: 1.6; }
+  .responsive-copy-btn { padding: 6px; background: none; border: 1px solid var(--color-border); border-radius: 6px; color: var(--color-text-muted); cursor: pointer; transition: color 0.15s; flex-shrink: 0; display: flex; align-items: center; }
+  .responsive-copy-btn:hover { color: var(--color-text); }
+</style>
+
+<script is:inline>
+  (function() {
+    var box = document.getElementById('responsive-box');
+    var text = document.getElementById('responsive-box-text');
+    var codeEl = document.getElementById('responsive-code');
+    var copyBtn = document.getElementById('responsive-copy');
+    var tabs = document.querySelectorAll('.responsive-tab');
+    var current = 'desktop';
+
+    var config = {
+      desktop: {
+        anim: 'slideInLeft',
+        transform: 'translateX(-40px)',
+        code: '<div\n  data-anim="slideInLeft"\n  data-anim-disable="mobile"\n>\n  Desktop only: slideInLeft\n</div>',
+        disableOn: 'mobile',
+      },
+      mobile: {
+        anim: 'fadeIn',
+        transform: 'scale(0.9)',
+        code: '<div\n  data-anim="fadeIn"\n  data-anim-disable="desktop"\n>\n  Mobile only: fadeIn\n</div>',
+        disableOn: 'desktop',
+      },
+    };
+
+    function getViewport() {
+      return window.innerWidth < 768 ? 'mobile' : 'desktop';
+    }
+
+    function playAnim(bp) {
+      var c = config[bp];
+      if (!box) return;
+      codeEl.textContent = c.code;
+      var vp = getViewport();
+      var disabled = (c.disableOn === vp);
+
+      if (disabled) {
+        text.textContent = 'disabled';
+        box.style.transition = 'none';
+        box.style.opacity = '0.3';
+        box.style.transform = 'none';
+        return;
+      }
+
+      text.textContent = c.anim;
+      box.style.transition = 'none';
+      box.style.opacity = '0';
+      box.style.transform = c.transform;
+      box.offsetWidth;
+      box.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      box.style.opacity = '1';
+      box.style.transform = 'none';
+    }
+
+    function switchTab(bp) {
+      current = bp;
+      tabs.forEach(function(t) {
+        t.classList.toggle('active', t.getAttribute('data-bp') === bp);
+      });
+      playAnim(bp);
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() { switchTab(tab.getAttribute('data-bp')); });
+    });
+
+    box.addEventListener('click', function() { playAnim(current); });
+
+    copyBtn.addEventListener('click', function() {
+      navigator.clipboard.writeText(config[current].code);
+      copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+      setTimeout(function() {
+        copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+      }, 1500);
+    });
+
+    setTimeout(function() { switchTab('desktop'); }, 300);
+  })();
+</script>
