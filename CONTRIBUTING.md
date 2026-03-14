@@ -49,6 +49,7 @@ pnpm check        # lint + format:check + test + build
 1. Fork the repository
 2. Create a branch (`git checkout -b my-feature`)
 3. Make your changes
-4. Run `pnpm check` to verify everything passes
-5. Commit and push
-6. Open a Pull Request
+4. Add or update tests for your changes
+5. Run `pnpm check` to verify everything passes
+6. Commit and push
+7. Open a Pull Request

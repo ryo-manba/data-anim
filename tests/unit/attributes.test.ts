@@ -57,10 +57,9 @@ describe('Type definitions match implementation', () => {
 
     it('every entry in EASING_PRESETS has a matching config', () => {
       for (const name of EASING_PRESETS) {
-        expect(
-          name in easings,
-          `"${name}" is in EASING_PRESETS but not in easings config`,
-        ).toBe(true);
+        expect(name in easings, `"${name}" is in EASING_PRESETS but not in easings config`).toBe(
+          true,
+        );
       }
     });
 
