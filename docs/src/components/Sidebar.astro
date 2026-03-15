@@ -121,11 +121,13 @@ function isSectionActive(links: { href: string }[]): boolean {
     function open() {
       sidebar!.classList.remove('-translate-x-full');
       overlay!.classList.remove('hidden');
+      toggle!.querySelector('svg')!.style.transform = 'rotate(90deg)';
     }
 
     function close() {
       sidebar!.classList.add('-translate-x-full');
       overlay!.classList.add('hidden');
+      toggle!.querySelector('svg')!.style.transform = '';
     }
 
     toggle.addEventListener('click', () => {

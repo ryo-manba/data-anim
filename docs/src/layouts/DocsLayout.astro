@@ -16,6 +16,20 @@ const { title, description } = Astro.props.frontmatter || Astro.props;
   <Header />
 
   <div class="pt-16 max-w-7xl mx-auto px-4 sm:px-6">
+    <!-- Mobile sidebar toggle (sticky below header) -->
+    <div class="lg:hidden sticky top-16 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 bg-bg/80 backdrop-blur-md border-b border-border">
+      <button
+        id="sidebar-toggle"
+        class="flex items-center gap-2 text-sm text-text-secondary hover:text-text transition-colors py-3 w-full"
+        aria-label="Toggle sidebar"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200">
+          <polyline points="9 6 15 12 9 18" />
+        </svg>
+        Menu
+      </button>
+    </div>
+
     <div class="flex gap-8 py-8">
       <Sidebar />
 
