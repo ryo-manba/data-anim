@@ -28,6 +28,22 @@ const langLabel = locale === 'en' ? '日本語' : 'English';
 <header class="fixed top-0 left-0 right-0 z-50 border-b border-border bg-bg/80 backdrop-blur-md">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
     <a href={locale === 'ja' ? `${base}ja/` : base} class="flex items-center gap-2 text-text hover:text-text no-underline">
+      <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+        <defs>
+          <linearGradient id="logo-g1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#818cf8"/>
+            <stop offset="100%" stop-color="#c084fc"/>
+          </linearGradient>
+          <linearGradient id="logo-g2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c084fc"/>
+            <stop offset="100%" stop-color="#f472b6"/>
+          </linearGradient>
+        </defs>
+        <rect width="32" height="32" rx="7" fill="#0a0a1f"/>
+        <rect x="9" y="9" width="14" height="14" rx="4" fill="url(#logo-g2)" opacity="0.15" transform="translate(4, -3)"/>
+        <rect x="9" y="9" width="14" height="14" rx="4" fill="url(#logo-g1)" opacity="0.4" transform="translate(2, -1.5)"/>
+        <rect x="9" y="9" width="14" height="14" rx="4" fill="url(#logo-g1)"/>
+      </svg>
       <span class="font-heading font-bold text-xl gradient-text">data-anim</span>
     </a>
 
