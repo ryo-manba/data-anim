@@ -73,7 +73,7 @@ Browser Timeline:
 
 Other libraries use `async` or `defer` to avoid blocking page render. But this creates a race condition where the page can paint before the library hides elements.
 
-data-anim's script is tiny (under 2KB), so the blocking time is negligible — typically under 5ms. This is a deliberate trade-off: 5ms of blocking time eliminates all FOUC.
+data-anim's script is tiny (under 3KB), so the blocking time is negligible — typically under 5ms. This is a deliberate trade-off: 5ms of blocking time eliminates all FOUC.
 
 ## Comparison with Other Libraries
 
