@@ -94,90 +94,8 @@ const categories = [
     </div>
   </section>
 
-  <!-- Features -->
-  <section class="py-20 px-4 sm:px-6 border-t border-border">
-    <div class="max-w-5xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-anim-stagger="100ms">
-        <div class="glass-card p-6" data-anim="fadeInUp">
-          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
-              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-heading font-semibold mb-2">No JS to Write</h3>
-          <p class="text-sm text-text-secondary">Pure CSS animations triggered by HTML attributes. Just add data attributes.</p>
-        </div>
-
-        <div class="glass-card p-6" data-anim="fadeInUp">
-          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-heading font-semibold mb-2">Anti-FOUC Built-in</h3>
-          <p class="text-sm text-text-secondary">3-layer defense against Flash of Unstyled Content. No manual CSS workarounds needed.</p>
-        </div>
-
-        <div class="glass-card p-6" data-anim="fadeInUp">
-          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-heading font-semibold mb-2">Under 3KB</h3>
-          <p class="text-sm text-text-secondary">Tiny footprint. No dependencies. Loads in under 5ms. Smaller than most favicons.</p>
-        </div>
-
-        <div class="glass-card p-6" data-anim="fadeInUp">
-          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
-              <path d="M3 3h18v18H3z M3 9h18 M9 3v18" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-heading font-semibold mb-2">TypeScript Support</h3>
-          <p class="text-sm text-text-secondary">Full autocomplete for all data-anim attributes in React and Vue. Just import and go.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Quick Start -->
-  <section class="py-20 px-4 sm:px-6 border-t border-border">
-    <div class="max-w-3xl mx-auto">
-      <h2 class="text-3xl font-heading font-bold text-center mb-4" data-anim="fadeInUp">
-        Three lines. That's it.
-      </h2>
-      <p class="text-center text-text-secondary mb-8" data-anim="fadeInUp" data-anim-delay="100ms">
-        No config files. No build step. No framework required.
-      </p>
-
-      <div data-anim="fadeInUp" data-anim-delay="200ms">
-        <CodeBlock
-          code={`<!-- 1. Add the script -->
-<script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
-
-<!-- 2. Add the attribute -->
-<div data-anim="fadeInUp">
-  Your content animates on scroll
-</div>
-
-<!-- 3. There is no step 3 -->`}
-          lang="html"
-          filename="index.html"
-        />
-      </div>
-
-      <div class="text-center mt-8" data-anim="fadeInUp" data-anim-delay="300ms">
-        <a href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}docs/getting-started`} class="text-accent-readable hover:text-[#c4b5fd] font-semibold text-lg">
-          Read the full docs &rarr;
-        </a>
-      </div>
-    </div>
-  </section>
-
   <!-- Animation Showcase -->
-  <section class="py-20 px-4 sm:px-6 border-t border-border">
+  <section id="showcase-section" class="py-20 px-4 sm:px-6 border-t border-border">
     <div class="max-w-5xl mx-auto">
       <p class="text-center text-xs font-semibold tracking-widest text-text-muted uppercase mb-4" data-anim="fadeInUp">Animation Library</p>
       <h2 class="text-3xl md:text-4xl font-heading font-bold text-center mb-4" data-anim="fadeInUp">
@@ -264,6 +182,88 @@ const categories = [
       <div class="text-center mt-10" data-anim="fadeInUp">
         <a href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}docs/animations`} class="text-accent-readable hover:text-[#c4b5fd] font-semibold text-lg">
           Browse all animations &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-20 px-4 sm:px-6 border-t border-border">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-anim-stagger="100ms">
+        <div class="glass-card p-6" data-anim="fadeInUp">
+          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-semibold mb-2">No JS to Write</h3>
+          <p class="text-sm text-text-secondary">Pure CSS animations triggered by HTML attributes. Just add data attributes.</p>
+        </div>
+
+        <div class="glass-card p-6" data-anim="fadeInUp">
+          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-semibold mb-2">Anti-FOUC Built-in</h3>
+          <p class="text-sm text-text-secondary">3-layer defense against Flash of Unstyled Content. No manual CSS workarounds needed.</p>
+        </div>
+
+        <div class="glass-card p-6" data-anim="fadeInUp">
+          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-semibold mb-2">Under 3KB</h3>
+          <p class="text-sm text-text-secondary">Tiny footprint. No dependencies. Loads in under 5ms. Smaller than most favicons.</p>
+        </div>
+
+        <div class="glass-card p-6" data-anim="fadeInUp">
+          <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2">
+              <path d="M3 3h18v18H3z M3 9h18 M9 3v18" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-heading font-semibold mb-2">TypeScript Support</h3>
+          <p class="text-sm text-text-secondary">Full autocomplete for all data-anim attributes in React and Vue. Just import and go.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section class="py-20 px-4 sm:px-6 border-t border-border">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl font-heading font-bold text-center mb-4" data-anim="fadeInUp">
+        Three lines. That's it.
+      </h2>
+      <p class="text-center text-text-secondary mb-8" data-anim="fadeInUp" data-anim-delay="100ms">
+        No config files. No build step. No framework required.
+      </p>
+
+      <div data-anim="fadeInUp" data-anim-delay="200ms">
+        <CodeBlock
+          code={`<!-- 1. Add the script -->
+<script src="https://unpkg.com/data-anim@latest/dist/data-anim.js"></script>
+
+<!-- 2. Add the attribute -->
+<div data-anim="fadeInUp">
+  Your content animates on scroll
+</div>
+
+<!-- 3. There is no step 3 -->`}
+          lang="html"
+          filename="index.html"
+        />
+      </div>
+
+      <div class="text-center mt-8" data-anim="fadeInUp" data-anim-delay="300ms">
+        <a href={`${import.meta.env.BASE_URL.replace(/\/?$/, '/')}docs/getting-started`} class="text-accent-readable hover:text-[#c4b5fd] font-semibold text-lg">
+          Read the full docs &rarr;
         </a>
       </div>
     </div>
@@ -466,14 +466,16 @@ const categories = [
     }, 2000);
   });
 
-  // Showcase card hover → animate child dots
-  document.querySelectorAll('.showcase-card').forEach(function(card) {
-    var dots = card.querySelectorAll('[data-gallery-anim]');
-    if (!dots.length) return;
-    var animating = false;
-    card.addEventListener('mouseenter', function() {
-      if (animating) return;
-      animating = true;
+  // Showcase card continuous auto-play (motion.dev style)
+  (function() {
+    var cards = Array.from(document.querySelectorAll('.showcase-card'));
+    if (!cards.length) return;
+
+    function playCard(card) {
+      var dots = card.querySelectorAll('[data-gallery-anim]');
+      if (!dots.length) return;
+      if (card._animating) return;
+      card._animating = true;
       var done = 0;
       dots.forEach(function(dot, i) {
         var name = dot.getAttribute('data-gallery-anim');
@@ -484,10 +486,45 @@ const categories = [
           dot.addEventListener('animationend', function() {
             dot.style.animation = '';
             done++;
-            if (done >= dots.length) animating = false;
+            if (done >= dots.length) card._animating = false;
           }, { once: true });
         }, i * 80);
       });
-    });
-  });
+    }
+
+    // Each card loops independently with staggered start
+    var intervals = [];
+
+    function startAutoPlay() {
+      if (intervals.length) return;
+      cards.forEach(function(card, idx) {
+        // Stagger initial start so they don't all fire at once
+        setTimeout(function() {
+          playCard(card);
+          var id = setInterval(function() { playCard(card); }, 1800);
+          intervals.push(id);
+        }, idx * 400);
+      });
+    }
+
+    function stopAutoPlay() {
+      intervals.forEach(function(id) { clearInterval(id); });
+      intervals = [];
+    }
+
+    var showcaseSection = document.getElementById('showcase-section');
+    if (!showcaseSection) return;
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          startAutoPlay();
+        } else {
+          stopAutoPlay();
+        }
+      });
+    }, { threshold: 0.1 });
+
+    observer.observe(showcaseSection);
+  })();
 </script>
