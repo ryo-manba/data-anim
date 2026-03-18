@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "data-anim Inspector",
+  "description": "Click any element on a website and try data-anim animations instantly.",
+  "version": "1.0.0",
+  "icons": {
+    "16": "icons/icon-16.svg",
+    "48": "icons/icon-48.svg",
+    "128": "icons/icon-128.svg"
+  },
+  "action": {
+    "default_title": "Toggle data-anim Inspector"
+  },
+  "permissions": ["activeTab", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
