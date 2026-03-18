@@ -22,6 +22,7 @@
   "scripts": {
     "build": "vite build && vite build --config vite.config.inspector.ts",
     "build:inspector": "vite build --config vite.config.inspector.ts",
+    "build:extension": "vite build --config vite.config.extension.ts",
     "dev": "vite build --watch",
     "lint": "oxlint src/",
     "lint:fix": "oxlint --fix src/",

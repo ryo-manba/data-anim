@@ -570,9 +570,10 @@ function onScroll(): void {
 }
 
 // ── Activate / Deactivate ──────────────────────────────────────────
-function activate(): void {
+export function activate(): void {
   if (active) return;
   active = true;
+  if (!document.getElementById('da-inspector-styles')) injectStyles();
   if (toggleBtn) toggleBtn.dataset.active = 'true';
 
   // Create panel
@@ -587,7 +588,7 @@ function activate(): void {
   window.addEventListener('scroll', onScroll, true);
 }
 
-function deactivate(): void {
+export function deactivate(): void {
   if (!active) return;
   active = false;
   selectedEl = null;
@@ -605,6 +606,30 @@ function deactivate(): void {
   }
   hideHighlight();
   hideSelected();
+}
+
+/** Full cleanup — remove all injected DOM and styles. */
+export function destroy(): void {
+  deactivate();
+  if (toggleBtn) {
+    toggleBtn.remove();
+    toggleBtn = null;
+  }
+  if (highlightBox) {
+    highlightBox.remove();
+    highlightBox = null;
+  }
+  if (selectedBox) {
+    selectedBox.remove();
+    selectedBox = null;
+  }
+  document.getElementById('da-inspector-styles')?.remove();
+  document.getElementById('da-inspector-keyframes')?.remove();
+  keyframesInjected = false;
+}
+
+export function isActive(): boolean {
+  return active;
 }
 
 // ── Bootstrap ──────────────────────────────────────────────────────
