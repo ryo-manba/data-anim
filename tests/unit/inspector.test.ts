@@ -1,5 +1,11 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import { activate, deactivate, destroy, isActive, onDestroy } from '../../plugins/inspector/src/inspector';
+import {
+  activate,
+  deactivate,
+  destroy,
+  isActive,
+  onDestroy,
+} from '../../plugins/inspector/src/inspector';
 
 afterEach(() => {
   destroy();
@@ -140,7 +146,10 @@ describe('element selection', () => {
 
   it('clicking an animation button applies data-anim attribute to selected element', async () => {
     // Mock rAF to run callbacks synchronously
-    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => { cb(0); return 0; });
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
+      cb(0);
+      return 0;
+    });
 
     activate();
     const target = document.createElement('div');

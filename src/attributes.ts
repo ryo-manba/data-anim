@@ -104,4 +104,3 @@ declare global {
     interface HTMLAttributes<T> extends DataAnimAttributes {}
   }
 }
-
