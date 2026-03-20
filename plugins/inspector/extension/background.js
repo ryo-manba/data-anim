@@ -2,7 +2,10 @@
 const injectedTabs = new Set();
 
 chrome.action.onClicked.addListener(async (tab) => {
-  if (!tab.id) return;
+  if (!tab.id || !tab.url) return;
+
+  // Cannot inject into chrome://, edge://, about:, or extension pages
+  if (/^(chrome|edge|about|chrome-extension):\/\//.test(tab.url)) return;
 
   if (injectedTabs.has(tab.id)) {
     // Toggle off: send message to deactivate and clean up
