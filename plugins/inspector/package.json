@@ -8,7 +8,8 @@
     "build": "vite build && vite build --config vite.config.extension.ts",
     "build:script": "vite build",
     "build:extension": "vite build --config vite.config.extension.ts",
-    "dev": "vite build --watch"
+    "dev": "vite build --watch",
+    "test": "cd ../.. && pnpm vitest run tests/unit/inspector"
   },
   "keywords": [
     "data-anim",
