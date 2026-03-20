@@ -81,6 +81,30 @@ describe('close button', () => {
   });
 });
 
+describe('topbar buttons in unselected state', () => {
+  it('overlay toggle changes active state on click', () => {
+    activate();
+    const btn = document.querySelector('.da-inspector-overlay-toggle') as HTMLButtonElement;
+    expect(btn).not.toBeNull();
+    // Default is inactive (showOverlays = false)
+    expect(btn.classList.contains('da-inspector-btn-active')).toBe(false);
+    btn.click();
+    // After click, should re-render with active state
+    const btn2 = document.querySelector('.da-inspector-overlay-toggle') as HTMLButtonElement;
+    expect(btn2.classList.contains('da-inspector-btn-active')).toBe(true);
+  });
+
+  it('multi-select toggle changes active state on click', () => {
+    activate();
+    const btn = document.querySelector('.da-inspector-multi-toggle') as HTMLButtonElement;
+    expect(btn).not.toBeNull();
+    expect(btn.classList.contains('da-inspector-btn-active')).toBe(false);
+    btn.click();
+    const btn2 = document.querySelector('.da-inspector-multi-toggle') as HTMLButtonElement;
+    expect(btn2.classList.contains('da-inspector-btn-active')).toBe(true);
+  });
+});
+
 describe('element selection', () => {
   it('clicking a page element selects it and shows animation controls', () => {
     activate();

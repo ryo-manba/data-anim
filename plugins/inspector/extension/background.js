@@ -21,6 +21,15 @@ chrome.action.onClicked.addListener(async (tab) => {
   }
 });
 
+// Listen for close messages from the content script (e.g. panel close button)
+chrome.runtime.onMessage.addListener((msg, sender) => {
+  if (msg.type === 'da-inspector-closed' && sender.tab?.id) {
+    const tabId = sender.tab.id;
+    injectedTabs.delete(tabId);
+    chrome.action.setBadgeText({ text: '', tabId });
+  }
+});
+
 // Clean up when tab is closed or navigated
 chrome.tabs.onRemoved.addListener((tabId) => {
   injectedTabs.delete(tabId);

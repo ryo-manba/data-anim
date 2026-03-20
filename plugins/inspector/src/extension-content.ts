@@ -5,13 +5,14 @@
  * Auto-activates the inspector and listens for toggle messages.
  */
 
-import { activate, destroy, isActive } from './inspector';
+import { activate, destroy, isActive, onDestroy } from './inspector';
 
 declare const chrome: {
   runtime: {
     onMessage: {
       addListener(cb: (msg: { type: string }) => void): void;
     };
+    sendMessage(msg: { type: string }): void;
   };
 };
 
@@ -22,6 +23,12 @@ const w = window as any;
 if (!w.__daInspectorLoaded) {
   w.__daInspectorLoaded = true;
 
+  // Notify the extension when the inspector is closed (e.g. via the panel close button)
+  onDestroy(() => {
+    chrome.runtime.sendMessage({ type: 'da-inspector-closed' });
+    w.__daInspectorLoaded = false;
+  });
+
   // Auto-activate on injection (no toggle button needed — the extension icon is the toggle)
   activate();
 
@@ -30,7 +37,6 @@ if (!w.__daInspectorLoaded) {
     if (msg.type === 'da-inspector-toggle') {
       if (isActive()) {
         destroy();
-        w.__daInspectorLoaded = false;
       } else {
         activate();
       }

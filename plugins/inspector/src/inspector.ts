@@ -42,6 +42,10 @@ let currentEasing: string = EASING_PRESETS[0];
 /** Tracks elements that have been overridden with data-anim attributes. */
 const appliedElements = new Set<HTMLElement>();
 let showOverlays = false;
+let minimized = false;
+let panelX = -1; // -1 means use default (right: 16px)
+let panelY = 16;
+let onDestroyCallback: (() => void) | null = null;
 let multiSelect = false;
 const multiSelectedEls = new Set<HTMLElement>();
 
@@ -144,7 +148,6 @@ function injectStyles(): void {
     .da-inspector-panel {
       position: fixed;
       top: 16px;
-      right: 16px;
       z-index: 2147483647;
       width: 320px;
       max-height: calc(100vh - 32px);
@@ -170,6 +173,17 @@ function injectStyles(): void {
       font-size: 14px;
     }
 
+    .da-inspector-drag-handle {
+      display: flex;
+      align-items: center;
+      padding: 0 4px 0 0;
+      cursor: grab;
+      color: #a1a1aa;
+      flex-shrink: 0;
+    }
+    .da-inspector-drag-handle:active { cursor: grabbing; }
+    .da-inspector-drag-handle:hover { color: #71717a; }
+
     .da-inspector-logo {
       display: flex;
       align-items: center;
@@ -191,6 +205,27 @@ function injectStyles(): void {
       line-height: 1;
     }
     .da-inspector-close:hover { color: #18181b; }
+
+    .da-inspector-minimize {
+      border: none;
+      background: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: #52525b;
+      padding: 0 4px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+    }
+    .da-inspector-minimize:hover { color: #18181b; }
+
+    .da-inspector-minimized {
+      display: flex;
+      gap: 8px;
+      padding: 8px 12px;
+      align-items: center;
+    }
+    .da-inspector-minimized .da-inspector-replay { flex: 1; }
 
     .da-inspector-topbar {
       display: flex;
@@ -232,7 +267,7 @@ function injectStyles(): void {
     .da-inspector-icon-btn[data-tooltip]:hover::after {
       content: attr(data-tooltip);
       position: absolute;
-      bottom: -28px;
+      top: -28px;
       left: 50%;
       transform: translateX(-50%);
       padding: 3px 8px;
@@ -595,12 +630,16 @@ function applyToElement(el: HTMLElement, animName: string): void {
   refreshAppliedOverlays();
 }
 
-/** Remove data-anim attributes from an element. */
+/** Remove data-anim attributes and restore inline styles. */
 function unapplyElement(el: HTMLElement): void {
   el.removeAttribute('data-anim');
   el.removeAttribute('data-anim-duration');
   el.removeAttribute('data-anim-easing');
   el.style.animation = '';
+  el.style.opacity = '';
+  el.style.transform = '';
+  el.style.filter = '';
+  el.style.clipPath = '';
   appliedElements.delete(el);
   refreshAppliedOverlays();
 }
@@ -653,8 +692,74 @@ function generateCode(): string {
 }
 
 // ── Panel UI ───────────────────────────────────────────────────────
+function applyPanelPosition(): void {
+  if (!panel) return;
+  if (panelX < 0) {
+    // Default: right-aligned
+    panel.style.left = 'auto';
+    panel.style.right = '16px';
+  } else {
+    panel.style.right = 'auto';
+    panel.style.left = `${panelX}px`;
+  }
+  panel.style.top = `${panelY}px`;
+}
+
+function initDrag(handle: HTMLElement): void {
+  let startX = 0;
+  let startY = 0;
+  let startPanelX = 0;
+  let startPanelY = 0;
+
+  const onPointerMove = (e: PointerEvent) => {
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    panelX = Math.max(0, Math.min(startPanelX + dx, window.innerWidth - 320));
+    panelY = Math.max(0, startPanelY + dy);
+    applyPanelPosition();
+  };
+
+  const onPointerUp = () => {
+    document.removeEventListener('pointermove', onPointerMove);
+    document.removeEventListener('pointerup', onPointerUp);
+  };
+
+  handle.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    startX = e.clientX;
+    startY = e.clientY;
+    if (!panel) return;
+    const rect = panel.getBoundingClientRect();
+    startPanelX = rect.left;
+    startPanelY = rect.top;
+    if (panelX < 0) panelX = rect.left;
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
+  });
+}
+
 function renderPanel(): void {
   if (!panel) return;
+  applyPanelPosition();
+
+  if (minimized) {
+    panel.innerHTML = `
+      <div class="da-inspector-minimized">
+        <div class="da-inspector-drag-handle"><svg width="8" height="16" viewBox="0 0 8 16" fill="currentColor"><circle cx="2" cy="2" r="1.2"/><circle cx="6" cy="2" r="1.2"/><circle cx="2" cy="6" r="1.2"/><circle cx="6" cy="6" r="1.2"/><circle cx="2" cy="10" r="1.2"/><circle cx="6" cy="10" r="1.2"/><circle cx="2" cy="14" r="1.2"/><circle cx="6" cy="14" r="1.2"/></svg></div>
+        <button class="da-inspector-replay" ${appliedElements.size === 0 ? 'disabled' : ''}>Replay All (${appliedElements.size})</button>
+        <button class="da-inspector-icon-btn da-inspector-expand" data-tooltip="Expand">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        </button>
+      </div>
+    `;
+    const replayBtn = panel.querySelector<HTMLButtonElement>('.da-inspector-replay');
+    if (replayBtn) replayBtn.addEventListener('click', (e) => { e.stopPropagation(); replayAll(); });
+    const expandBtn = panel.querySelector<HTMLButtonElement>('.da-inspector-expand');
+    if (expandBtn) expandBtn.addEventListener('click', (e) => { e.stopPropagation(); minimized = false; renderPanel(); });
+    const minDragHandle = panel.querySelector<HTMLElement>('.da-inspector-drag-handle');
+    if (minDragHandle) initDrag(minDragHandle);
+    return;
+  }
 
   const eyeIcon = showOverlays
     ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
@@ -664,8 +769,14 @@ function renderPanel(): void {
 
   const topbarHtml = `
     <div class="da-inspector-header">
+      <div class="da-inspector-drag-handle"><svg width="8" height="16" viewBox="0 0 8 16" fill="currentColor"><circle cx="2" cy="2" r="1.2"/><circle cx="6" cy="2" r="1.2"/><circle cx="2" cy="6" r="1.2"/><circle cx="6" cy="6" r="1.2"/><circle cx="2" cy="10" r="1.2"/><circle cx="6" cy="10" r="1.2"/><circle cx="2" cy="14" r="1.2"/><circle cx="6" cy="14" r="1.2"/></svg></div>
       <a class="da-inspector-logo" href="https://ryo-manba.github.io/data-anim/" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 32 32"><defs><linearGradient id="da-logo-g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#818cf8"/><stop offset="100%" stop-color="#c084fc"/></linearGradient><linearGradient id="da-logo-g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c084fc"/><stop offset="100%" stop-color="#f472b6"/></linearGradient></defs><rect width="32" height="32" rx="7" fill="#0a0a1f"/><rect x="9" y="9" width="14" height="14" rx="4" fill="url(#da-logo-g2)" opacity="0.15" transform="translate(4,-3)"/><rect x="9" y="9" width="14" height="14" rx="4" fill="url(#da-logo-g1)" opacity="0.4" transform="translate(2,-1.5)"/><rect x="9" y="9" width="14" height="14" rx="4" fill="url(#da-logo-g1)"/></svg><span>data-anim Inspector</span></a>
-      <button class="da-inspector-close" title="Close">&times;</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="da-inspector-minimize" title="Minimize">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <button class="da-inspector-close" title="Close">&times;</button>
+      </div>
     </div>
     <div class="da-inspector-topbar">
       <button class="da-inspector-replay" ${appliedElements.size === 0 ? 'disabled' : ''}>Replay All (${appliedElements.size})</button>
@@ -694,15 +805,19 @@ function renderPanel(): void {
       </div>
       ${footerHtml}
     `;
-    panel.querySelector('.da-inspector-close')!.addEventListener('click', deactivate);
+    panel.querySelector('.da-inspector-close')!.addEventListener('click', destroy);
+    const minBtn = panel.querySelector<HTMLButtonElement>('.da-inspector-minimize');
+    if (minBtn) minBtn.addEventListener('click', (e) => { e.stopPropagation(); minimized = true; renderPanel(); });
     const replayBtn = panel.querySelector<HTMLButtonElement>('.da-inspector-replay');
     if (replayBtn) replayBtn.addEventListener('click', (e) => { e.stopPropagation(); replayAll(); });
     const overlayToggle = panel.querySelector<HTMLButtonElement>('.da-inspector-overlay-toggle');
     if (overlayToggle) overlayToggle.addEventListener('click', (e) => { e.stopPropagation(); showOverlays = !showOverlays; refreshAppliedOverlays(); renderPanel(); });
     const multiToggle = panel.querySelector<HTMLButtonElement>('.da-inspector-multi-toggle');
-    if (multiToggle) multiToggle.addEventListener('click', (e) => { e.stopPropagation(); multiSelect = !multiSelect; if (!multiSelect) { multiSelectedEls.clear(); clearMultiBoxes(); } renderPanel(); });
+    if (multiToggle) multiToggle.addEventListener('click', (e) => { e.stopPropagation(); multiSelect = !multiSelect; if (multiSelect) { selectedEl = null; currentAnim = ''; hideSelected(); } else { multiSelectedEls.clear(); clearMultiBoxes(); } renderPanel(); });
     const clearAllBtn = panel.querySelector<HTMLButtonElement>('.da-inspector-clear-all');
     if (clearAllBtn) clearAllBtn.addEventListener('click', (e) => { e.stopPropagation(); for (const el of [...appliedElements]) unapplyElement(el); currentAnim = ''; renderPanel(); });
+    const dragHandle = panel.querySelector<HTMLElement>('.da-inspector-drag-handle');
+    if (dragHandle) initDrag(dragHandle);
     return;
   }
 
@@ -768,7 +883,9 @@ function renderPanel(): void {
 
   panel.innerHTML = html;
 
-  panel.querySelector('.da-inspector-close')!.addEventListener('click', deactivate);
+  panel.querySelector('.da-inspector-close')!.addEventListener('click', destroy);
+  const minBtnSel = panel.querySelector<HTMLButtonElement>('.da-inspector-minimize');
+  if (minBtnSel) minBtnSel.addEventListener('click', (e) => { e.stopPropagation(); minimized = true; renderPanel(); });
 
   const previewBox = panel.querySelector<HTMLElement>('.da-inspector-preview-box');
   const previewLabel = panel.querySelector<HTMLElement>('.da-inspector-preview-label');
@@ -838,7 +955,11 @@ function renderPanel(): void {
     multiToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       multiSelect = !multiSelect;
-      if (!multiSelect) {
+      if (multiSelect) {
+        selectedEl = null;
+        currentAnim = '';
+        hideSelected();
+      } else {
         multiSelectedEls.clear();
         clearMultiBoxes();
       }
@@ -855,6 +976,9 @@ function renderPanel(): void {
       renderPanel();
     });
   }
+
+  const dragHandleEl = panel.querySelector<HTMLElement>('.da-inspector-drag-handle');
+  if (dragHandleEl) initDrag(dragHandleEl);
 
   const unapplyBtn = panel.querySelector<HTMLButtonElement>('.da-inspector-unapply');
   if (unapplyBtn) {
@@ -888,7 +1012,7 @@ function escapeHtml(s: string): string {
 
 // ── Inspector interaction handlers ─────────────────────────────────
 function isInspectorElement(el: EventTarget | null): boolean {
-  if (!el || !(el instanceof HTMLElement)) return false;
+  if (!el || !(el instanceof Element)) return false;
   return !!(
     el.closest('.da-inspector-panel') ||
     el.closest('.da-inspector-toggle') ||
@@ -957,6 +1081,9 @@ export function activate(): void {
   if (!document.getElementById('da-inspector-styles')) injectStyles();
   if (toggleBtn) toggleBtn.dataset.active = 'true';
 
+  // Guard: remove any stale panel left from a previous session
+  document.querySelector('.da-inspector-panel')?.remove();
+
   panel = document.createElement('div');
   panel.className = 'da-inspector-panel';
   document.body.appendChild(panel);
@@ -990,6 +1117,11 @@ export function deactivate(): void {
   hideSelected();
 }
 
+/** Register a callback invoked after destroy() completes. */
+export function onDestroy(cb: () => void): void {
+  onDestroyCallback = cb;
+}
+
 /** Full cleanup — remove all injected DOM and styles. */
 export function destroy(): void {
   deactivate();
@@ -1008,9 +1140,12 @@ export function destroy(): void {
   document.getElementById('da-inspector-styles')?.remove();
   document.getElementById('da-inspector-keyframes')?.remove();
   keyframesInjected = false;
+  panelX = -1;
+  panelY = 16;
   appliedElements.forEach((el) => unapplyElement(el));
   appliedElements.clear();
   clearAppliedOverlays();
+  if (onDestroyCallback) onDestroyCallback();
 }
 
 export function isActive(): boolean {
