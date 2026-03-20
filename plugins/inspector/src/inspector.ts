@@ -2,13 +2,12 @@
  * data-anim Inspector
  *
  * Drop this script onto any website to interactively click elements
- * and apply data-anim animations. Works standalone — no dependencies.
+ * and apply data-anim animations. Injects the data-anim CDN script
+ * at runtime so no animation definitions are bundled.
  *
  * Usage:
- *   <script src="data-anim-inspector.min.js"><\/script>
+ *   <script src="data-anim-inspector.min.js"></script>
  */
-
-import { allAnimations, getKeyframesCSS, EASING_PRESETS, easings } from './animations';
 
 // ── Types ──────────────────────────────────────────────────────────
 interface AnimCategory {
@@ -27,6 +26,9 @@ const categories: AnimCategory[] = [
   { label: 'Special', names: ['blur', 'clipReveal', 'typewriter'] },
 ];
 
+// ── Easing presets (inline, no external dependency) ────────────────
+const EASING_PRESETS = ['ease', 'ease-out-expo', 'ease-out-back', 'spring'] as const;
+
 // ── State ──────────────────────────────────────────────────────────
 let active = false;
 let selectedEl: HTMLElement | null = null;
@@ -43,14 +45,87 @@ let showOverlays = true;
 let multiSelect = false;
 const multiSelectedEls = new Set<HTMLElement>();
 
-// ── Keyframes injection ────────────────────────────────────────────
-let keyframesInjected = false;
-function ensureKeyframes(): void {
-  if (keyframesInjected) return;
-  keyframesInjected = true;
+// ── CDN script injection ──────────────────────────────────────────
+const CDN_URL = 'https://unpkg.com/data-anim';
+let cdnLoaded = false;
+let cdnLoadPromise: Promise<void> | null = null;
+
+function ensureCDN(): Promise<void> {
+  if (cdnLoaded) return Promise.resolve();
+  if (cdnLoadPromise) return cdnLoadPromise;
+
+  // Check if data-anim is already loaded on the page
+  if ((window as any).__dataAnimLoaded || document.querySelector(`script[src="${CDN_URL}"]`)) {
+    cdnLoaded = true;
+    return Promise.resolve();
+  }
+
+  cdnLoadPromise = new Promise<void>((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = CDN_URL;
+    script.id = 'da-inspector-cdn';
+    script.onload = () => {
+      cdnLoaded = true;
+      resolve();
+    };
+    script.onerror = () => {
+      cdnLoadPromise = null;
+      reject(new Error('Failed to load data-anim CDN script'));
+    };
+    document.head.appendChild(script);
+  });
+
+  return cdnLoadPromise;
+}
+
+// ── Preview keyframes (inline for the inspector panel preview box) ─
+// These are minimal keyframes used only for the preview box inside
+// the inspector panel. The actual page animations are handled by the
+// data-anim runtime.
+let previewKeyframesInjected = false;
+function ensurePreviewKeyframes(): void {
+  if (previewKeyframesInjected) return;
+  previewKeyframesInjected = true;
+
+  const D = '--da-distance,30px';
+  const O_T = 'to{opacity:1;transform:none}';
+
+  const keyframes = [
+    `@keyframes da-fadeIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}`,
+    `@keyframes da-fadeOut{from{opacity:1}to{opacity:0}}`,
+    `@keyframes da-fadeInUp{from{opacity:0;transform:translateY(var(${D}))}${O_T}}`,
+    `@keyframes da-fadeInDown{from{opacity:0;transform:translateY(calc(var(${D})*-1))}${O_T}}`,
+    `@keyframes da-fadeInLeft{from{opacity:0;transform:translateX(calc(var(${D})*-1))}${O_T}}`,
+    `@keyframes da-fadeInRight{from{opacity:0;transform:translateX(var(${D}))}${O_T}}`,
+    `@keyframes da-slideInUp{from{opacity:0;transform:translateY(100%)}${O_T}}`,
+    `@keyframes da-slideInDown{from{opacity:0;transform:translateY(-100%)}${O_T}}`,
+    `@keyframes da-slideInLeft{from{opacity:0;transform:translateX(-100%)}${O_T}}`,
+    `@keyframes da-slideInRight{from{opacity:0;transform:translateX(100%)}${O_T}}`,
+    `@keyframes da-zoomIn{from{opacity:0;transform:scale(.5)}${O_T}}`,
+    `@keyframes da-zoomOut{from{opacity:0;transform:scale(1.5)}${O_T}}`,
+    `@keyframes da-zoomInUp{from{opacity:0;transform:scale(.9) translateY(var(${D}))}${O_T}}`,
+    `@keyframes da-zoomInDown{from{opacity:0;transform:scale(.9) translateY(calc(var(${D})*-1))}${O_T}}`,
+    `@keyframes da-bounce{0%,20%,53%,to{transform:none}40%{transform:translateY(-20px)}70%{transform:translateY(-10px)}}`,
+    `@keyframes da-bounceIn{0%{opacity:0;transform:scale(.3)}50%{transform:scale(1.05)}70%{transform:scale(.9)}${O_T}}`,
+    `@keyframes da-bounceInUp{0%{opacity:0;transform:translateY(50px)}60%{opacity:1;transform:translateY(-10px)}80%{transform:translateY(5px)}to{transform:none}}`,
+    `@keyframes da-bounceInDown{0%{opacity:0;transform:translateY(-50px)}60%{opacity:1;transform:translateY(10px)}80%{transform:translateY(-5px)}to{transform:none}}`,
+    `@keyframes da-shake{0%,to{transform:none}10%,30%,50%,70%,90%{transform:translateX(-10px)}20%,40%,60%,80%{transform:translateX(10px)}}`,
+    `@keyframes da-pulse{0%,to{transform:scale(1)}50%{transform:scale(1.15)}}`,
+    `@keyframes da-wobble{0%,to{transform:none}15%{transform:translateX(-15px) rotate(-5deg)}30%{transform:translateX(10px) rotate(3deg)}45%{transform:translateX(-5px) rotate(-2deg)}}`,
+    `@keyframes da-flip{from{transform:perspective(400px) rotateY(0)}to{transform:perspective(400px) rotateY(360deg)}}`,
+    `@keyframes da-swing{0%,to{transform:none}20%{transform:rotate(15deg)}40%{transform:rotate(-10deg)}60%{transform:rotate(5deg)}80%{transform:rotate(-5deg)}}`,
+    `@keyframes da-rubberBand{0%,to{transform:scale(1)}30%{transform:scale(1.25,.75)}40%{transform:scale(.75,1.25)}50%{transform:scale(1.15,.85)}65%{transform:scale(.95,1.05)}75%{transform:scale(1.05,.95)}}`,
+    `@keyframes da-rotateIn{from{opacity:0;transform:rotate(-200deg)}${O_T}}`,
+    `@keyframes da-rotateInDownLeft{from{opacity:0;transform:rotate(-90deg)}${O_T}}`,
+    `@keyframes da-rotateInDownRight{from{opacity:0;transform:rotate(90deg)}${O_T}}`,
+    `@keyframes da-blur{from{opacity:0;filter:blur(10px)}to{opacity:1;filter:blur(0)}}`,
+    `@keyframes da-clipReveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}`,
+    `@keyframes da-typewriter{from{max-width:0}to{max-width:100%}}`,
+  ];
+
   const s = document.createElement('style');
-  s.id = 'da-inspector-keyframes';
-  s.textContent = getKeyframesCSS();
+  s.id = 'da-inspector-preview-keyframes';
+  s.textContent = keyframes.join('');
   document.head.appendChild(s);
 }
 
@@ -571,11 +646,9 @@ function describeEl(el: HTMLElement): string {
 }
 
 // ── Apply animation attributes to element ─────────────────────────
+// Sets data-anim attributes and lets the data-anim runtime (loaded
+// via CDN) handle the actual animation through its MutationObserver.
 function applyToElement(el: HTMLElement, animName: string): void {
-  ensureKeyframes();
-  const def = allAnimations.find((a) => a.name === animName);
-  if (!def) return;
-
   el.setAttribute('data-anim', animName);
   el.setAttribute('data-anim-duration', currentDuration);
   if (currentEasing !== 'ease') {
@@ -599,22 +672,21 @@ function unapplyElement(el: HTMLElement): void {
   refreshAppliedOverlays();
 }
 
-/** Replay animation on a single element using its data-anim attributes. */
+/** Replay animation on a single element by toggling its data-anim attribute. */
 function replayElement(el: HTMLElement): void {
-  ensureKeyframes();
   const animName = el.getAttribute('data-anim');
   if (!animName) return;
-  const duration = el.getAttribute('data-anim-duration') || '800ms';
-  const easing = el.getAttribute('data-anim-easing') || 'ease';
-  const easingVal = easings[easing] || easing;
 
+  // Temporarily remove and re-set the attribute so the data-anim
+  // MutationObserver picks up the change and re-triggers the animation.
+  el.removeAttribute('data-anim');
   el.style.animation = 'none';
   el.style.transform = '';
   el.style.opacity = '';
   el.style.filter = '';
   el.style.clipPath = '';
   requestAnimationFrame(() => {
-    el.style.animation = `da-${animName} ${duration} ${easingVal} 0s 1 both`;
+    el.setAttribute('data-anim', animName);
   });
 }
 
@@ -768,12 +840,12 @@ function renderPanel(): void {
 
     btn.addEventListener('mouseenter', () => {
       if (!previewBox) return;
-      ensureKeyframes();
+      // Use inline preview keyframes for the panel preview box
+      ensurePreviewKeyframes();
       const name = btn.dataset.animName!;
-      const easingVal = easings[currentEasing] || currentEasing;
       previewBox.style.animation = 'none';
       void previewBox.offsetWidth;
-      previewBox.style.animation = `da-${name} ${currentDuration} ${easingVal} 0s 1 both`;
+      previewBox.style.animation = `da-${name} ${currentDuration} ease 0s 1 both`;
       if (previewLabel) previewLabel.textContent = name;
     });
   });
@@ -936,6 +1008,11 @@ export function activate(): void {
   if (!document.getElementById('da-inspector-styles')) injectStyles();
   if (toggleBtn) toggleBtn.dataset.active = 'true';
 
+  // Inject the data-anim CDN script so its runtime handles animations
+  ensureCDN().catch((err) => {
+    console.warn('[data-anim Inspector]', err.message);
+  });
+
   panel = document.createElement('div');
   panel.className = 'da-inspector-panel';
   document.body.appendChild(panel);
@@ -985,8 +1062,11 @@ export function destroy(): void {
     selectedBox = null;
   }
   document.getElementById('da-inspector-styles')?.remove();
-  document.getElementById('da-inspector-keyframes')?.remove();
-  keyframesInjected = false;
+  document.getElementById('da-inspector-preview-keyframes')?.remove();
+  document.getElementById('da-inspector-cdn')?.remove();
+  previewKeyframesInjected = false;
+  cdnLoaded = false;
+  cdnLoadPromise = null;
   appliedElements.forEach((el) => unapplyElement(el));
   appliedElements.clear();
   clearAppliedOverlays();

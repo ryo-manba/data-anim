@@ -4,6 +4,15 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    typescript:
+      specifier: ^5.3.0
+      version: 5.9.3
+    vite:
+      specifier: ^8.0.0
+      version: 8.0.0
+
 importers:
 
   .:
@@ -21,10 +30,10 @@ importers:
         specifier: ^24.39.1
         version: 24.39.1(typescript@5.9.3)
       typescript:
-        specifier: ^5.3.0
+        specifier: 'catalog:'
         version: 5.9.3
       vite:
-        specifier: ^8.0.0
+        specifier: 'catalog:'
         version: 8.0.0(@types/node@24.12.0)(esbuild@0.27.4)(jiti@2.6.1)(yaml@2.8.2)
       vite-plugin-dts:
         specifier: ^4.0.0
@@ -51,6 +60,18 @@ importers:
       tailwindcss:
         specifier: ^4.2.1
         version: 4.2.1
+
+  plugins/inspector:
+    devDependencies:
+      esbuild:
+        specifier: ^0.27.0
+        version: 0.27.4
+      typescript:
+        specifier: 'catalog:'
+        version: 5.9.3
+      vite:
+        specifier: 'catalog:'
+        version: 8.0.0(@types/node@24.12.0)(esbuild@0.27.4)(jiti@2.6.1)(yaml@2.8.2)
 
 packages:
 
