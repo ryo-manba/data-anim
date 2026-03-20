@@ -6,9 +6,9 @@ chrome.action.onClicked.addListener(async (tab) => {
 
   if (injectedTabs.has(tab.id)) {
     // Toggle off: send message to deactivate and clean up
-    await chrome.tabs.sendMessage(tab.id, { type: 'da-inspector-toggle' });
+    await chrome.tabs.sendMessage(tab.id, { type: 'da-inspector-toggle' }).catch(() => {});
     injectedTabs.delete(tab.id);
-    chrome.action.setBadgeText({ text: '', tabId: tab.id });
+    chrome.action.setBadgeText({ text: '', tabId: tab.id }).catch(() => {});
   } else {
     // Toggle on: inject the inspector script
     await chrome.scripting.executeScript({
@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener((msg, sender) => {
   if (msg.type === 'da-inspector-closed' && sender.tab?.id) {
     const tabId = sender.tab.id;
     injectedTabs.delete(tabId);
-    chrome.action.setBadgeText({ text: '', tabId });
+    chrome.action.setBadgeText({ text: '', tabId }).catch(() => {});
   }
 });
 
@@ -39,6 +39,6 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (changeInfo.status === 'loading') {
     injectedTabs.delete(tabId);
-    chrome.action.setBadgeText({ text: '', tabId });
+    chrome.action.setBadgeText({ text: '', tabId }).catch(() => {});
   }
 });
