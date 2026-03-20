@@ -1,15 +1,8 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import { activate, deactivate, destroy, isActive } from '../../plugins/inspector/src/inspector';
 
-// Suppress CDN script loading (happy-dom doesn't actually load scripts)
-beforeEach(() => {
-  // Mark data-anim as already loaded to skip CDN injection
-  (window as any).__dataAnimLoaded = true;
-});
-
 afterEach(() => {
   destroy();
-  delete (window as any).__dataAnimLoaded;
 });
 
 describe('activate / deactivate', () => {
@@ -139,8 +132,6 @@ describe('element selection', () => {
 
     target.remove();
     vi.unstubAllGlobals();
-    // Restore __dataAnimLoaded since unstubAllGlobals clears it
-    (window as any).__dataAnimLoaded = true;
   });
 });
 
