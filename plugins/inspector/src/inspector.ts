@@ -916,10 +916,11 @@ function renderPanel(): void {
     });
   });
 
+  const VALID_DURATIONS = ['400ms', '600ms', '800ms', '1000ms', '1200ms', '1600ms', '2000ms'];
   const durSelect = panel.querySelector<HTMLSelectElement>('.da-inspector-dur');
   if (durSelect) {
     durSelect.addEventListener('change', () => {
-      currentDuration = durSelect.value;
+      if (VALID_DURATIONS.includes(durSelect.value)) currentDuration = durSelect.value;
       renderPanel();
     });
   }
@@ -927,7 +928,7 @@ function renderPanel(): void {
   const easeSelect = panel.querySelector<HTMLSelectElement>('.da-inspector-ease');
   if (easeSelect) {
     easeSelect.addEventListener('change', () => {
-      currentEasing = easeSelect.value;
+      if ((EASING_PRESETS as readonly string[]).includes(easeSelect.value)) currentEasing = easeSelect.value;
       renderPanel();
     });
   }
@@ -1100,6 +1101,7 @@ export function deactivate(): void {
   selectedEl = null;
   hoveredEl = null;
   currentAnim = '';
+  minimized = false;
   multiSelect = false;
   multiSelectedEls.clear();
   clearMultiBoxes();

@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import { activate, deactivate, destroy, isActive } from '../../plugins/inspector/src/inspector';
+import { activate, deactivate, destroy, isActive, onDestroy } from '../../plugins/inspector/src/inspector';
 
 afterEach(() => {
   destroy();
@@ -167,5 +167,67 @@ describe('destroy', () => {
     expect(document.querySelector('.da-inspector-panel')).toBeNull();
     expect(document.getElementById('da-inspector-styles')).toBeNull();
     expect(document.getElementById('da-inspector-preview-keyframes')).toBeNull();
+  });
+
+  it('reopen after destroy creates exactly one panel', () => {
+    activate();
+    destroy();
+    activate();
+    expect(document.querySelectorAll('.da-inspector-panel').length).toBe(1);
+  });
+
+  it('fires onDestroy callback', () => {
+    const cb = vi.fn();
+    onDestroy(cb);
+    activate();
+    destroy();
+    expect(cb).toHaveBeenCalledOnce();
+    onDestroy(() => {}); // reset
+  });
+});
+
+describe('minimize', () => {
+  it('minimize button switches to minimized view', () => {
+    activate();
+    const minBtn = document.querySelector('.da-inspector-minimize') as HTMLButtonElement;
+    expect(minBtn).not.toBeNull();
+    minBtn.click();
+    // Minimized view shows expand button and replay, no header
+    expect(document.querySelector('.da-inspector-minimized')).not.toBeNull();
+    expect(document.querySelector('.da-inspector-header')).toBeNull();
+  });
+
+  it('expand button restores full panel from minimized state', () => {
+    activate();
+    (document.querySelector('.da-inspector-minimize') as HTMLButtonElement).click();
+    (document.querySelector('.da-inspector-expand') as HTMLButtonElement).click();
+    expect(document.querySelector('.da-inspector-header')).not.toBeNull();
+    expect(document.querySelector('.da-inspector-minimized')).toBeNull();
+  });
+
+  it('minimize works in selected-element state', () => {
+    activate();
+    const target = document.createElement('div');
+    document.body.appendChild(target);
+    target.click();
+    // Should have minimize button in selected state too
+    const minBtn = document.querySelector('.da-inspector-minimize') as HTMLButtonElement;
+    expect(minBtn).not.toBeNull();
+    minBtn.click();
+    expect(document.querySelector('.da-inspector-minimized')).not.toBeNull();
+    target.remove();
+  });
+});
+
+describe('drag handle', () => {
+  it('renders drag handle in header', () => {
+    activate();
+    expect(document.querySelector('.da-inspector-drag-handle')).not.toBeNull();
+  });
+
+  it('renders drag handle in minimized state', () => {
+    activate();
+    (document.querySelector('.da-inspector-minimize') as HTMLButtonElement).click();
+    expect(document.querySelector('.da-inspector-drag-handle')).not.toBeNull();
   });
 });

@@ -23,6 +23,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 
 // Listen for close messages from the content script (e.g. panel close button)
 chrome.runtime.onMessage.addListener((msg, sender) => {
+  if (sender.id !== chrome.runtime.id) return;
   if (msg.type === 'da-inspector-closed' && sender.tab?.id) {
     const tabId = sender.tab.id;
     injectedTabs.delete(tabId);
