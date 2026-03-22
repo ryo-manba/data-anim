@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/ryo-manba/data-anim/compare/v1.0.0...v1.1.0) (2026-03-22)
+
+
+### Features
+
+* add Chrome extension for data-anim Inspector ([#3](https://github.com/ryo-manba/data-anim/issues/3)) ([f731bd0](https://github.com/ryo-manba/data-anim/commit/f731bd06be6d30ed7d621b12d730b522d536dd71))
+
+
+### Bug Fixes
+
+* add include-component-in-tag to release-please config ([95a71e7](https://github.com/ryo-manba/data-anim/commit/95a71e77a60bb893fa4735c61e6d3ec3372594c4))
+
 ## 1.0.0 (2026-03-14)
 
 

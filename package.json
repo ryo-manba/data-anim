@@ -1,6 +1,6 @@
 {
   "name": "data-anim",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Animate with just HTML. Powered by data attributes.",
   "type": "module",
   "packageManager": "pnpm@10.11.0",
